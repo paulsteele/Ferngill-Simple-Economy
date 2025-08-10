@@ -13,6 +13,8 @@ namespace fse.core.models
 
 		//cache the multiplier at the beginning of the day to keep prices consistent throughout the day
 		private decimal _cachedMultiplier = 1m;
+		
+		private decimal? _overrideMultiplierTonight = null;
 
 		[JsonInclude] public string ObjectId => objectId;
 
@@ -39,6 +41,7 @@ namespace fse.core.models
 		public void UpdateMultiplier()
 		{
 			_cachedMultiplier = GetMultiplier();
+			_overrideMultiplierTonight = null;
 		}
 
 		private decimal GetMultiplier()
@@ -49,7 +52,7 @@ namespace fse.core.models
 			return (ratio * percentageRange) + ConfigModel.Instance.MinPercentage;
 		}
 
-		public decimal GetPrice(int basePrice) => basePrice * _cachedMultiplier;
+		public decimal GetPrice(int basePrice) => basePrice * (_overrideMultiplierTonight ?? _cachedMultiplier);
 
 		public void CapSupply()
 		{
@@ -58,5 +61,17 @@ namespace fse.core.models
 		
 		private Object? _objectInstance;
 		public Object GetObjectInstance() => _objectInstance ??= new Object(ObjectId, 1);
+
+		public decimal GetMultiplierAtSupply(int supply)
+		{
+			var clamped = Math.Min(supply, ConfigModel.Instance.MaxCalculatedSupply);
+			var ratio = 1 - (clamped / (decimal)ConfigModel.Instance.MaxCalculatedSupply);
+			var percentageRange = ConfigModel.Instance.MaxPercentage - ConfigModel.Instance.MinPercentage;
+			return (ratio * percentageRange) + ConfigModel.Instance.MinPercentage;
+		}
+
+		public void SetOneNightOverrideMultiplier(decimal multiplier) {
+			_overrideMultiplierTonight = multiplier;
+		}
 	}
 }

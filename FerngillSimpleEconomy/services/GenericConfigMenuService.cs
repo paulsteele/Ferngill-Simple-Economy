@@ -9,6 +9,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 using Object = StardewValley.Object;
+using static fse.core.models.ConfigModel;
 
 namespace fse.core.services;
 
@@ -281,6 +282,34 @@ public class GenericConfigMenuService(
 			setValue: val => ConfigModel.Instance.CustomDeltaUpdateFrequency = val,
 			min: 1
 		);
+
+		configMenu.AddSectionTitle(mod: manifest, text: () => "Pricing Mode");
+
+		string[] modes = Enum.GetNames(typeof(PricingMode));
+
+		configMenu.AddTextOption(
+				mod: manifest,
+				name: () => "Shipping Bin Pricing Mode",
+				getValue: () => ConfigModel.Instance.ShippingPricingMode.ToString(),
+				setValue: v => {
+					if (Enum.TryParse<PricingMode>(v, out var m))
+						ConfigModel.Instance.ShippingPricingMode = m;
+				},
+				allowedValues: modes,
+				formatAllowedValue: s => s
+		);
+
+		//configMenu.AddTextOption(
+		//		mod: manifest,
+		//		name: () => "Shop Pricing Mode",
+		//		getValue: () => ConfigModel.Instance.ShopPricingMode.ToString(),
+		//		setValue: v => {
+		//			if (Enum.TryParse<PricingMode>(v, out var m))
+		//				ConfigModel.Instance.ShopPricingMode = m;
+		//		},
+		//		allowedValues: modes,
+		//		formatAllowedValue: s => s
+		//);
 	}
 
 	private void PopulateMenuPage(IGenericModConfigMenuApi configMenu)

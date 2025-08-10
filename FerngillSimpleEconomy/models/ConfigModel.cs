@@ -30,6 +30,9 @@ public class ConfigModel
 	public UpdateFrequency DeltaUpdateFrequency { get; set; } = UpdateFrequency.Seasonally;
 	public int CustomSupplyUpdateFrequency { get; set; } = 112;
 	public int CustomDeltaUpdateFrequency { get; set; } = 28;
+	public enum PricingMode { Instant, Batch }
+	public PricingMode ShippingPricingMode { get; set; } = PricingMode.Instant;
+	public PricingMode ShopPricingMode { get; set; } = PricingMode.Instant;
 
 	public List<int> ValidCategories { get; set; } =
 	[
