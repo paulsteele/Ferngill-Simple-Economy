@@ -6,24 +6,17 @@ using StardewValley;
 using StardewValley.Menus;
 using System;
 using static fse.core.models.ConfigModel;
+using Econ = fse.core.services.EconomyService;
 
 namespace fse.core.patches
 {
 	public class ObjectPatches : SelfRegisteringPatches
 	{
-		public static void SellToStoreSalePricePostFix(Object __instance, ref int __result)
-		{
-			// Instant Price
-			if (Game1.activeClickableMenu is ShopMenu &&
-					ConfigModel.Instance.ShopPricingMode == PricingMode.Instant) {
-				var model = EconomyService.GetItemModelFromObject(__instance);
-				if (model != null) {
-					int basePrice = __result;
-					decimal mult = model.GetMultiplierAtSupply(model.Supply + 1);
-					__result = (int)Math.Round(basePrice * mult, 0, MidpointRounding.ToEven);
-					return;
-				}
-			}
+
+		public static void SellToStoreSalePricePostFix(Object __instance, ref int __result) {
+			if (Econ.BypassPricePatch) return;
+			if (Game1.activeClickableMenu is ShopMenu)
+				return;
 
 			int baseP = __result;
 			__result = SafeAction.Run(() => EconomyService.GetPrice(__instance, baseP), baseP, Monitor);

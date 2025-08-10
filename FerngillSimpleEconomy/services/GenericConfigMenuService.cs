@@ -299,17 +299,17 @@ public class GenericConfigMenuService(
 				formatAllowedValue: s => s
 		);
 
-		//configMenu.AddTextOption(
-		//		mod: manifest,
-		//		name: () => "Shop Pricing Mode",
-		//		getValue: () => ConfigModel.Instance.ShopPricingMode.ToString(),
-		//		setValue: v => {
-		//			if (Enum.TryParse<PricingMode>(v, out var m))
-		//				ConfigModel.Instance.ShopPricingMode = m;
-		//		},
-		//		allowedValues: modes,
-		//		formatAllowedValue: s => s
-		//);
+		configMenu.AddTextOption(
+				mod: manifest,
+				name: () => "Shop Pricing Mode",
+				getValue: () => ConfigModel.Instance.ShopPricingMode.ToString(),
+				setValue: v => {
+					if (Enum.TryParse<PricingMode>(v, out var m))
+						ConfigModel.Instance.ShopPricingMode = m;
+				},
+				allowedValues: modes,
+				formatAllowedValue: s => s
+		);
 	}
 
 	private void PopulateMenuPage(IGenericModConfigMenuApi configMenu)

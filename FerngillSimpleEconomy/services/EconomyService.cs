@@ -47,6 +47,8 @@ public class EconomyService(
 	public bool Loaded { get; private set; }
 
 	private EconomyModel Economy { get; set; } = new(new Dictionary<int, Dictionary<string, ItemModel>>());
+	
+	public static bool BypassPricePatch = false;
 
 	public void OnLoaded()
 	{
@@ -434,4 +436,14 @@ public class EconomyService(
 
 	private static int RoundDouble(double d) => (int)Math.Round(d, 0, MidpointRounding.ToEven);
 	private static int RoundDecimal(decimal d) => (int)Math.Round(d, 0, MidpointRounding.ToEven);
+
+ public int GetVanillaSellPrice(Object obj) {
+	try {
+	 BypassPricePatch = true;
+	 return obj.sellToStorePrice();
+	}
+	finally {
+	 BypassPricePatch = false;
+	}
+ }
 }
