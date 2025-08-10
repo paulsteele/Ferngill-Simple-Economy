@@ -7,6 +7,7 @@ using fse.core.multiplayer;
 using StardewModdingAPI;
 using StardewValley;
 using Object = StardewValley.Object;
+using static fse.core.models.ConfigModel;
 
 namespace fse.core.services;
 
@@ -334,13 +335,15 @@ public class EconomyService(
 		var itemModel = Economy.GetItem(obj);
 		if (itemModel == null)
 		{
-			// monitor.Log($"Could not find item model for {obj.name}", LogLevel.Trace);
 			return;
 		}
 
 		itemModel.Supply += amount;
 
-		// monitor.Log($"Adjusted {obj.name} supply from {prev} to {itemModel.Supply}", LogLevel.Trace);
+		if (ConfigModel.Instance.ShopPricingMode == PricingMode.Instant)
+		{
+			itemModel.UpdateMultiplier();
+		}
 
 		if (notifyPeers)
 		{
