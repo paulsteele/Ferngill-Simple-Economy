@@ -17,20 +17,25 @@ namespace fse.core.patches {
 	public class ShopMenuPatches : SelfRegisteringPatches {
 		// Correct Payout
 		public static void AddBuybackItem_Postfix(ShopMenu __instance, ISalable sold_item, int sell_unit_price) {
-			if (ConfigModel.Instance.ShopPricingMode != PricingMode.Instant) return;
 			if (sold_item is not Object obj) return;
 
-			int quantity = obj.Stack;
+			if (ConfigModel.Instance.ShopPricingMode == PricingMode.Instant) {
+				int quantity = obj.Stack;
 
-			var model = EconomyService.GetItemModelFromObject(obj);
-			if (model is null) return;
+				var model = EconomyService.GetItemModelFromObject(obj);
+				if (model is null) return;
 
-			int currentTotal = sell_unit_price * quantity;
-			int wantedTotal = EconomyService.GetInstantTotal(obj);
-			int delta = wantedTotal - currentTotal;
-			if (delta != 0) Game1.player.Money += delta;
+				int currentTotal = sell_unit_price * quantity;
+				int wantedTotal = EconomyService.GetInstantTotal(obj);
+				int delta = wantedTotal - currentTotal;
+				if (delta != 0) Game1.player.Money += delta;
 
-			EconomyService.AdjustSupply(obj, quantity);
+				EconomyService.AdjustSupply(obj, quantity);
+			}
+			else
+			{
+				EconomyService.AdjustSupply(obj, obj.Stack);
+			}
 		}
 
 		public static void BuyBuybackItem_Postfix(ISalable bought_item, int price, int stack) {
