@@ -52,8 +52,6 @@ public class EconomyService(
 
 	private EconomyModel Economy { get; set; } = new(new Dictionary<int, Dictionary<string, ItemModel>>());
 	
-	public static bool BypassPricePatch = false;
-
 	public void OnLoaded()
 	{
 		if (IsClient)
@@ -443,21 +441,9 @@ public class EconomyService(
 	private static int RoundDouble(double d) => (int)Math.Round(d, 0, MidpointRounding.ToEven);
 	private static int RoundDecimal(decimal d) => (int)Math.Round(d, 0, MidpointRounding.ToEven);
 	
-	//public int GetVanillaSellPrice(Object obj)
-	//{
-	//	try
-	//	{
-	//		BypassPricePatch = true;
-	//		return obj.sellToStorePrice();
-	//	}
-	//	finally
-	//	{
-	//		BypassPricePatch = false;
-	//	}
-	//}
-
 	// Calculates Price in "Instant" Pricing Mode
-	public int GetInstantPrice(Object obj) {
+	public int GetInstantPrice(Object obj)
+	{
 		var quantity = obj.Stack;
 		if (quantity <= 0) return obj.Price;
 
@@ -465,33 +451,36 @@ public class EconomyService(
 		return (int)RoundDecimal(total / quantity);
 	}
 
-	public int GetInstantTotal(Object obj) {
+	public int GetInstantTotal(Object obj)
+	{
 		var quantity = obj.Stack;
 		if (quantity <= 0) return 0;
 
 		var model = GetItemModelFromObject(obj);
 
-		int baseUnit;
-		try { BypassPricePatch = true; baseUnit = obj.sellToStorePrice(); }
-		finally { BypassPricePatch = false; }
+		int basePrice = obj.Price;
 
 		if (model is null)
-			return (int)RoundDouble(baseUnit * quantity);
-
-		int s = model.Supply;
-		int cap = ConfigModel.Instance.MaxCalculatedSupply;
-
-		int k = Math.Max(0, Math.Min(quantity, cap - s));
-		int total = 0;
-
-		for (int i = 1; i <= k; i++) {
-			decimal m = model.GetMultiplierAtSupply(s + i);
-			total += (int)RoundDecimal(baseUnit * m);
+		{
+			return (int)RoundDouble(basePrice * quantity);
 		}
 
-		if (quantity > k) {
-			int tail = quantity - k;
-			int flatUnit = (int)RoundDecimal(baseUnit * ConfigModel.Instance.MinPercentage);
+		int supply = model.Supply;
+		int cap = ConfigModel.Instance.MaxCalculatedSupply;
+
+		int remain = Math.Max(0, Math.Min(quantity, cap - supply));
+		int total = 0;
+
+		for (int i = 1; i <= remain; i++)
+		{
+			decimal m = model.GetMultiplierAtSupply(supply + i);
+			total += (int)RoundDecimal(basePrice * m);
+		}
+
+		if (quantity > remain)
+		{
+			int tail = quantity - remain;
+			int flatUnit = (int)RoundDecimal(basePrice * ConfigModel.Instance.MinPercentage);
 			total += flatUnit * tail;
 		}
 

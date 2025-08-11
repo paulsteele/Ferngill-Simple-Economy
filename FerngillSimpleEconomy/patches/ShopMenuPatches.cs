@@ -25,14 +25,9 @@ namespace fse.core.patches {
 			var model = EconomyService.GetItemModelFromObject(obj);
 			if (model is null) return;
 
-			// Vanilla base Unit Price
-			int baseUnit;
-			try { Econ.BypassPricePatch = true; baseUnit = obj.sellToStorePrice(); }
-			finally { Econ.BypassPricePatch = false; }
-
-			int vanillaTotal = sell_unit_price * quantity;
+			int currentTotal = sell_unit_price * quantity;
 			int wantedTotal = EconomyService.GetInstantTotal(obj);
-			int delta = wantedTotal - vanillaTotal;
+			int delta = wantedTotal - currentTotal;
 			if (delta != 0) Game1.player.Money += delta;
 
 			EconomyService.AdjustSupply(obj, quantity);

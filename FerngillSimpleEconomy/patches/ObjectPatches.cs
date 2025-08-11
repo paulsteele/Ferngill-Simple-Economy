@@ -11,9 +11,7 @@ using Object = StardewValley.Object;
 namespace fse.core.patches {
 	public class ObjectPatches : SelfRegisteringPatches {
 		public static void SellToStoreSalePricePostFix(Object __instance, ref int __result) {
-			if (Econ.BypassPricePatch) return;
-
-			// Non-Shop: Apply Normal FSE Pricing
+			// FSE Pricing
 			var basePrice = __result;
 			if (ConfigModel.Instance.ShopPricingMode == PricingMode.Instant)
 			{
