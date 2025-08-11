@@ -13,20 +13,17 @@ namespace fse.core.patches {
 		public static void SellToStoreSalePricePostFix(Object __instance, ref int __result) {
 			if (Econ.BypassPricePatch) return;
 
-			if (Game1.activeClickableMenu is ShopMenu &&
-					ConfigModel.Instance.ShopPricingMode == PricingMode.Instant) {
-				var model = EconomyService.GetItemModelFromObject(__instance);
-				if (model != null) {
-					int baseUnit = __result; // Vanilla Base Unit
-					decimal mNext = model.GetMultiplierAtSupply(model.Supply + 1); // Next Unit Multiplier
-					__result = (int)Math.Round(baseUnit * mNext, 0, MidpointRounding.ToEven);
-					return;
-				}
-			}
-
 			// Non-Shop: Apply Normal FSE Pricing
-			int baseP = __result;
-			__result = SafeAction.Run(() => EconomyService.GetPrice(__instance, baseP), baseP, Monitor);
+			var basePrice = __result;
+			if (ConfigModel.Instance.ShopPricingMode == PricingMode.Instant)
+			{
+				__result = EconomyService.GetInstantPrice(__instance);
+				//__result = SafeAction.Run(() => EconomyService.GetInstantPrice(__instance), basePrice, Monitor);
+			}
+			else
+			{
+				__result = SafeAction.Run(() => EconomyService.GetPrice(__instance, basePrice), basePrice, Monitor);
+			}
 		}
 
 		public override void Register(Harmony harmony) {
@@ -34,6 +31,15 @@ namespace fse.core.patches {
 				AccessTools.Method(typeof(Object), nameof(Object.sellToStorePrice)),
 				postfix: new HarmonyMethod(typeof(ObjectPatches), nameof(SellToStoreSalePricePostFix))
 			);
+		}
+
+		public static bool GetSellToStorePriceOfItem_Prefix(Item i, bool countStack, ref int __result) {
+			if (!countStack) return true;
+			if (ConfigModel.Instance.ShopPricingMode != PricingMode.Instant) return true;
+			if (i is not Object obj) return true;
+
+			__result = EconomyService.GetInstantTotal(obj);
+			return false;
 		}
 	}
 }

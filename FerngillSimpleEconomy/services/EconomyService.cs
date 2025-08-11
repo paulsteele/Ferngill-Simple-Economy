@@ -30,6 +30,9 @@ public interface IEconomyService
 	ItemModel GetConsolidatedItem(ItemModel original);
 	decimal GetBreakEvenSupply();
 	ItemModel? GetItemModelFromObject(Object obj);
+	//int GetVanillaSellPrice(Object obj);
+	int GetInstantPrice(Object obj);
+	int GetInstantTotal(Object obj);
 }
 
 public class EconomyService(
@@ -439,14 +442,59 @@ public class EconomyService(
 
 	private static int RoundDouble(double d) => (int)Math.Round(d, 0, MidpointRounding.ToEven);
 	private static int RoundDecimal(decimal d) => (int)Math.Round(d, 0, MidpointRounding.ToEven);
+	
+	//public int GetVanillaSellPrice(Object obj)
+	//{
+	//	try
+	//	{
+	//		BypassPricePatch = true;
+	//		return obj.sellToStorePrice();
+	//	}
+	//	finally
+	//	{
+	//		BypassPricePatch = false;
+	//	}
+	//}
 
- public int GetVanillaSellPrice(Object obj) {
-	try {
-	 BypassPricePatch = true;
-	 return obj.sellToStorePrice();
+	// Calculates Price in "Instant" Pricing Mode
+	public int GetInstantPrice(Object obj) {
+		var quantity = obj.Stack;
+		if (quantity <= 0) return obj.Price;
+
+		var total = GetInstantTotal(obj);
+		return (int)RoundDecimal(total / quantity);
 	}
-	finally {
-	 BypassPricePatch = false;
+
+	public int GetInstantTotal(Object obj) {
+		var quantity = obj.Stack;
+		if (quantity <= 0) return 0;
+
+		var model = GetItemModelFromObject(obj);
+
+		int baseUnit;
+		try { BypassPricePatch = true; baseUnit = obj.sellToStorePrice(); }
+		finally { BypassPricePatch = false; }
+
+		if (model is null)
+			return (int)RoundDouble(baseUnit * quantity);
+
+		int s = model.Supply;
+		int cap = ConfigModel.Instance.MaxCalculatedSupply;
+
+		int k = Math.Max(0, Math.Min(quantity, cap - s));
+		int total = 0;
+
+		for (int i = 1; i <= k; i++) {
+			decimal m = model.GetMultiplierAtSupply(s + i);
+			total += (int)RoundDecimal(baseUnit * m);
+		}
+
+		if (quantity > k) {
+			int tail = quantity - k;
+			int flatUnit = (int)RoundDecimal(baseUnit * ConfigModel.Instance.MinPercentage);
+			total += flatUnit * tail;
+		}
+
+		return total;
 	}
- }
 }

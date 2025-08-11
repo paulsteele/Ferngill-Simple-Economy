@@ -15,47 +15,12 @@ using Object = StardewValley.Object;
 
 namespace fse.core.patches {
 	public class ShopMenuPatches : SelfRegisteringPatches {
-		private static int MarginalTotal(ItemModel model, int qty, int baseUnit) {
-			if (qty <= 0) return 0;
-
-			int s = model.Supply;
-			int cap = ConfigModel.Instance.MaxCalculatedSupply;
-
-			int k = Math.Max(0, Math.Min(qty, cap - s));
-			decimal mStart = model.GetMultiplierAtSupply(s + 1);
-			decimal mEnd = model.GetMultiplierAtSupply(s + k);
-			decimal sumLinear = k * (mStart + mEnd) / 2m;
-
-			int tail = qty - k; // Past Cap -> flat at MinPercentage
-			decimal sumTail = tail * ConfigModel.Instance.MinPercentage;
-
-			decimal totalMult = sumLinear + sumTail;
-			return (int)Math.Round(baseUnit * totalMult, 0, MidpointRounding.ToEven);
-		}
-
 		// Correct Payout
-		public static void AddBuybackItem_Postfix(ShopMenu __instance, ISalable sold_item, int sell_unit_price, int stack) {
+		public static void AddBuybackItem_Postfix(ShopMenu __instance, ISalable sold_item, int sell_unit_price) {
 			if (ConfigModel.Instance.ShopPricingMode != PricingMode.Instant) return;
 			if (sold_item is not Object obj) return;
 
-			// Resolve Sold Quantity (may be 0 in 1.6)
-			int qty = stack;
-			if (qty <= 0) qty = obj.Stack;
-
-			if (qty <= 0) {
-				string[] fields = { "buyBackItemsToSell", "buyBackItems", "buyBackItemsForSale" };
-				foreach (var fname in fields) {
-					var fi = AccessTools.Field(typeof(ShopMenu), fname);
-					if (fi == null) continue;
-					if (fi.GetValue(__instance) is IList list && list.Count > 0) {
-						if (list[list.Count - 1] is Object last && last.ParentSheetIndex == obj.ParentSheetIndex) {
-							qty = last.Stack;
-							break;
-						}
-					}
-				}
-			}
-			if (qty <= 0) return;
+			int quantity = obj.Stack;
 
 			var model = EconomyService.GetItemModelFromObject(obj);
 			if (model is null) return;
@@ -65,12 +30,12 @@ namespace fse.core.patches {
 			try { Econ.BypassPricePatch = true; baseUnit = obj.sellToStorePrice(); }
 			finally { Econ.BypassPricePatch = false; }
 
-			int vanillaTotal = sell_unit_price * qty;
-			int wantedTotal = MarginalTotal(model, qty, baseUnit);
+			int vanillaTotal = sell_unit_price * quantity;
+			int wantedTotal = EconomyService.GetInstantTotal(obj);
 			int delta = wantedTotal - vanillaTotal;
 			if (delta != 0) Game1.player.Money += delta;
 
-			EconomyService.AdjustSupply(obj, qty);
+			EconomyService.AdjustSupply(obj, quantity);
 		}
 
 		public static void BuyBuybackItem_Postfix(ISalable bought_item, int price, int stack) {
