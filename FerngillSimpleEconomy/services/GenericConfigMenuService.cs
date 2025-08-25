@@ -281,6 +281,23 @@ public class GenericConfigMenuService(
 			setValue: val => ConfigModel.Instance.CustomDeltaUpdateFrequency = val,
 			min: 1
 		);
+		
+		configMenu.AddSectionTitle(mod: manifest, text: () => helper.Translation.Get("fse.config.pricing.mode.description"));
+		
+		configMenu.AddTextOption(
+			mod: manifest,
+			name: () => helper.Translation.Get("fse.config.pricing.mode.field"),
+			getValue: () => ConfigModel.Instance.PricingMode.ToString(),
+			setValue: val =>
+			{
+				if (Enum.TryParse<PricingMode>(val, true, out var pricingMode))
+				{
+					ConfigModel.Instance.PricingMode = pricingMode;
+				}
+			},
+			allowedValues: Enum.GetNames(typeof(PricingMode)),
+			formatAllowedValue: val => helper.Translation.Get($"fse.config.pricing.mode.{val}")
+		);
 	}
 
 	private void PopulateMenuPage(IGenericModConfigMenuApi configMenu)

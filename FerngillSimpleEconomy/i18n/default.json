@@ -51,5 +51,9 @@
 	"fse.config.maximum": "Maximum",
 	"fse.config.standard.deviation": "Standard Deviation",
 	"fse.config.standard.deviation.delta": "Daily Supply Change Standard Deviation",
-	"fse.config.other": "Other"
+	"fse.config.other": "Other",
+	"fse.config.pricing.mode.description": "Pricing Mode",
+	"fse.config.pricing.mode.field": "Mode",
+	"fse.config.pricing.mode.Instant": "Instant",
+	"fse.config.pricing.mode.Batch": "Batch"
 }
