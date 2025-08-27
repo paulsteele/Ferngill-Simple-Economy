@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using fse.core.models;
 using HarmonyLib;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
 using StardewValley.Menus;
@@ -13,23 +13,69 @@ namespace fse.core.patches
 {
 	public class ShopMenuPatches : SelfRegisteringPatches
 	{
-		//Prefix as the number of sold stacks is modified in the original function
-		public static bool AddBuyBackItemPreFix(ISalable sold_item, int sell_unit_price, int stack)
+		public static bool AddBuyBackItemPreFix(
+			ShopMenu __instance, 
+			ISalable sold_item, 
+			int sell_unit_price,
+			int stack, 
+			out BuyBackState __state)
 		{
-			if (sold_item is Object soldObject)
+			var buyBackItems = new List<ISalable>();
+			
+			if (ConfigModel.Instance.PricingMode == PricingMode.Instant)
 			{
-				EconomyService.AdjustSupply(soldObject, stack);
+				// The original method will compare sold items to the buyback list and stack items if the `canStackWith` method returns true.
+				// modifying this method via another patch would have unintended consequences. Thankfully the logic plays fairly nicely with
+				// removing the item from `buyBackItems` before the original method runs and then adding it back in the postfix.
+				// This makes it so that the original method will not stack items with different prices and allows the player to buy back items at the price they were sold at.
+				// of note is this does not require removing the item from `itemPriceAndStock` which is convenient to track the price of the item.
+
+				var sameKeys = __instance.buyBackItems
+					.Where(key => key.canStackWith(sold_item))
+					.Where(__instance.itemPriceAndStock.ContainsKey)
+					.Where(key => __instance.itemPriceAndStock[key].Price != sell_unit_price)
+					.ToList();
+				
+				foreach (var key in sameKeys)
+				{
+					__instance.buyBackItems.Remove(key);
+				}
+
+				buyBackItems = sameKeys;
 			}
+			
+			__state = new BuyBackState(buyBackItems, stack); //store the stack size before the original function modifies it
 
 			return true;
 		}
 
-		public static void BuyBuybackItemPostFix(ISalable bought_item, int price, int stack)
+		public static void AddBuyBackItemPostFix(
+			ShopMenu __instance, 
+			ISalable sold_item, 
+			int sell_unit_price, 
+			BuyBackState __state
+		)
 		{
-			if (bought_item is Object boughtObject)
+			// supply must be adjusted in the postfix as changing the supply in the prefix would result in the price being calculated with the wrong supply
+			if (sold_item is Object soldObject)
 			{
-				EconomyService.AdjustSupply(boughtObject, -stack);
+				EconomyService.AdjustSupply(soldObject, __state.StackSize);
 			}
+
+			foreach (var key in __state.BuyBackItems)
+			{
+				__instance.buyBackItems.Add(key);
+			}
+		}
+
+		public static void BuyBuybackItemPostFix(ShopMenu __instance, ISalable bought_item, int stack)
+		{
+			if (bought_item is not Object boughtObject)
+			{
+				return;
+			}
+
+			EconomyService.AdjustSupply(boughtObject, -stack);
 		}
 
 		public static void DrawSeedInfo(
@@ -50,17 +96,17 @@ namespace fse.core.patches
 
 			var forSaleButtons = shopMenu.forSaleButtons;
 			var forSale = shopMenu.forSale;
-			int currItemIdx = shopMenu.currentItemIndex;
-			int vanillaBtnWidth = shopMenu.width - 32;
-			for (int i = 0; i < forSaleButtons.Count; i++)
+			var currItemIdx = shopMenu.currentItemIndex;
+			var vanillaBtnWidth = shopMenu.width - 32;
+			for (var i = 0; i < forSaleButtons.Count; i++)
 			{
 				if (currItemIdx + i >= forSale.Count)
 				{
 					continue;
 				}
-				ClickableComponent component = forSaleButtons[i];
-				ISalable salable = forSale[currItemIdx + i];
-				Rectangle bounds = component.bounds;
+				var component = forSaleButtons[i];
+				var salable = forSale[currItemIdx + i];
+				var bounds = component.bounds;
 				if (salable is Object { Category: Object.SeedsCategory } obj && EconomyService.GetItemModelFromSeed(obj.ItemId) is ItemModel model)
 				{
 					if (bounds.Width < vanillaBtnWidth)
@@ -79,7 +125,8 @@ namespace fse.core.patches
 		{
 			harmony.Patch(
 				AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.AddBuybackItem)),
-				new HarmonyMethod(typeof(ShopMenuPatches), nameof(AddBuyBackItemPreFix))
+				prefix: new HarmonyMethod(typeof(ShopMenuPatches), nameof(AddBuyBackItemPreFix)),
+				postfix: new HarmonyMethod(typeof(ShopMenuPatches), nameof(AddBuyBackItemPostFix))
 			);
 
 			harmony.Patch(
@@ -88,7 +135,7 @@ namespace fse.core.patches
 			);
 
 			harmony.Patch(
-				AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.draw), new[] { typeof(SpriteBatch) }),
+				AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.draw), [typeof(SpriteBatch)]),
 				transpiler: new HarmonyMethod(typeof(ShopMenuPatches), nameof(ShopDrawingTranspiler))
 			);
 		}

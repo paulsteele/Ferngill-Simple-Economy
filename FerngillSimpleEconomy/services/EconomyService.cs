@@ -267,7 +267,7 @@ public class EconomyService(
 		{
 			return basePrice;
 		}
-		var adjustedPrice = itemModel.GetPrice(basePrice);
+		var adjustedPrice = itemModel.GetPrice(basePrice, obj.Stack);
 
 		return RoundDecimal(adjustedPrice);
 	}
