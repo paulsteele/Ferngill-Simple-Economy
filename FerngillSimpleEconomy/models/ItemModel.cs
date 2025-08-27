@@ -38,18 +38,27 @@ public class ItemModel(string objectId)
 
 	public void UpdateMultiplier()
 	{
-		_cachedMultiplier = GetMultiplier();
+		_cachedMultiplier = GetMultiplier(Supply);
 	}
 
-	private decimal GetMultiplier()
+	private static decimal GetMultiplier(int supply)
 	{
-		var ratio = 1 - (Math.Min(Supply, ConfigModel.Instance.MaxCalculatedSupply) / (decimal)ConfigModel.Instance.MaxCalculatedSupply);
+		var ratio = 1 - (Math.Min(supply, ConfigModel.Instance.MaxCalculatedSupply) / (decimal)ConfigModel.Instance.MaxCalculatedSupply);
 		var percentageRange = ConfigModel.Instance.MaxPercentage - ConfigModel.Instance.MinPercentage;
 
 		return (ratio * percentageRange) + ConfigModel.Instance.MinPercentage;
 	}
 
-	public decimal GetPrice(int basePrice) => basePrice * _cachedMultiplier;
+	public decimal GetPrice(int basePrice, int stackSize)
+	{
+		var multiplier = ConfigModel.Instance.PricingMode switch
+		{
+			PricingMode.Batch => _cachedMultiplier,
+			_ => (GetMultiplier(Supply) + GetMultiplier(Math.Max(Supply + (stackSize - 1) , 0))) / 2,
+		};
+
+		return basePrice * multiplier;
+	}
 
 	public void CapSupply()
 	{
