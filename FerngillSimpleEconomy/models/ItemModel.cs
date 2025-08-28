@@ -49,12 +49,30 @@ public class ItemModel(string objectId)
 		return (ratio * percentageRange) + ConfigModel.Instance.MinPercentage;
 	}
 
-	public decimal GetPrice(int basePrice, int stackSize)
+	private static decimal GetMultiplier(int supply, int quantity)
+	{
+		if (supply > ConfigModel.Instance.MaxCalculatedSupply)
+		{
+			return ConfigModel.Instance.MinPercentage;
+		}
+
+		var endingSupply = supply + quantity - 1;
+		
+		var numberOfCappedItems = Math.Max(0, endingSupply - ConfigModel.Instance.MaxCalculatedSupply);
+		var numberOfVariableItems = quantity - numberOfCappedItems;
+
+		var variableMultiplier = (GetMultiplier(supply) + GetMultiplier(endingSupply)) / 2; // this is valid because GetMultiplier is linear for non capped items
+		var cappedMultiplier = ConfigModel.Instance.MinPercentage;
+
+		return ((variableMultiplier * numberOfVariableItems) + (cappedMultiplier * numberOfCappedItems)) / quantity;
+	}
+
+	public decimal GetPrice(int basePrice, int quantity)
 	{
 		var multiplier = ConfigModel.Instance.PricingMode switch
 		{
 			PricingMode.Batch => _cachedMultiplier,
-			_ => (GetMultiplier(Supply) + GetMultiplier(Math.Max(Supply + (stackSize - 1) , 0))) / 2,
+			_ => GetMultiplier(Supply, quantity),
 		};
 
 		return basePrice * multiplier;
