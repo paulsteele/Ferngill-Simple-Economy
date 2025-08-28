@@ -8,6 +8,7 @@ Downloads: [Nexus](https://www.nexusmods.com/stardewvalley/mods/21414)
 * BetterGame Menu Support - https://github.com/KhloeLeclair
 * Compact Searchable Shop Menu Support - https://github.com/Mushymato
 * Configurable Supply / Delta - https://github.com/cidrei & https://github.com/SingularityPotato
+* Instant Pricing - https://github.com/BeesQ
 
 ## Translations
 * Korean - cheesecats
