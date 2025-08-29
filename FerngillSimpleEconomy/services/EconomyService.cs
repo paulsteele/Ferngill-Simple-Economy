@@ -332,13 +332,10 @@ public class EconomyService(
 		var itemModel = Economy.GetItem(obj);
 		if (itemModel == null)
 		{
-			// monitor.Log($"Could not find item model for {obj.name}", LogLevel.Trace);
 			return;
 		}
 
 		itemModel.Supply += amount;
-
-		// monitor.Log($"Adjusted {obj.name} supply from {prev} to {itemModel.Supply}", LogLevel.Trace);
 
 		if (notifyPeers)
 		{

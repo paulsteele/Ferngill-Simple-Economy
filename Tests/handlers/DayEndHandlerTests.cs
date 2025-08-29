@@ -121,6 +121,8 @@ public class DayEndHandlerTests : HarmonyTestBase
 		HarmonyGame.GetAllFarmersResults = _farmers;
 		
 		_mockGameLoopEvents.InvokeDayEnding();
+		ClearShippingBins();
+		_mockGameLoopEvents.InvokeSaving();
 		
 		_mockEconomyService.Verify(m => m.AdjustSupply(It.IsAny<Object>(), It.IsAny<int>(), false), Times.Exactly(_farmer1BinInventory.Count));
 		foreach (var item in _farmer1BinInventory)
@@ -135,6 +137,8 @@ public class DayEndHandlerTests : HarmonyTestBase
 		_farmerTeam.SetUseSeparateWalletsResult(false);
 		
 		_mockGameLoopEvents.InvokeDayEnding();
+		ClearShippingBins();
+		_mockGameLoopEvents.InvokeSaving();
 		
 		_mockEconomyService.Verify(m => m.AdjustSupply(It.IsAny<Object>(), It.IsAny<int>(), false), Times.Exactly(_farmer1BinInventory.Count));
 		foreach (var item in _farmer1BinInventory)
@@ -149,6 +153,8 @@ public class DayEndHandlerTests : HarmonyTestBase
 		_farmerTeam.SetUseSeparateWalletsResult(true);
 		
 		_mockGameLoopEvents.InvokeDayEnding();
+		ClearShippingBins();
+		_mockGameLoopEvents.InvokeSaving();
 		
 		_mockEconomyService.Verify(m => m.AdjustSupply(It.IsAny<Object>(), It.IsAny<int>(), false), Times.Exactly(_farmer1BinInventory.Count + _farmer2BinInventory.Count + _farmer3BinInventory.Count + _farmer4BinInventory.Count));
 		foreach (var item in _farmer1BinInventory.Concat(_farmer2BinInventory).Concat(_farmer3BinInventory).Concat(_farmer4BinInventory))
@@ -164,8 +170,11 @@ public class DayEndHandlerTests : HarmonyTestBase
 		_farmerTeam.SetUseSeparateWalletsResult(true);
 		
 		_mockGameLoopEvents.InvokeDayEnding();
+		ClearShippingBins();
+		_mockGameLoopEvents.InvokeSaving();
 
 		_mockEconomyService.Verify(m => m.AdjustSupply(It.IsAny<Object>(), It.IsAny<int>(), false), Times.Never);
+		_mockEconomyService.Verify(m => m.HandleDayEnd(It.IsAny<DayModel>()), Times.Never);
 	}
 	
 	[TestCase(1, Season.Spring, 1)]
@@ -180,8 +189,35 @@ public class DayEndHandlerTests : HarmonyTestBase
 		Game1.dayOfMonth = dayOfMonth;
 
 		_mockGameLoopEvents.InvokeDayEnding();
+		ClearShippingBins();
+		_mockGameLoopEvents.InvokeSaving();
 
 		_mockEconomyService.Verify(m => m.HandleDayEnd(new DayModel(year, SeasonHelper.GetCurrentSeason(), dayOfMonth)), Times.Once);
+	}
+	
+	[Test]
+	public void ShouldNotDoubleCountIfSavingIsCalledMultipleTimes()
+	{
+		_farmerTeam.SetUseSeparateWalletsResult(false);
+		
+		_mockGameLoopEvents.InvokeDayEnding();
+		ClearShippingBins();
+		_mockGameLoopEvents.InvokeSaving();
+		_mockGameLoopEvents.InvokeSaving();
+		_mockGameLoopEvents.InvokeSaving();
+		
+		_mockEconomyService.Verify(m => m.AdjustSupply(It.IsAny<Object>(), It.IsAny<int>(), false), Times.Exactly(_farmer1BinInventory.Count));
+		foreach (var item in _farmer1BinInventory)
+		{
+			_mockEconomyService.Verify(m => m.AdjustSupply(item as Object, item.Stack, false));
+		}
+		
+		_mockEconomyService.Verify(m => m.HandleDayEnd(It.IsAny<DayModel>()), Times.Once);
+	}
+	
+	private static void ClearShippingBins()
+	{
+		HarmonyFarm.GetShippingBinDictionary.Clear();
 	}
 }
 

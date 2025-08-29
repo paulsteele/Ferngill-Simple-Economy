@@ -28,6 +28,11 @@ public class MockGameLoopEvents : IGameLoopEvents
 	{
 		DayEnding?.Invoke(this, new DayEndingEventArgs());
 	}
+	
+	public void InvokeSaving()
+	{
+		Saving?.Invoke(this, new SavingEventArgs());
+	}
 
 	public void InvokeSaveLoaded()
 	{
