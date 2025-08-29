@@ -29,6 +29,8 @@ public class ArtisanServiceTests
 						{ "2", new ItemModel("2") },
 						{ "3", new ItemModel("3") },
 						{ "4", new ItemModel("4") },
+						{ "186", new ItemModel("186") },
+						{ "184", new ItemModel("184") },
 					}
 				},
 			}
@@ -176,6 +178,28 @@ public class ArtisanServiceTests
 		// Assert
 		Assert.That(result, Is.Null);
 	}
+	
+	[Test]
+	public void ShouldHandleHardcodedEquivalents()
+	{
+		GenerateMachineData(
+			("186", "184"),
+			("1", "186"),
+			("2", "184")
+		);
+
+		_artisanService.GenerateArtisanMapping(_economyModel);
+		var result1 = _artisanService.GetBaseFromArtisanGood("186");
+		var result2 = _artisanService.GetBaseFromArtisanGood("2");
+		var result3 = _artisanService.GetBaseFromArtisanGood("1");
+
+		Assert.Multiple(() =>
+		{
+		 Assert.That(result1, Is.Null);
+		 Assert.That(result2.ObjectId, Is.EqualTo("184"));
+		 Assert.That(result3.ObjectId, Is.EqualTo("184")); // hardcoded equivalent
+		});
+ }
 
 	[Test]
 	public void ShouldHandleEmptyMachineData()

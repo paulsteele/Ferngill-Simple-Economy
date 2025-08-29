@@ -53,7 +53,7 @@ public class ArtisanService(IMonitor monitor, IModHelper helper) : IArtisanServi
 				output: t.output.ItemId.Replace("(O)", string.Empty),
 				input: t.trigger.RequiredItemId.Replace("(O)", string.Empty))
 			)
-			.Where(t => !t.input.Equals(t.output))
+			.Where(t => !HardcodedEquivalentItemsList.GetEquivalentId(t.input).Equals(HardcodedEquivalentItemsList.GetEquivalentId(t.output)))
 			.Where(t => !ArtisanMappingIgnoreList.IgnoreList.Contains(t.input))
 			.Where(t => economyModel.HasItem(t.output) && economyModel.HasItem(t.input))
 			.GroupBy(t => t.output)
