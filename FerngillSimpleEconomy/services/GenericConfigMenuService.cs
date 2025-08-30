@@ -44,6 +44,8 @@ public class GenericConfigMenuService(
 			save: () => helper.WriteConfig(ConfigModel.Instance)
 		);
 
+		configMenu.AddSectionTitle(mod: manifest, text: () => helper.Translation.Get("fse.config.pricing.mode.description"));
+
 		configMenu.AddNumberOption(
 			mod: manifest,
 			name: ()=> helper.Translation.Get("fse.config.MaxCalculatedSupply"),
@@ -66,6 +68,21 @@ public class GenericConfigMenuService(
 			getValue: () => (float)ConfigModel.Instance.MaxPercentage,
 			setValue: val => ConfigModel.Instance.MaxPercentage = (decimal)val,
 			min: 0f
+		);
+		
+		configMenu.AddTextOption(
+			mod: manifest,
+			name: () => helper.Translation.Get("fse.config.pricing.mode.field"),
+			getValue: () => ConfigModel.Instance.PricingMode.ToString(),
+			setValue: val =>
+			{
+				if (Enum.TryParse<PricingMode>(val, true, out var pricingMode))
+				{
+					ConfigModel.Instance.PricingMode = pricingMode;
+				}
+			},
+			allowedValues: Enum.GetNames(typeof(PricingMode)),
+			formatAllowedValue: val => helper.Translation.Get($"fse.config.pricing.mode.{val}")
 		);
 
 		configMenu.AddPageLink(manifest, FrequencyPageId, () => helper.Translation.Get("fse.config.page.frequency"));
@@ -282,22 +299,6 @@ public class GenericConfigMenuService(
 			min: 1
 		);
 		
-		configMenu.AddSectionTitle(mod: manifest, text: () => helper.Translation.Get("fse.config.pricing.mode.description"));
-		
-		configMenu.AddTextOption(
-			mod: manifest,
-			name: () => helper.Translation.Get("fse.config.pricing.mode.field"),
-			getValue: () => ConfigModel.Instance.PricingMode.ToString(),
-			setValue: val =>
-			{
-				if (Enum.TryParse<PricingMode>(val, true, out var pricingMode))
-				{
-					ConfigModel.Instance.PricingMode = pricingMode;
-				}
-			},
-			allowedValues: Enum.GetNames(typeof(PricingMode)),
-			formatAllowedValue: val => helper.Translation.Get($"fse.config.pricing.mode.{val}")
-		);
 	}
 
 	private void PopulateMenuPage(IGenericModConfigMenuApi configMenu)
