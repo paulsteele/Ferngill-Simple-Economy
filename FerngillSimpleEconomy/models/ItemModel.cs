@@ -56,6 +56,11 @@ public class ItemModel(string objectId)
 			return ConfigModel.Instance.MinPercentage;
 		}
 
+		if (quantity <= 1)
+		{
+			return GetMultiplier(supply);
+		}
+
 		var endingSupply = supply + quantity - 1;
 		
 		var numberOfCappedItems = Math.Max(0, endingSupply - ConfigModel.Instance.MaxCalculatedSupply);

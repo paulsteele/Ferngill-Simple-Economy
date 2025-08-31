@@ -160,4 +160,15 @@ public class ItemModelTests : HarmonyTestBase
 		Assert.That(iterativeTotal, Is.EqualTo(batchPrice * quantity));
 		Assert.That(iterativeTotal, Is.EqualTo(expectedTotal));
 	}
+	
+	[Test]
+	public void ShouldHandleZeroQuantityGracefully()
+	{
+		ConfigModel.Instance.PricingMode = PricingMode.Instant;
+		_itemModel.Supply = 100;
+		
+		_itemModel.UpdateMultiplier();
+		var price = _itemModel.GetPrice(100, 0);
+		Assert.That(price, Is.EqualTo(50));
+	}
 }
