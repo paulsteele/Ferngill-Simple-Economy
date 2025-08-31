@@ -667,7 +667,7 @@ public class ForecastMenu : IForecastMenu
 
 	private void DrawRow(SpriteBatch batch, ItemModel model, int rowNumber, int startingX, int startingY, int rowWidth, int rowHeight = 80, int padding = 40)
 	{
-		var obj = model.GetObjectInstance();
+		var obj = model.GetObjectInstance(1);
 
 		var x = startingX + padding;
 		var y = startingY + 315 + padding + (rowHeight + padding) * rowNumber;
@@ -787,7 +787,7 @@ public class ForecastMenu : IForecastMenu
 		if (!string.IsNullOrWhiteSpace(_textFilter))
 		{
 			var filter = _textFilter.ToLower().Trim();
-			items = items.Where(i => i.GetObjectInstance().DisplayName.ToLower().Trim().Contains(filter)).ToList();
+			items = items.Where(i => i.GetObjectInstance(1).DisplayName.ToLower().Trim().Contains(filter)).ToList();
 		}
 
 		switch (_chosenSort)
@@ -795,7 +795,7 @@ public class ForecastMenu : IForecastMenu
 			case nameof(Name):
 			{
 				items.Sort((a, b) =>
-					string.Compare(a.GetObjectInstance().DisplayName, b.GetObjectInstance().DisplayName, StringComparison.Ordinal)
+					string.Compare(a.GetObjectInstance(1).DisplayName, b.GetObjectInstance(1).DisplayName, StringComparison.Ordinal)
 				);
 				break;
 			}
@@ -813,8 +813,8 @@ public class ForecastMenu : IForecastMenu
 			{
 				items.Sort((a, b) =>
 				{
-					var aObj = a.GetObjectInstance();
-					var bObj = b.GetObjectInstance();
+					var aObj = a.GetObjectInstance(1);
+					var bObj = b.GetObjectInstance(1);
 					return _economyService.GetPrice(bObj, bObj.sellToStorePrice()) - _economyService.GetPrice(aObj, aObj.sellToStorePrice());
 				});
 				break;

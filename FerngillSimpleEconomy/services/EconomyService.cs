@@ -306,9 +306,9 @@ public class EconomyService(
 		var artisanBase = artisanService.GetBaseFromArtisanGood(obj.ItemId);
 		if (artisanBase != null)
 		{
-			return artisanBase.GetObjectInstance();
+			return artisanBase.GetObjectInstance(obj.Stack);
 		}
-		return string.IsNullOrWhiteSpace(preserveId) ? null : new Object(preserveId, 1);
+		return string.IsNullOrWhiteSpace(preserveId) ? null : new Object(preserveId, obj.Stack);
 	}
 
 	private decimal GetArtisanGoodPrice(Object artisanBase, int price)
@@ -394,7 +394,7 @@ public class EconomyService(
 	{
 		var seed = GetSeedModelFromItem(model.ObjectId);
 
-		var modelPrice = model.GetObjectInstance().sellToStorePrice();
+		var modelPrice = model.GetObjectInstance(1).sellToStorePrice();
 			
 		if (seed == null || seed.DaysToGrow < 1)
 		{

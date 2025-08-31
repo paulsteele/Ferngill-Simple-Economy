@@ -590,7 +590,7 @@ public class ForecastMenuTests : HarmonyTestBase
 
 		_menu.draw(_batch);
 
-		var drawIconLocation = HarmonyObject.DrawInMenuCalls[models[0].GetObjectInstance()].First();
+		var drawIconLocation = HarmonyObject.DrawInMenuCalls[models[0].GetObjectInstance(1)].First();
 		Assert.Multiple(() =>
 		{
 			Assert.That(drawIconLocation.X, Is.EqualTo(140f));

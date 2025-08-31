@@ -89,5 +89,13 @@ public class ItemModel(string objectId)
 	}
 		
 	private Object? _objectInstance;
-	public Object GetObjectInstance() => _objectInstance ??= new Object(ObjectId, 1);
+	public Object GetObjectInstance(int stack)
+	{
+		if (_objectInstance != null && _objectInstance.Stack == stack)
+		{
+			return _objectInstance;
+		}
+		_objectInstance = new Object(ObjectId, stack);
+		return _objectInstance;
+	}
 }

@@ -58,10 +58,11 @@ public class ItemModelTests : HarmonyTestBase
 	}
 
 	[Test]
-	public void TestGetObjectInstance()
+	public void TestGetObjectInstance([Values(1, 5, 10)] int stack)
 	{
-		var obj = _itemModel.GetObjectInstance();
+		var obj = _itemModel.GetObjectInstance(stack);
 		Assert.That(obj.ItemId, Is.EqualTo(_itemModel.ObjectId));
+		Assert.That(obj.Stack, Is.EqualTo(stack));
 	}
 
 	private static IEnumerable<TestCaseData> TestGetPriceSource()

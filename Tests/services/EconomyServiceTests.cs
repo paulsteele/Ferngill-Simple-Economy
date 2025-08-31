@@ -1002,8 +1002,11 @@ public class EconomyServiceTests : HarmonyTestBase
 		});
 	}
 
-	[Test]
-	public void ShouldGetPriceForArtisanItemWithBase()
+	[TestCase(PricingMode.Batch, 1, 130)]
+	[TestCase(PricingMode.Batch, 100, 13000)]
+	[TestCase(PricingMode.Instant, 1, 130)]
+	[TestCase(PricingMode.Instant, 100, 12000)]
+	public void ShouldGetPriceForArtisanItemWithBase(PricingMode pricingMode, int stack, int expectedPrice)
 	{
 		HarmonyObject.ObjectIdCategoryMapping.Clear();
 
@@ -1015,9 +1018,10 @@ public class EconomyServiceTests : HarmonyTestBase
 			GenerateObjectData("4", 2),
 		});
 		
-		ConfigModel.Instance = new ConfigModel()
+		ConfigModel.Instance = new ConfigModel
 		{
 			ValidCategories = [1, 2, 3, 4, 5, Object.artisanGoodsCategory],
+			PricingMode = pricingMode,
 		};
 		
 		HarmonyObject.ObjectIdToPriceMapping.Add("2", 10);
@@ -1033,7 +1037,7 @@ public class EconomyServiceTests : HarmonyTestBase
 		catArtisanItems[0].UpdateMultiplier();
 		cat1Items[0].UpdateMultiplier();
 
-		var sellable = new Object("1", 1)
+		var sellable = new Object("1", stack)
 		{
 			preservedParentSheetIndex =
 			{
@@ -1043,8 +1047,8 @@ public class EconomyServiceTests : HarmonyTestBase
 
 		Assert.Multiple(() =>
 		{ 
-			Assert.That(_economyService.GetPrice(sellable, 100), Is.EqualTo(130)); 
-			Assert.That(_economyService.GetPrice(sellable, 1000), Is.EqualTo(1300));
+			Assert.That(_economyService.GetPrice(sellable, 100) * stack, Is.EqualTo(expectedPrice)); 
+			Assert.That(_economyService.GetPrice(sellable, 1000) * stack, Is.EqualTo(expectedPrice * 10));
 		});
 	}
 	
@@ -1092,7 +1096,7 @@ public class EconomyServiceTests : HarmonyTestBase
 			GenerateObjectData("4", 2),
 		});
 		
-		ConfigModel.Instance = new ConfigModel()
+		ConfigModel.Instance = new ConfigModel
 		{
 			ValidCategories = [1, 2, 3, 4, 5, Object.artisanGoodsCategory],
 		};
