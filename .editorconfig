@@ -33,3 +33,9 @@ resharper_wrap_before_linq_expression = true
 resharper_arrange_constructor_or_destructor_body_highlighting = suggestion
 resharper_arrange_local_function_body_highlighting = suggestion
 resharper_arrange_method_or_operator_body_highlighting = suggestion
+
+# YAML files
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 2
+resharper_yaml_indent_sequence_style = block
