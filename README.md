@@ -13,23 +13,14 @@ Above all, the intent of the mod is to make things more fun, not necessarily fol
 
 Items are included in the economy based on the category they are under. By default, the included categories are:
 
-		Object.GemCategory,
-		Object.FishCategory,
-		Object.EggCategory,
-		Object.MilkCategory,
-		Object.meatCategory,
-		Object.artisanGoodsCategory,
-		Object.VegetableCategory,
-		Object.FruitsCategory,
-		Object.flowersCategory,
-		Object.GreensCategory,
 * Forage
 * Vegetables
 * Minerals
+* Fruit
 * Fish
 * Animal Products
-* Fruit
 * Artisan Goods
+* Basic
 * Flowers
 	Starting from 1.2.0, categories can be customized in the config menu(recommended) / file.
 
