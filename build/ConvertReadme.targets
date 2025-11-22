@@ -25,13 +25,21 @@
 		WorkingDirectory="$(DirectoryBuildTargetsDirectory)"
 		IgnoreExitCode="true"
 		ContinueOnError="true"
+		ConsoleToMsBuild="true"
 	>
 		<Output TaskParameter="ExitCode" PropertyName="ConversionExitCode" />
+		<Output TaskParameter="ConsoleOutput" ItemName="Md2bbcodeOutput" />
 	</Exec>
 
 		<Error 
 			Condition="'$(ConversionExitCode)' != '0'"
-			Text="Failed to convert README. If md2bbcode is not installed, run: uv tool install md2bbcode" 
+			Text="Failed to convert README."
+		/>
+
+		<WriteLinesToFile 
+			File="$(ReadmeOutputPath)" 
+			Lines="@(Md2bbcodeOutput)" 
+			Overwrite="true"
 		/>
 
 		<Message Text="Successfully converted README.md to README.bb at: $(ReadmeOutputPath)" Importance="high" />
