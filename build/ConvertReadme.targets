@@ -1,8 +1,8 @@
 <Project>
 	<Target Name="ConvertReadme">
 		<PropertyGroup>
-			<ReadmeInputPath>$(MSBuildThisFileDirectory)README.md</ReadmeInputPath>
-			<ReadmeOutputPath>$(MSBuildThisFileDirectory)README.bb</ReadmeOutputPath>
+			<ReadmeInputPath>$(DirectoryBuildTargetsDirectory)README.md</ReadmeInputPath>
+			<ReadmeOutputPath>$(DirectoryBuildTargetsDirectory)README.bb</ReadmeOutputPath>
 		</PropertyGroup>
 
 		<!-- Check if uv is available -->
@@ -22,7 +22,7 @@
 	<!-- Convert README.md to README.bb using uv tool run -->
 	<Exec 
 		Command="uv tool run md2bbcode &quot;$(ReadmeInputPath)&quot;"
-		WorkingDirectory="$(MSBuildThisFileDirectory)"
+		WorkingDirectory="$(DirectoryBuildTargetsDirectory)"
 		IgnoreExitCode="true"
 		ContinueOnError="true"
 	>
@@ -37,4 +37,3 @@
 		<Message Text="Successfully converted README.md to README.bb at: $(ReadmeOutputPath)" Importance="high" />
 	</Target>
 </Project>
-

@@ -1,3 +1,6 @@
 <Project>
+	<PropertyGroup>
+		<DirectoryBuildTargetsDirectory>$(MSBuildThisFileDirectory)</DirectoryBuildTargetsDirectory>
+	</PropertyGroup>
 	<Import Project="build\ConvertReadme.targets" />
 </Project>
