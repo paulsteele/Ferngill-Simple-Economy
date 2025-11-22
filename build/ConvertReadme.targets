@@ -47,6 +47,7 @@
 			IgnoreExitCode="true"
 			ContinueOnError="true"
 			ConsoleToMsBuild="true"
+			EnvironmentVariables="PYTHONIOENCODING=utf-8"
 		>
 			<Output TaskParameter="ExitCode" PropertyName="ConversionExitCode" />
 			<Output TaskParameter="ConsoleOutput" ItemName="Md2bbcodeOutput" />
