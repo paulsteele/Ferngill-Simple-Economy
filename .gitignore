@@ -492,3 +492,7 @@ fabric.properties
 .aider*
 .idea
 .github/copilot-instructions.md
+
+*prompt.md
+
+README.bb
