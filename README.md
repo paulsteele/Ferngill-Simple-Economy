@@ -135,7 +135,7 @@ For example, if supply is 0 for strawberries, strawberry wine will have the max 
 Special artisan goods (e.g., Caviar) will have their own supply. Rule of thumb: if it's in the menu as its own item, it has its own supply.
 
 ## Contributing
-Interested in contributing? Please read the https://github.com/paulsteele/Ferngill-Supply-And-Demand/CONTRIBUTING.md
+Interested in contributing? Please read the https://github.com/paulsteele/Ferngill-Simple-Economy/blob/main/CONTRIBUTING.md 
 
 ### Bug Reporting
 
