@@ -21,7 +21,7 @@
 
 	<!-- Convert README.md to README.bb using uv tool run -->
 	<Exec 
-		Command="uv tool run md2bbcode &quot;$(ReadmeInputPath)&quot; &gt; &quot;$(ReadmeOutputPath)&quot;"
+		Command="uv tool run md2bbcode &quot;$(ReadmeInputPath)&quot;"
 		WorkingDirectory="$(MSBuildThisFileDirectory)"
 		IgnoreExitCode="true"
 		ContinueOnError="true"
