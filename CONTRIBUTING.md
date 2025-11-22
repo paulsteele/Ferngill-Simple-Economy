@@ -5,11 +5,11 @@ Please report bugs at https://github.com/paulsteele/Ferngill-Supply-And-Demand/i
 
 ## Localization
 
-Translation files are located in 
+Translation files are located in:
 * `FerngillSimpleEconomy/i18n/`. (Most resources)
 * `FerngillSimpleEconomy/assets/mail/i18n/` (The intro mail)
 
-The wiki has a short guide for how translations work in smapi https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Translation#Tips_for_translators
+The wiki has a short guide for how translations work in SMAPI https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Translation#Tips_for_translators
 
 ### Pull Request Process
 
@@ -17,7 +17,7 @@ In general the only "requirement" for submitting a PR is that the solution build
 
 You can run them with `dotnet test`. 
 
-I'm honored that people want to contribute to this project and would like to merge as many contributions as possible. At the same time this is a hobby project for me and I have limited time to adapt PR's into a code style I can support. PR's that include some of the following will help reduce the time it takes integrate them:
+I'm honored that people want to contribute to this project and would like to merge as many contributions as possible. At the same time this is a hobby project for me and I have limited time to adapt PRs into a code style I can support. PRs that include some of the following will help reduce the time it takes to integrate them:
 * Follow existing code style
 * Following architectural patterns (dependency injection, etc) already in use
 * Include tests for new functionality
