@@ -1,6 +1,4 @@
 ﻿# Ferngill Simple Economy
-Downloads: [Nexus](https://www.nexusmods.com/stardewvalley/mods/21414)
-
 # What is it?
 
 Ferngill Simple Economy at its core is a mod that makes Stardew Valley follow the rules of supply and demand. The goal is that there is no longer an optimal crop to be grown to maximize profits by providing some extra financial challenge to the game.
@@ -48,7 +46,7 @@ Supply is most of the story when it comes to determining price but there are a c
 3) All items will have a sell price listed in the menu. This shows how much a normal quality item would sell on the current date. For crops that have growth time, that sale price is divided by the number of days it takes to grow and is displayed under the Sell Price Per Day column. Items without known growth cycles will instead have "---" listed. This value does not take into account crops that produce multiple items per harvest. Nor does it take into account regrowth cycles.  Both of these columns do not affect how much an item sells for, they simply provide an easy way to see what crops might be worth growing. To note: cost of seeds is not accounted for in these calculations. There's still a bit of manual work to be done to maximize profits!
 ![Sell Price Per Day](https://staticdelivery.nexusmods.com/mods/1303/images/21414/21414-1711894282-914518526.png)
  
-Looking through the entire menu for crops can be a little daunting when purchasing seeds, so the shop will also display the supply for crops that seeds grow. This supply is not for the seed itself.
+Looking through the entire menu for crops can be a little daunting when purchasing seeds, so the shop will also display the supply for crops that seeds grow. This supply is **not** for the seed itself.
 
 ![Shop menu with forecast](https://staticdelivery.nexusmods.com/mods/1303/images/21414/21414-1711833120-1924923088.png)
 
@@ -67,15 +65,15 @@ As mentioned, one of the key aspects of this mod was that modded crops would sea
 
 Specific mods tested:
 
-| Mod                              | Status | Notes                                                                                                                                                                                                                   |
-|----------------------------------|--------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Better Balance                   | ✔️     | N/A                                                                                                                                                                                                                     |
-| Stardew Valley Balance Overhaul  | ✔️     | N/A                                                                                                                                                                                                                     |
-| Cornucopia - More Crops          | ✔️     | N/A                                                                                                                                                                                                                     |
-| Informant - Updated and Improved | ✔️     | N/A                                                                                                                                                                                                                     |
-| Overgrown Flowery Interface      | ✔️     | Ferngill Simple Economy for Flowery Interface                                                                                                                                                                           |
-| UIInfoSuite2                     | ⚠️     | UIInfoSuite2 also adds a tab to the main menu and they overlap. Setting MenuTabOffset in simple economy to 70 should make both tabs accessible. The mod will attempt to do so automatically if it detects UiInfoSuite2  |
-| Other mods?                      | ❓      | Please report any compatibility issues you find!                                                                                                                                                                        |
+| Mod                                                                                    | Status | Notes                                                                                                                                                                                                                  |
+|----------------------------------------------------------------------------------------|--------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Better Balance](https://www.nexusmods.com/stardewvalley/mods/8141)                    | ✔️     | N/A                                                                                                                                                                                                                    |
+| [Stardew Valley Balance Overhaul]( https://www.nexusmods.com/stardewvalley/mods/13426) | ✔️     | N/A                                                                                                                                                                                                                    |
+| [Cornucopia - More Crops](https://www.nexusmods.com/stardewvalley/mods/19508)          | ✔️     | N/A                                                                                                                                                                                                                    |
+| [Informant - Updated and Improved](https://www.nexusmods.com/stardewvalley/mods/21286) | ✔️     | N/A                                                                                                                                                                                                                    |
+| [Overgrown Flowery Interface](https://www.nexusmods.com/stardewvalley/mods/6166)       | ✔️     | [Ferngill Simple Economy for Flowery Interface](https://www.nexusmods.com/stardewvalley/mods/22472)                                                                                                                    |
+| [UIInfoSuite2](https://github.com/Annosz/UIInfoSuite2)                                 | ⚠️     | UIInfoSuite2 also adds a tab to the main menu and they overlap. Setting MenuTabOffset in simple economy to 70 should make both tabs accessible. The mod will attempt to do so automatically if it detects UiInfoSuite2 |
+| Other mods?                                                                            | ❓      | Please report any compatibility issues you find!                                                                                                                                                                       |
 
 # Configuration
 I attempted to make most things in the mod configurable. 
@@ -92,8 +90,8 @@ First a note: knowing how the mod works on a technical level is not necessary to
 Ferngill Simple Economy centers around [the bell curve](https://en.wikipedia.org/wiki/Normal_distribution) and has two major distributions that affect how prices are calculated.
 
 The default distributions of supply and daily change can be viewed on Wolfram Alpha :
-* Supply 
-* Daily Change
+* [Supply](https://www.wolframalpha.com/input?i=normal+distribution+calculator&assumption=%7B%22F%22%2C+%22NormalProbabilities%22%2C+%22z%22%7D+-%3E%22500%22&assumption=%7B%22F%22%2C+%22NormalProbabilities%22%2C+%22mu%22%7D+-%3E%22500%22&assumption=%7B%22F%22%2C+%22NormalProbabilities%22%2C+%22sigma%22%7D+-%3E%22150%22)
+* [Daily Change](https://www.wolframalpha.com/input?i=normal+distribution+calculator&assumption=%7B%22F%22%2C+%22NormalProbabilities%22%2C+%22z%22%7D+-%3E%220%22&assumption=%7B%22F%22%2C+%22NormalProbabilities%22%2C+%22mu%22%7D+-%3E%220%22&assumption=%7B%22F%22%2C+%22NormalProbabilities%22%2C+%22sigma%22%7D+-%3E%225%22)
 
 Each distribution has both a mean and standard deviation that can be customized in the config file. In general, when playing with a crop mod or two, there will almost always be a profitable crop to grow.
 
@@ -120,6 +118,9 @@ With how the game is coded, generic artisan goods like wines and pickles are tec
 For example, if supply is 0 for strawberries, strawberry wine will have the max multiplier (on top of the normal wine multiplier). While if Blueberries have a maxed supply, Blueberry Wine will have the minimum multiplier.
 
 Special artisan goods (e.g., Caviar) will have their own supply. Rule of thumb: if it's in the menu as its own item, it has its own supply.
+
+# Downloads
+* [Nexus](https://www.nexusmods.com/stardewvalley/mods/21414)
 
 # Bug Reporting
 Please report all bugs to https://github.com/paulsteele/Ferngill-Supply-And-Demand/issues
