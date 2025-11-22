@@ -1,0 +1,7 @@
+﻿<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="FerngillSimpleEconomy\FerngillSimpleEconomy.csproj" Type="Classic C#" />
+  <Project Path="Tests\Tests.csproj" Type="Classic C#" />
+</Solution>
