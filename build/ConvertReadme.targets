@@ -1,0 +1,40 @@
+<Project>
+	<Target Name="ConvertReadme">
+		<PropertyGroup>
+			<ReadmeInputPath>$(MSBuildThisFileDirectory)README.md</ReadmeInputPath>
+			<ReadmeOutputPath>$(MSBuildThisFileDirectory)README.bb</ReadmeOutputPath>
+		</PropertyGroup>
+
+		<!-- Check if uv is available -->
+		<Exec 
+			Command="uv --version"
+			IgnoreExitCode="true"
+			ContinueOnError="true"
+		>
+			<Output TaskParameter="ExitCode" PropertyName="UvExitCode" />
+		</Exec>
+
+		<Error 
+			Condition="'$(UvExitCode)' != '0'"
+			Text="uv is not installed or not in PATH. Please install uv from https://github.com/astral-sh/uv (e.g., 'curl -LsSf https://astral.sh/uv/install.sh | sh' on Unix or 'powershell -c &quot;irm https://astral.sh/uv/install.ps1 | iex&quot;' on Windows)" 
+		/>
+
+	<!-- Convert README.md to README.bb using uv tool run -->
+	<Exec 
+		Command="uv tool run md2bbcode &quot;$(ReadmeInputPath)&quot; &gt; &quot;$(ReadmeOutputPath)&quot;"
+		WorkingDirectory="$(MSBuildThisFileDirectory)"
+		IgnoreExitCode="true"
+		ContinueOnError="true"
+	>
+		<Output TaskParameter="ExitCode" PropertyName="ConversionExitCode" />
+	</Exec>
+
+		<Error 
+			Condition="'$(ConversionExitCode)' != '0'"
+			Text="Failed to convert README. If md2bbcode is not installed, run: uv tool install md2bbcode" 
+		/>
+
+		<Message Text="Successfully converted README.md to README.bb at: $(ReadmeOutputPath)" Importance="high" />
+	</Target>
+</Project>
+

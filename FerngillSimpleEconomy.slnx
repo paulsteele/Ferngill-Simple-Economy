@@ -4,6 +4,6 @@
     <File Path="Directory.Build.targets" />
     <File Path="global.json" />
   </Folder>
-  <Project Path="FerngillSimpleEconomy\FerngillSimpleEconomy.csproj" Type="C#" />
-  <Project Path="Tests\Tests.csproj" Type="C#" />
+  <Project Path="FerngillSimpleEconomy\FerngillSimpleEconomy.csproj" />
+  <Project Path="Tests\Tests.csproj" />
 </Solution>
