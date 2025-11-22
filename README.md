@@ -43,7 +43,7 @@ Price
 
 ## Price
 Supply is most of the story when it comes to determining price but there are a couple of points worth mentioning about the price multiplier itself.
-1) By default, it is possible to have supply low enough items to sell for higher than they normally would. In my testing, I found that I was getting more money than I normally would in a play-through without this mod.
+1) By default, it is possible to have supply low enough for items to sell for higher than they normally would. In my testing, I found that I was getting more money than I normally would in a play-through without this mod.
 2) By default, price is locked in day to day, meaning it is possible to sell 20,000 parsnips and have all of them fetch the price as if the supply was 0 if that's where it started in the morning. While this may seem to defeat the point of the mod, I found it made an interesting choice that needed to be made while still supporting large volumes of crops being produced. Do you hoard your crops to maximize profits at the detriment of early season cash flow? Or do you sell as soon as possible and hurt yourself if you sell more of the item later in the season.
 3) All items will have a sell price listed in the menu. This shows how much a normal quality item would sell on the current date. For crops that have growth time, that sale price is divided by the number of days it takes to grow and is displayed under the Sell Price Per Day column. Items without known growth cycles will instead have "---" listed. This value does not take into account crops that produce multiple items per harvest. Nor does it take into account regrowth cycles.  Both of these columns do not affect how much an item sells for, they simply provide an easy way to see what crops might be worth growing. To note: cost of seeds is not accounted for in these calculations. There's still a bit of manual work to be done to maximize profits!
 ![Sell Price Per Day](https://staticdelivery.nexusmods.com/mods/1303/images/21414/21414-1711894282-914518526.png)
@@ -91,11 +91,11 @@ First a note: knowing how the mod works on a technical level is not necessary to
 
 Ferngill Simple Economy centers around [the bell curve](https://en.wikipedia.org/wiki/Normal_distribution) and has two major distributions that affect how prices are calculated.
 
-The default distributions of supply and daily change can view viewed on Wolfram Alpha : 
+The default distributions of supply and daily change can be viewed on Wolfram Alpha :
 * Supply 
 * Daily Change
 
-Each distribution has both a mean and standard deviation that can be customized in the config file. In general playing with a crop mod or two, there will almost always be a profitable crop to grow.
+Each distribution has both a mean and standard deviation that can be customized in the config file. In general, when playing with a crop mod or two, there will almost always be a profitable crop to grow.
 
 ## Categories
 Items are included in the economy based on the category they are under. By default, the included categories are:
@@ -109,7 +109,7 @@ Items are included in the economy based on the category they are under. By defau
 * Artisan Goods
 * Basic
 * Flowers
-Starting from 1.2.0, categories can be customized in the config menu(recommended) / file.
+Starting from 1.2.0, categories can be customized in the config menu (recommended) / file.
 
 Some special items (e.g., The Legend) are excluded from the economy model.
 
