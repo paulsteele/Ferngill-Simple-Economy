@@ -19,26 +19,47 @@
 			Text="uv is not installed or not in PATH. Please install uv from https://github.com/astral-sh/uv (e.g., 'curl -LsSf https://astral.sh/uv/install.sh | sh' on Unix or 'powershell -c &quot;irm https://astral.sh/uv/install.ps1 | iex&quot;' on Windows)" 
 		/>
 
-	<!-- Convert README.md to README.bb using uv tool run -->
-	<Exec 
-		Command="uv tool run md2bbcode &quot;$(ReadmeInputPath)&quot;"
-		WorkingDirectory="$(DirectoryBuildTargetsDirectory)"
-		IgnoreExitCode="true"
-		ContinueOnError="true"
-		ConsoleToMsBuild="true"
-	>
-		<Output TaskParameter="ExitCode" PropertyName="ConversionExitCode" />
-		<Output TaskParameter="ConsoleOutput" ItemName="Md2bbcodeOutput" />
-	</Exec>
+		<!-- Check if md2bbcode is installed -->
+		<Exec 
+			Command="uv tool list"
+			IgnoreExitCode="true"
+			ContinueOnError="true"
+			ConsoleToMsBuild="true"
+		>
+			<Output TaskParameter="ConsoleOutput" ItemName="UvToolListOutput" />
+		</Exec>
+
+		<PropertyGroup>
+			<UvToolListOutputString>@(UvToolListOutput)</UvToolListOutputString>
+			<Md2bbcodeInstalled Condition="$(UvToolListOutputString.Contains('md2bbcode'))">true</Md2bbcodeInstalled>
+			<Md2bbcodeInstalled Condition="!$(UvToolListOutputString.Contains('md2bbcode'))">false</Md2bbcodeInstalled>
+		</PropertyGroup>
 
 		<Error 
+			Condition="'$(Md2bbcodeInstalled)' != 'true'"
+			Text="md2bbcode is not installed. Please install it using: uv tool install md2bbcode" 
+		/>
+
+		<!-- Convert README.md to README.bb using uv tool run -->
+		<Exec
+			Command="uv tool run md2bbcode &quot;$(ReadmeInputPath)&quot;"
+			WorkingDirectory="$(DirectoryBuildTargetsDirectory)"
+			IgnoreExitCode="true"
+			ContinueOnError="true"
+			ConsoleToMsBuild="true"
+		>
+			<Output TaskParameter="ExitCode" PropertyName="ConversionExitCode" />
+			<Output TaskParameter="ConsoleOutput" ItemName="Md2bbcodeOutput" />
+		</Exec>
+
+		<Error
 			Condition="'$(ConversionExitCode)' != '0'"
 			Text="Failed to convert README."
 		/>
 
-		<WriteLinesToFile 
-			File="$(ReadmeOutputPath)" 
-			Lines="@(Md2bbcodeOutput)" 
+		<WriteLinesToFile
+			File="$(ReadmeOutputPath)"
+			Lines="@(Md2bbcodeOutput)"
 			Overwrite="true"
 		/>
 
