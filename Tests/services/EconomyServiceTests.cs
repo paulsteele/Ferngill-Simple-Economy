@@ -1179,6 +1179,132 @@ public class EconomyServiceTests : HarmonyTestBase
 	}
 
 	[Test]
+	public void ShouldAdjustDeltaForNormalItem(
+		[Values] bool isClient,
+		[Values] bool shouldNotifyPeers
+	)
+	{
+		_economyService.OnLoaded();
+		
+		HarmonyFarmer.IsMainPlayerDictionary.Clear();
+		HarmonyFarmer.IsMainPlayerDictionary.Add(_player, !isClient);
+		
+		var cat1Items = _economyService.GetItemsForCategory(1);
+
+		cat1Items[0].DailyDelta = 0;
+		
+		cat1Items[0].UpdateMultiplier();
+
+		var sellable = new Object("1", 1);
+		
+		_economyService.AdjustDelta(sellable, 20, shouldNotifyPeers);
+		
+		cat1Items = _economyService.GetItemsForCategory(1);
+		
+		Assert.That(cat1Items[0].DailyDelta, Is.EqualTo(20));
+		_mockMultiplayerService.Verify(m => m.SendMessageToPeers(It.Is<DeltaAdjustedMessage>(e => e.ObjectId == "1" && e.Amount == 20)), Times.Exactly(shouldNotifyPeers ? 1 : 0));
+		_mockDataHelper.Verify(m => m.WriteSaveData(EconomyModel.ModelKey, It.IsAny<EconomyModel>()), Times.Exactly(isClient ? 1 : 2));
+	}
+	
+	[Test]
+	public void ShouldAdjustDeltaForArtisanItemWithNoBase(
+		[Values] bool isClient,
+		[Values] bool shouldNotifyPeers
+	)
+	{
+		HarmonyObject.ObjectIdCategoryMapping.Clear();
+
+		Game1.objectData = new Dictionary<string, ObjectData>(new[]
+		{
+			GenerateObjectData("1", Object.artisanGoodsCategory),
+			GenerateObjectData("2", 1),
+			GenerateObjectData("3", 2),
+			GenerateObjectData("4", 2),
+		});
+		
+		ConfigModel.Instance = new ConfigModel
+		{
+			ValidCategories = [1, 2, 3, 4, 5, Object.artisanGoodsCategory],
+		};
+		
+		_economyService.OnLoaded();
+		
+		HarmonyFarmer.IsMainPlayerDictionary.Clear();
+		HarmonyFarmer.IsMainPlayerDictionary.Add(_player, !isClient);
+		
+		var catArtisanItems = _economyService.GetItemsForCategory(Object.artisanGoodsCategory);
+		var cat1Items = _economyService.GetItemsForCategory(1);
+
+		catArtisanItems[0].DailyDelta = 0;
+		cat1Items[0].DailyDelta = 0;
+
+		var sellable = new Object("1", 1);
+		
+		_economyService.AdjustDelta(sellable, 20, shouldNotifyPeers);
+		
+		cat1Items = _economyService.GetItemsForCategory(1);
+		Assert.Multiple(() =>
+		{ 
+			Assert.That(catArtisanItems[0].DailyDelta, Is.EqualTo(20)); 
+			Assert.That(cat1Items[0].DailyDelta, Is.EqualTo(0));
+		});
+		_mockMultiplayerService.Verify(m => m.SendMessageToPeers(It.Is<DeltaAdjustedMessage>(e => e.ObjectId == "1" && e.Amount == 20)), Times.Exactly(shouldNotifyPeers ? 1 : 0));
+		_mockDataHelper.Verify(m => m.WriteSaveData(EconomyModel.ModelKey, It.IsAny<EconomyModel>()), Times.Exactly(isClient ? 1 : 2));
+	}
+	
+	[Test]
+	public void ShouldAdjustDeltaForArtisanItemWithBase(
+		[Values] bool isClient,
+		[Values] bool shouldNotifyPeers
+	)
+	{
+		HarmonyObject.ObjectIdCategoryMapping.Clear();
+
+		Game1.objectData = new Dictionary<string, ObjectData>(new[]
+		{
+			GenerateObjectData("1", Object.artisanGoodsCategory),
+			GenerateObjectData("2", 1),
+			GenerateObjectData("3", 2),
+			GenerateObjectData("4", 2),
+		});
+		
+		ConfigModel.Instance = new ConfigModel()
+		{
+			ValidCategories = [1, 2, 3, 4, 5, Object.artisanGoodsCategory],
+		};
+		
+		_economyService.OnLoaded();
+		
+		HarmonyFarmer.IsMainPlayerDictionary.Clear();
+		HarmonyFarmer.IsMainPlayerDictionary.Add(_player, !isClient);
+		
+		var catArtisanItems = _economyService.GetItemsForCategory(Object.artisanGoodsCategory);
+		var cat1Items = _economyService.GetItemsForCategory(1);
+
+		catArtisanItems[0].DailyDelta = 0;
+		cat1Items[0].DailyDelta = 0;
+
+		var sellable = new Object("1", 1)
+		{
+			preservedParentSheetIndex =
+			{
+				Value = "2",
+			},
+		};
+		
+		_economyService.AdjustDelta(sellable, 20, shouldNotifyPeers);
+		
+		cat1Items = _economyService.GetItemsForCategory(1);
+		Assert.Multiple(() =>
+		{ 
+			Assert.That(catArtisanItems[0].DailyDelta, Is.EqualTo(0)); 
+			Assert.That(cat1Items[0].DailyDelta, Is.EqualTo(20));
+		});
+		_mockMultiplayerService.Verify(m => m.SendMessageToPeers(It.Is<DeltaAdjustedMessage>(e => e.ObjectId == "2" && e.Amount == 20)), Times.Exactly(shouldNotifyPeers ? 1 : 0));
+		_mockDataHelper.Verify(m => m.WriteSaveData(EconomyModel.ModelKey, It.IsAny<EconomyModel>()), Times.Exactly(isClient ? 1 : 2));
+	}
+
+	[Test]
 	public void ShouldSayNonSeasonItemIsValidForEverySeason()
 	{
 		_economyService.OnLoaded();
