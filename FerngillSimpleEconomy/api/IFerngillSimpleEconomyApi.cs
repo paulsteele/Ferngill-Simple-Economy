@@ -15,14 +15,14 @@ public interface IFerngillSimpleEconomyApi
 	bool IsLoaded();
 
 	/// <summary>
-	/// Adjusts the supply value for the specified object.
+	/// Adjusts the supply value for the specified object. Will update supply for all players in multiplayer.
 	/// </summary>
 	/// <param name="obj">The object to adjust supply for.</param>
 	/// <param name="amount">The amount to adjust supply by (can be negative).</param>
 	void AdjustSupply(Object obj, int amount);
 
 	/// <summary>
-	/// Adjusts the daily delta value for the specified object.
+	/// Adjusts the daily delta value for the specified object. Will update daily delta for all players in multiplayer.
 	/// </summary>
 	/// <param name="obj">The object to adjust daily delta for.</param>
 	/// <param name="amount">The amount to adjust daily delta by (can be negative).</param>
