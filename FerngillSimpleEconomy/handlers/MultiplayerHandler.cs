@@ -30,6 +30,11 @@ namespace fse.core.handlers
 				{
 					HandleSupplyAdjustedMessage(e.ReadAs<SupplyAdjustedMessage>());
 				}
+				
+				if (multiplayerService.IsMultiplayerMessageOfType(DeltaAdjustedMessage.StaticType, e))
+				{
+					HandleDeltaAdjustedMessage(e.ReadAs<DeltaAdjustedMessage>());
+				}
 			};
 		}
 
@@ -58,6 +63,13 @@ namespace fse.core.handlers
 			var obj = new Object(message.ObjectId, 1);
 			
 			economyService.AdjustSupply(obj, message.Amount, false);
+		}
+
+		private void HandleDeltaAdjustedMessage(DeltaAdjustedMessage message)
+		{
+			var obj = new Object(message.ObjectId, 1);
+			
+			economyService.AdjustDelta(obj, message.Amount, false);
 		}
 	}
 }

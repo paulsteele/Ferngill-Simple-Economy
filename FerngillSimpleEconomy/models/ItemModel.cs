@@ -8,9 +8,6 @@ namespace fse.core.models;
 [method: JsonConstructor]
 public class ItemModel(string objectId)
 {
-	private int _dailyDelta;
-	private int _supply;
-
 	//cache the multiplier at the beginning of the day to keep prices consistent throughout the day
 	private decimal _cachedMultiplier = 1m;
 
@@ -19,15 +16,15 @@ public class ItemModel(string objectId)
 	[JsonInclude]
 	public int Supply
 	{
-		get => _supply;
-		set => _supply = BoundsHelper.EnsureBounds(value, ConfigModel.MinSupply, ConfigModel.MaxSupply);
+		get;
+		set => field = BoundsHelper.EnsureBounds(value, ConfigModel.MinSupply, ConfigModel.MaxSupply);
 	}
 
 	[JsonInclude]
 	public int DailyDelta
 	{
-		get => _dailyDelta;
-		set => _dailyDelta = BoundsHelper.EnsureBounds(value, ConfigModel.Instance.MinDelta, ConfigModel.Instance.MaxDelta);
+		get;
+		set => field = BoundsHelper.EnsureBounds(value, ConfigModel.Instance.MinDelta, ConfigModel.Instance.MaxDelta);
 	}
 
 	public void AdvanceOneDay()

@@ -1,4 +1,5 @@
-﻿using fse.core.handlers;
+﻿using fse.core.api;
+using fse.core.handlers;
 using fse.core.helpers;
 using fse.core.menu;
 using fse.core.models;
@@ -13,6 +14,8 @@ namespace fse.core;
 // ReSharper disable once UnusedType.Global
 public class FerngillSimpleEconomy : Mod
 {
+	private IEconomyService? _economyService;
+
 	public override void Entry(IModHelper helper)
 	{
 		ConfigModel.Instance = helper.ReadConfig<ConfigModel>();
@@ -62,6 +65,8 @@ public class FerngillSimpleEconomy : Mod
 			economyService.Reset(false, true, SeasonHelper.GetCurrentSeason());
 			economyService.AdvanceOneDay();
 		});
+
+		_economyService = economyService;
 	}
 
 	private void RegisterPatches
@@ -97,4 +102,6 @@ public class FerngillSimpleEconomy : Mod
 		new MultiplayerHandler(helper, economyService, multiplayerService).Register();
 		new HotkeyHandler(helper, forecastMenuService).Register();
 	}
+
+	public override object GetApi() => new FerngillSimpleEconomyApi(_economyService);
 }

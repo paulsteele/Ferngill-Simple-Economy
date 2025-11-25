@@ -23,6 +23,7 @@ public interface IEconomyService
 	ItemModel[] GetItemsForCategory(int category);
 	int GetPrice(Object obj, int basePrice);
 	void AdjustSupply(Object? obj, int amount, bool notifyPeers = true);
+	void AdjustDelta(Object? obj, int amount, bool notifyPeers = true);
 	ItemModel? GetItemModelFromSeed(string seed);
 	bool ItemValidForSeason(ItemModel model, Seasons seasonsFilter);
 	int GetPricePerDay(ItemModel model);
@@ -327,6 +328,32 @@ public class EconomyService(
 
 	public void AdjustSupply(Object? obj, int amount, bool notifyPeers = true)
 	{
+		AdjustItemModel(obj, itemModel =>
+		{
+			itemModel.Supply += amount;
+			
+			if (notifyPeers)
+			{
+				multiplayerService.SendMessageToPeers(new SupplyAdjustedMessage(itemModel.ObjectId, amount));
+			}
+		});
+	}
+
+	public void AdjustDelta(Object? obj, int amount, bool notifyPeers = true)
+	{
+		AdjustItemModel(obj, itemModel =>
+		{
+			itemModel.DailyDelta += amount;
+			
+			if (notifyPeers)
+			{
+				multiplayerService.SendMessageToPeers(new DeltaAdjustedMessage(itemModel.ObjectId, amount));
+			}
+		});
+	}
+
+	private void AdjustItemModel(Object? obj, Action<ItemModel> adjustment)
+	{
 		obj = GetArtisanBase(obj) ?? obj;
 			
 		var itemModel = Economy.GetItem(obj);
@@ -335,12 +362,7 @@ public class EconomyService(
 			return;
 		}
 
-		itemModel.Supply += amount;
-
-		if (notifyPeers)
-		{
-			multiplayerService.SendMessageToPeers(new SupplyAdjustedMessage(itemModel.ObjectId, amount));
-		}
+		adjustment(itemModel);
 			
 		if (!IsClient)
 		{
