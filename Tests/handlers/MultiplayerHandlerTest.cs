@@ -144,6 +144,36 @@ public class MultiplayerHandlerTests : HarmonyTestBase
 		_mockEconomyService.Verify(m => m.AdjustSupply(
 			It.Is<Object>(o => o.ItemId == "(O)75"), 4, false), Times.Once);
 	}
+
+	[Test]
+	public void ShouldReceiveDeltaAdjustedMessage()
+	{
+		HarmonyGame.GetPlayerResult = _farmer1;
+
+		_mockMultiplayerService.Setup(m =>
+				m.IsMultiplayerMessageOfType(DeltaAdjustedMessage.StaticType, It.IsAny<ModMessageReceivedEventArgs>()))
+			.Returns(true);
+		
+		HarmonyGame.GetPlayerResult = _farmer1;
+		_mockMultiplayerEvents.InvokeModMessageReceived(new DeltaAdjustedMessage("(O)72", 1));
+		_mockEconomyService.Verify(m => m.AdjustDelta(
+			It.Is<Object>(o => o.ItemId == "(O)72"), 1, false), Times.Once);
+		
+		HarmonyGame.GetPlayerResult = _farmer2;
+		_mockMultiplayerEvents.InvokeModMessageReceived(new DeltaAdjustedMessage("(O)73", 2));
+		_mockEconomyService.Verify(m => m.AdjustDelta(
+			It.Is<Object>(o => o.ItemId == "(O)73"), 2, false), Times.Once);
+		
+		HarmonyGame.GetPlayerResult = _farmer3;
+		_mockMultiplayerEvents.InvokeModMessageReceived(new DeltaAdjustedMessage("(O)74", 3));
+		_mockEconomyService.Verify(m => m.AdjustDelta(
+			It.Is<Object>(o => o.ItemId == "(O)74"), 3, false), Times.Once);
+		
+		HarmonyGame.GetPlayerResult = _farmer4;
+		_mockMultiplayerEvents.InvokeModMessageReceived(new DeltaAdjustedMessage("(O)75", 4));
+		_mockEconomyService.Verify(m => m.AdjustDelta(
+			It.Is<Object>(o => o.ItemId == "(O)75"), 4, false), Times.Once);
+	}
 }
 
 internal class MockMultiplayerEvents : IMultiplayerEvents
