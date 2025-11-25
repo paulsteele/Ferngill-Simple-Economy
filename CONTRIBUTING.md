@@ -1,4 +1,4 @@
-﻿# Contributing to Ferngill Simple Economy
+# Contributing to Ferngill Simple Economy
 ## Bug Reporting
 
 Please report bugs at https://github.com/paulsteele/Ferngill-Supply-And-Demand/issues and fill in as much of the template as possible.

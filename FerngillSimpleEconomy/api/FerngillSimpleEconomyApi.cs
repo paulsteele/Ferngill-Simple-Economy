@@ -1,4 +1,4 @@
-﻿using fse.core.services;
+using fse.core.services;
 using StardewValley;
 
 namespace fse.core.api;

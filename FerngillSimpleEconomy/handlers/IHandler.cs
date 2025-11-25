@@ -1,4 +1,4 @@
-﻿namespace fse.core.handlers
+namespace fse.core.handlers
 {
 	public interface IHandler
 	{

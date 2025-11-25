@@ -1,4 +1,4 @@
-﻿using StardewModdingAPI;
+using StardewModdingAPI;
 
 // ReSharper disable once CheckNamespace
 namespace MailFrameworkMod.Api

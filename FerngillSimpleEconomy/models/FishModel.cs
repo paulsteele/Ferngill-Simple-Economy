@@ -1,4 +1,4 @@
-﻿namespace fse.core.models
+namespace fse.core.models
 {
 	public class FishModel
 	{

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using fse.core.models;
 using MathNet.Numerics.Distributions;
 

@@ -1,4 +1,4 @@
-﻿using fse.core.actions;
+using fse.core.actions;
 using fse.core.extensions;
 using fse.core.menu;
 using fse.core.models;

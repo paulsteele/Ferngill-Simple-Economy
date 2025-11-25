@@ -1,4 +1,4 @@
-﻿using StardewValley;
+using StardewValley;
 // ReSharper disable UnusedMember.Global
 
 namespace fse.core.api;

@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 

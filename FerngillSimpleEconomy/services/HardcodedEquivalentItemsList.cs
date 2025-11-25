@@ -1,4 +1,4 @@
-﻿namespace fse.core.services;
+namespace fse.core.services;
 
 public static class HardcodedEquivalentItemsList
 {

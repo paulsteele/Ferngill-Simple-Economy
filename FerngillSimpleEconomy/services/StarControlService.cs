@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using LeFauxMods.Common.Integrations.IconicFramework;
 using Microsoft.Xna.Framework.Graphics;
 using StarControl;

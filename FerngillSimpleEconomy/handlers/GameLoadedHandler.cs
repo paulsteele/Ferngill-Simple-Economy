@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using fse.core.actions;
 using fse.core.extensions;

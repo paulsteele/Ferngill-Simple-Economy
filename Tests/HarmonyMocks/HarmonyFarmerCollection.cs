@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using HarmonyLib;
 using StardewValley;
 using StardewValley.Network;

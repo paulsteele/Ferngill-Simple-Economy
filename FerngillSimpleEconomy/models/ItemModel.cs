@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text.Json.Serialization;
 using fse.core.helpers;
 using Object = StardewValley.Object;

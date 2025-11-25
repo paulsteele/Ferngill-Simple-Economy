@@ -1,4 +1,4 @@
-﻿# Ferngill Simple Economy
+# Ferngill Simple Economy
 
 **Downloads:** [Nexus Mods](https://www.nexusmods.com/stardewvalley/mods/21414)
 

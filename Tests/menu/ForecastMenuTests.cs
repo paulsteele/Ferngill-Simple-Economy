@@ -1,4 +1,4 @@
-﻿using fse.core.helpers;
+using fse.core.helpers;
 using fse.core.menu;
 using fse.core.models;
 using fse.core.services;

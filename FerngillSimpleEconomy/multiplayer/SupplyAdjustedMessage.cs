@@ -1,4 +1,4 @@
-﻿
+
 namespace fse.core.multiplayer;
 
 public class SupplyAdjustedMessage(string objectId, int amount) : IMessage

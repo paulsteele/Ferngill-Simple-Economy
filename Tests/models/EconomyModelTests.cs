@@ -1,4 +1,4 @@
-﻿using fse.core.models;
+using fse.core.models;
 using StardewValley;
 using Object = StardewValley.Object;
 

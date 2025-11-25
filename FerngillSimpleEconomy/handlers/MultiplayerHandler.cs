@@ -1,4 +1,4 @@
-﻿using fse.core.multiplayer;
+using fse.core.multiplayer;
 using fse.core.services;
 using StardewModdingAPI;
 using StardewValley;

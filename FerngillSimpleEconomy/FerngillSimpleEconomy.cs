@@ -1,4 +1,4 @@
-﻿using fse.core.api;
+using fse.core.api;
 using fse.core.handlers;
 using fse.core.helpers;
 using fse.core.menu;

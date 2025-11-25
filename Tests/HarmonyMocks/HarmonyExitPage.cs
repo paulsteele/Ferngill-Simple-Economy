@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using StardewValley.Menus;
 
 namespace Tests.HarmonyMocks;

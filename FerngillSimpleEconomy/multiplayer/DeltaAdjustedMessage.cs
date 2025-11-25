@@ -1,4 +1,4 @@
-﻿namespace fse.core.multiplayer;
+namespace fse.core.multiplayer;
 
 public class DeltaAdjustedMessage(string objectId, int amount) : IMessage
 {

@@ -1,4 +1,4 @@
-﻿namespace fse.core.services;
+namespace fse.core.services;
 
 //necessary to avoid certain items being the unexpected base of artisan goods
 public static class ArtisanMappingIgnoreList

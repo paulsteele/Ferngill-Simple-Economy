@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using fse.core.helpers;
 using fse.core.models;
 using fse.core.services;

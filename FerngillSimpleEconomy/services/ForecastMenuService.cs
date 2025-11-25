@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using fse.core.helpers;
 using fse.core.menu;
 using StardewModdingAPI;

@@ -1,4 +1,4 @@
-﻿using fse.core.models;
+using fse.core.models;
 using fse.core.services;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;

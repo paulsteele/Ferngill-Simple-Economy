@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using StardewValley;
 using StardewValley.GameData.Crops;
 
