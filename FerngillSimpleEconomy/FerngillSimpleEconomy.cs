@@ -14,7 +14,7 @@ namespace fse.core;
 // ReSharper disable once UnusedType.Global
 public class FerngillSimpleEconomy : Mod
 {
-	private IEconomyService? _economyService;
+	private IFerngillSimpleEconomyApi? _api;
 
 	public override void Entry(IModHelper helper)
 	{
@@ -66,7 +66,7 @@ public class FerngillSimpleEconomy : Mod
 			economyService.AdvanceOneDay();
 		});
 
-		_economyService = economyService;
+		_api = new FerngillSimpleEconomyApi(economyService);
 	}
 
 	private void RegisterPatches
@@ -103,5 +103,5 @@ public class FerngillSimpleEconomy : Mod
 		new HotkeyHandler(helper, forecastMenuService).Register();
 	}
 
-	public override object GetApi() => new FerngillSimpleEconomyApi(_economyService);
+	public override object? GetApi() => _api;
 }
