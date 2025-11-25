@@ -5,6 +5,8 @@ namespace fse.core.api;
 
 public class FerngillSimpleEconomyApi(IEconomyService? economyService) : IFerngillSimpleEconomyApi
 {
+	public bool IsLoaded() => economyService?.Loaded ?? false;
+
 	public void AdjustSupply(Object obj, int amount)
 	{
 		economyService?.AdjustSupply(obj, amount);

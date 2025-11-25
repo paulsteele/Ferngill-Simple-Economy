@@ -9,6 +9,12 @@ namespace fse.core.api;
 public interface IFerngillSimpleEconomyApi
 {
 	/// <summary>
+	/// Gets whether the economy has been loaded. No actions can be taken if the economy is not loaded.
+	/// </summary>
+	/// <returns>True if the economy has been loaded, false otherwise.</returns>
+	bool IsLoaded();
+
+	/// <summary>
 	/// Adjusts the supply value for the specified object.
 	/// </summary>
 	/// <param name="obj">The object to adjust supply for.</param>
