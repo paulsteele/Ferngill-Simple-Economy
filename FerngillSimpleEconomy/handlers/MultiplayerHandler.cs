@@ -3,73 +3,72 @@ using fse.core.services;
 using StardewModdingAPI;
 using StardewValley;
 
-namespace fse.core.handlers
+namespace fse.core.handlers;
+
+public class MultiplayerHandler(
+	IModHelper helper,
+	IEconomyService economyService,
+	IMultiplayerService multiplayerService
+)
+	: IHandler
 {
-	public class MultiplayerHandler(
-		IModHelper helper,
-		IEconomyService economyService,
-		IMultiplayerService multiplayerService
-	)
-		: IHandler
+	public void Register()
 	{
-		public void Register()
+		helper.Events.Multiplayer.ModMessageReceived += (_, e) =>
 		{
-			helper.Events.Multiplayer.ModMessageReceived += (_, e) =>
+			if (multiplayerService.IsMultiplayerMessageOfType(EconomyModelMessage.StaticType, e))
 			{
-				if (multiplayerService.IsMultiplayerMessageOfType(EconomyModelMessage.StaticType, e))
-				{
-					HandleEconomyModelMessage(e.ReadAs<EconomyModelMessage>());
-				}
+				HandleEconomyModelMessage(e.ReadAs<EconomyModelMessage>());
+			}
 
-				if (multiplayerService.IsMultiplayerMessageOfType(RequestEconomyModelMessage.StaticType, e))
-				{
-					HandleRequestEconomyModelMessage();
-				}
+			if (multiplayerService.IsMultiplayerMessageOfType(RequestEconomyModelMessage.StaticType, e))
+			{
+				HandleRequestEconomyModelMessage();
+			}
 
-				if (multiplayerService.IsMultiplayerMessageOfType(SupplyAdjustedMessage.StaticType, e))
-				{
-					HandleSupplyAdjustedMessage(e.ReadAs<SupplyAdjustedMessage>());
-				}
+			if (multiplayerService.IsMultiplayerMessageOfType(SupplyAdjustedMessage.StaticType, e))
+			{
+				HandleSupplyAdjustedMessage(e.ReadAs<SupplyAdjustedMessage>());
+			}
 				
-				if (multiplayerService.IsMultiplayerMessageOfType(DeltaAdjustedMessage.StaticType, e))
-				{
-					HandleDeltaAdjustedMessage(e.ReadAs<DeltaAdjustedMessage>());
-				}
-			};
-		}
-
-		private void HandleEconomyModelMessage(EconomyModelMessage message)
-		{
-			if (Game1.player.IsMainPlayer)
+			if (multiplayerService.IsMultiplayerMessageOfType(DeltaAdjustedMessage.StaticType, e))
 			{
-				return;
+				HandleDeltaAdjustedMessage(e.ReadAs<DeltaAdjustedMessage>());
 			}
-			
-			economyService.ReceiveEconomy(message.Model);
-		}
-		
-		private void HandleRequestEconomyModelMessage()
-		{
-			if (!Game1.player.IsMainPlayer)
-			{
-				return;
-			}
-			
-			economyService.SendEconomyMessage();
-		}
-		
-		private void HandleSupplyAdjustedMessage(SupplyAdjustedMessage message)
-		{
-			var obj = new Object(message.ObjectId, 1);
-			
-			economyService.AdjustSupply(obj, message.Amount, false);
-		}
+		};
+	}
 
-		private void HandleDeltaAdjustedMessage(DeltaAdjustedMessage message)
+	private void HandleEconomyModelMessage(EconomyModelMessage message)
+	{
+		if (Game1.player.IsMainPlayer)
 		{
-			var obj = new Object(message.ObjectId, 1);
-			
-			economyService.AdjustDelta(obj, message.Amount, false);
+			return;
 		}
+			
+		economyService.ReceiveEconomy(message.Model);
+	}
+		
+	private void HandleRequestEconomyModelMessage()
+	{
+		if (!Game1.player.IsMainPlayer)
+		{
+			return;
+		}
+			
+		economyService.SendEconomyMessage();
+	}
+		
+	private void HandleSupplyAdjustedMessage(SupplyAdjustedMessage message)
+	{
+		var obj = new Object(message.ObjectId, 1);
+			
+		economyService.AdjustSupply(obj, message.Amount, false);
+	}
+
+	private void HandleDeltaAdjustedMessage(DeltaAdjustedMessage message)
+	{
+		var obj = new Object(message.ObjectId, 1);
+			
+		economyService.AdjustDelta(obj, message.Amount, false);
 	}
 }
