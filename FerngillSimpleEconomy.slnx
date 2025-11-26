@@ -1,9 +1,12 @@
 <Solution>
-  <Folder Name="/Solution Items/">
-    <File Path="README.md" />
-    <File Path="Directory.Build.targets" />
-    <File Path="global.json" />
-  </Folder>
-  <Project Path="FerngillSimpleEconomy\FerngillSimpleEconomy.csproj" />
-  <Project Path="Tests\Tests.csproj" />
+	<Folder Name="/Solution Items/">
+		<File Path="README.md" />
+		<File Path="Directory.Build.targets" />
+		<File Path="global.json" />
+	</Folder>
+	<Folder Name="/content-packs/[FSE] Vanilla/">
+		<File Path="content-packs\[FSE] Vanilla\manifest.json" />
+	</Folder>
+	<Project Path="FerngillSimpleEconomy\FerngillSimpleEconomy.csproj" />
+	<Project Path="Tests\Tests.csproj" />
 </Solution>

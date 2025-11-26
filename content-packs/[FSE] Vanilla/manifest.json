@@ -1,0 +1,14 @@
+{
+	"Name": "Ferngill Simple Economy Vanilla Pack",
+	"Author": "Paul Steele",
+	"Version": "1.11.2",
+	"Description": "Ferngill Simple Economy Content Pack for Vanilla items",
+	"UniqueID": "paulsteele.fse.vanilla",
+	"MinimumApiVersion": "3.0.0",
+	"UpdateKeys": [
+		"ferngill.simple.economy", "Nexus:21414"
+	],
+	"ContentPackFor": {
+		"UniqueID": "paulsteele.fse"
+	}
+}
