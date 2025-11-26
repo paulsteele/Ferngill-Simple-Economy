@@ -39,6 +39,9 @@ public class ArtisanService(IMonitor monitor, IModHelper helper, IContentPackSer
 		var artisanMappingIgnoreList = contentPackService.GetItemsOfType<IgnoreArtisanMappingContentPackItem>()
 			.Select(i => i.Id)
 			.ToArray();
+		
+		var contextTagItemMapping = contentPackService.GetItemsOfType<MapContextTagToItemContentPackItem>()
+			.ToDictionary(i => i.Tag, i => i.Id);
 
 		_artisanGoodToBase = machineData.Values
 			.Where(m => m.OutputRules != null)
@@ -47,7 +50,7 @@ public class ArtisanService(IMonitor monitor, IModHelper helper, IContentPackSer
 			.SelectMany(r => r.OutputItem.SelectMany(output => r.Triggers.Select(trigger => (output, trigger))))
 			.Select(t =>
 			{
-				t.trigger.RequiredItemId ??= t.trigger.RequiredTags?.Select(tag => ContextTagItemMapping.Mapping.GetValueOrDefault(tag))
+				t.trigger.RequiredItemId ??= t.trigger.RequiredTags?.Select(tag => contextTagItemMapping.GetValueOrDefault(tag))
 					.FirstOrDefault(item => !string.IsNullOrWhiteSpace(item));
 				return t;
 			})
@@ -67,6 +70,8 @@ public class ArtisanService(IMonitor monitor, IModHelper helper, IContentPackSer
 				return (first.output, first.input);
 			})
 			.ToDictionary(t => t.output, t => t.input);
+		
+		//TODO ADD OVERWRITE CONTENT PACK
 
 		monitor.LogOnce("Artisan Good Mapping Trace");
 		foreach (var mapping in _artisanGoodToBase)

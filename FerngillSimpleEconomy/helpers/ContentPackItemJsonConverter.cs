@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using fse.core.models.contentPacks;
@@ -24,6 +24,7 @@ public class ContentPackItemJsonConverter : JsonConverter<BaseContentPackItem>
 		return action switch
 		{
 			"IgnoreArtisanMapping" => JsonSerializer.Deserialize<IgnoreArtisanMappingContentPackItem>(root.GetRawText(), options),
+			"MapContextTagToItem" => JsonSerializer.Deserialize<MapContextTagToItemContentPackItem>(root.GetRawText(), options),
 			_ => throw new JsonException($"Unknown action type: {action}"),
 		};
 	}

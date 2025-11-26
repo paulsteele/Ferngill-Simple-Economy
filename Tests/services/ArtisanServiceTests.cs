@@ -71,6 +71,34 @@ public class ArtisanServiceTests
 
 		_gameContentHelper.Setup(m => m.Load<Dictionary<string, MachineData>>("Data\\Machines")).Returns(dict);
 	}
+	
+	private void GenerateMachineDataFromTag(params (string output, string input)[] mappings)
+	{
+		var dict = new Dictionary<string, MachineData>
+		{
+			{
+				"machine1", new MachineData
+				{
+					OutputRules =
+					[
+						..mappings.Select(m => new MachineOutputRule
+						{
+							OutputItem = new[]
+							{
+								new MachineItemOutput { ItemId = m.output },
+							}.ToList(),
+							Triggers = new[]
+							{
+								new MachineOutputTriggerRule { RequiredTags = [m.input] },
+							}.ToList(),
+						}).ToArray(),
+					],
+				}
+			},
+		};
+
+		_gameContentHelper.Setup(m => m.Load<Dictionary<string, MachineData>>("Data\\Machines")).Returns(dict);
+	}
 
 	[Test]
 	public void ShouldGenerateBasicMapping()
@@ -224,8 +252,33 @@ public class ArtisanServiceTests
 		{
 		 Assert.That(result, Is.Null);
 		 Assert.That(result2, Is.Null);
+		}); 
+	}
+	
+	[Test]
+	public void ShouldHandleMappingFromTags()
+	{
+		GenerateMachineDataFromTag(
+			("2", "TagA"),
+			("3", "TagB")
+		);
+
+		_mockContentPackService.Setup(m => m.GetItemsOfType<MapContextTagToItemContentPackItem>())
+			.Returns([
+				new MapContextTagToItemContentPackItem { Tag = "TagA", Id = "1" },
+				new MapContextTagToItemContentPackItem { Tag = "TagB", Id = "4" },
+			]);
+
+		_artisanService.GenerateArtisanMapping(_economyModel);
+		var result1 = _artisanService.GetBaseFromArtisanGood("2");
+		var result2 = _artisanService.GetBaseFromArtisanGood("3");
+
+		Assert.Multiple(() =>
+		{
+		 Assert.That(result1.ObjectId, Is.EqualTo("1"));
+		 Assert.That(result2.ObjectId, Is.EqualTo("4"));
 		});
- }
+	}
 
 	[Test]
 	public void ShouldHandleMachineWithNoOutputRules()

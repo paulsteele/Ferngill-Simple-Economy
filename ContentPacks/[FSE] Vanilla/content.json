@@ -43,5 +43,17 @@
 		"action": "IgnoreArtisanMapping",
 		"comment": "Copper bar -> slot machine",
 		"id": "334"
+	},
+	{
+		"action": "MapContextTagToItem",
+		"comment": "Link eggs",
+		"tag": "egg_item",
+		"id": "(O)176"
+	},
+	{
+		"action": "MapContextTagToItem",
+		"comment": "Link milk",
+		"tag": "milk_item",
+		"id": "(O)184"
 	}
 ]

@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 using fse.core.helpers;
 
 namespace fse.core.models.contentPacks;
