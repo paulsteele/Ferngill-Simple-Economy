@@ -25,6 +25,7 @@ public class FerngillSimpleEconomy : Mod
 		var artisanService = new ArtisanService(Monitor, helper);
 		var normalDistributionService = new NormalDistributionService();
 		var updateFrequencyService = new UpdateFrequencyService();
+		var contentPackService = new ContentPackService(Monitor, helper);
 		var economyService = new EconomyService(helper, Monitor, multiplayerService, fishService, seedService, artisanService, normalDistributionService, updateFrequencyService);
 		var drawSupplyBarHelper = new DrawSupplyBarHelper(economyService);
 		var forecastMenuService = new ForecastMenuService(helper, economyService, new DrawTextHelper(), drawSupplyBarHelper);
@@ -67,6 +68,7 @@ public class FerngillSimpleEconomy : Mod
 		});
 
 		_api = new FerngillSimpleEconomyApi(economyService);
+		contentPackService.LoadContentPacks();
 	}
 
 	private void RegisterPatches

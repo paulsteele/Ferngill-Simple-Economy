@@ -6,6 +6,7 @@
 	</Folder>
 	<Folder Name="/content-packs/[FSE] Vanilla/">
 		<File Path="content-packs\[FSE] Vanilla\manifest.json" />
+		<File Path="content-packs\[FSE] Vanilla\content.json" />
 	</Folder>
 	<Project Path="FerngillSimpleEconomy\FerngillSimpleEconomy.csproj" />
 	<Project Path="Tests\Tests.csproj" />
