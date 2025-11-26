@@ -1,7 +1,7 @@
-using fse.core.services;
+using fse.core.api;
 using StardewValley;
 
-namespace fse.core.api;
+namespace fse.core.services;
 
 public class FerngillSimpleEconomyApi(IEconomyService? economyService) : IFerngillSimpleEconomyApi
 {
