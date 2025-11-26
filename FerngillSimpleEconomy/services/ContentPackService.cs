@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 using fse.core.models.contentPacks;
 using StardewModdingAPI;
 
@@ -14,6 +16,7 @@ public interface IContentPackService
 
 public class ContentPackService(IMonitor monitor, IModHelper helper) : IContentPackService
 {
+	private const string ContentFileName = "content.json";
 	private readonly List<BaseContentPackItem> _loadedItems = [];
 
 	public void LoadContentPacks()
@@ -28,17 +31,28 @@ public class ContentPackService(IMonitor monitor, IModHelper helper) : IContentP
 		
 		foreach (var contentPack in contentPacks)
 		{
+			var packString = $"{contentPack.Manifest.Name} v{contentPack.Manifest.Version}";
 			try
 			{
-				var items = contentPack.ReadJsonFile<List<BaseContentPackItem>>("content.json") ?? [];
+				var filePath = Path.Combine(contentPack.DirectoryPath, ContentFileName);
+				
+				if (!File.Exists(filePath))
+				{
+					monitor.Log($"{packString} has no {ContentFileName}.", LogLevel.Warn);
+					continue;
+				}
+				
+				var jsonText = File.ReadAllText(filePath);
+				
+				var items = JsonSerializer.Deserialize<List<BaseContentPackItem>>(jsonText) ?? [];
 				
 				_loadedItems.AddRange(items);
 				
-				monitor.Log($"Loaded {items.Count} item(s) from content pack {contentPack.Manifest.Name}", LogLevel.Info);
+				monitor.Log($"Loaded {items.Count} item(s) from {packString}", LogLevel.Info);
 			}
 			catch (Exception ex)
 			{
-				monitor.Log($"Error loading content pack {contentPack.Manifest.Name}: {ex.Message}", LogLevel.Error);
+				monitor.Log($"Error loading {packString}: {ex.Message}", LogLevel.Error);
 			}
 		}
 	}
