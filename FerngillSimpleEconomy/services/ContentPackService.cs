@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using fse.core.models.contentPacks;
 using StardewModdingAPI;
 
 namespace fse.core.services;
@@ -6,10 +9,13 @@ namespace fse.core.services;
 public interface IContentPackService
 {
 	void LoadContentPacks();
+	IEnumerable<T> GetItemsOfType<T>() where T : BaseContentPackItem;
 }
 
 public class ContentPackService(IMonitor monitor, IModHelper helper) : IContentPackService
 {
+	private readonly List<BaseContentPackItem> _loadedItems = [];
+
 	public void LoadContentPacks()
 	{
 		var contentPacks = helper.ContentPacks.GetOwned().ToArray();
@@ -22,7 +28,20 @@ public class ContentPackService(IMonitor monitor, IModHelper helper) : IContentP
 		
 		foreach (var contentPack in contentPacks)
 		{
-			monitor.Log($"Found content pack: {contentPack.Manifest.Name} v{contentPack.Manifest.Version}", LogLevel.Info);
+			try
+			{
+				var items = contentPack.ReadJsonFile<List<BaseContentPackItem>>("content.json") ?? [];
+				
+				_loadedItems.AddRange(items);
+				
+				monitor.Log($"Loaded {items.Count} item(s) from content pack {contentPack.Manifest.Name}", LogLevel.Info);
+			}
+			catch (Exception ex)
+			{
+				monitor.Log($"Error loading content pack {contentPack.Manifest.Name}: {ex.Message}", LogLevel.Error);
+			}
 		}
 	}
+
+	public IEnumerable<T> GetItemsOfType<T>() where T : BaseContentPackItem => _loadedItems.OfType<T>();
 }
