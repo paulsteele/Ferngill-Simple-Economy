@@ -1,0 +1,86 @@
+﻿using fse.core.models.contentPacks;
+using fse.core.services;
+using Moq;
+using StardewModdingAPI;
+
+namespace Tests.services;
+
+public class ContentPackServiceTests
+{
+	private Mock<IMonitor> _mockMonitor;
+	private Mock<IModHelper> _mockHelper;
+	private Mock<IContentPackHelper> _mockContentPackHelper;
+	private ContentPackService _contentPackService;
+	private Mock<IFileService> _fileService;
+
+	[SetUp]
+	public void Setup()
+	{
+		_mockMonitor = new Mock<IMonitor>();
+		_mockHelper = new Mock<IModHelper>();
+		_fileService = new Mock<IFileService>();
+		_mockContentPackHelper = new Mock<IContentPackHelper>();
+
+		_mockHelper.SetupGet(m => m.ContentPacks)
+			.Returns(_mockContentPackHelper.Object);
+
+		_contentPackService = new ContentPackService(_mockMonitor.Object, _mockHelper.Object, _fileService.Object);
+	}
+
+	[Test]
+	public void ShouldDeserializeMixedContentPacks()
+	{
+		var pack = CreateMockContentPack(
+			"pack1",
+			new SemanticVersion(1, 1, 1),
+			"content.json",
+			"""
+			[
+			{"action": "IgnoreArtisanMapping", "id": "item1"},
+			{"action": "MapContextTagToItem", "tag": "tag2", "id": "item2"},
+			{"action": "MapEquivalentItems", "id": "item3", "base": "base3"}
+			]
+			"""
+		);
+		
+		_mockContentPackHelper.Setup(cp => cp.GetOwned()).Returns([pack]);
+		
+		_contentPackService.LoadContentPacks();
+
+		var ignoreArtisanMappingContentPackItems = _contentPackService.GetItemsOfType<IgnoreArtisanMappingContentPackItem>().ToArray();
+		var mapContextTagToItemContentPackItems = _contentPackService.GetItemsOfType<MapContextTagToItemContentPackItem>().ToArray();
+		var mapEquivalentItemsContentPackItems = _contentPackService.GetItemsOfType<MapEquivalentItemsContentPackItem>().ToArray();
+
+		Assert.Multiple(() =>
+		{
+			Assert.That(ignoreArtisanMappingContentPackItems, Has.Length.EqualTo(1));
+			Assert.That(ignoreArtisanMappingContentPackItems[0].Id, Is.EqualTo("item1"));
+			
+			Assert.That(mapContextTagToItemContentPackItems, Has.Length.EqualTo(1));
+			Assert.That(mapContextTagToItemContentPackItems[0].Id, Is.EqualTo("item2"));
+			Assert.That(mapContextTagToItemContentPackItems[0].Tag, Is.EqualTo("tag2"));
+			
+			Assert.That(mapEquivalentItemsContentPackItems, Has.Length.EqualTo(1));
+			Assert.That(mapEquivalentItemsContentPackItems[0].Id, Is.EqualTo("item3"));
+			Assert.That(mapEquivalentItemsContentPackItems[0].Base, Is.EqualTo("base3"));
+		});
+	}
+
+	private IContentPack CreateMockContentPack(string name, SemanticVersion version, string contentName, string content)
+	{
+		var directoryPath = $"/fake/path/{name}";
+		
+		var manifest = new Mock<IManifest>();
+		manifest.SetupGet(m => m.Name).Returns(name);
+		manifest.SetupGet(m => m.Version).Returns(version);
+		
+		var pack = new Mock<IContentPack>();
+		pack.SetupGet(m => m.Manifest).Returns(manifest.Object);
+		pack.SetupGet(m => m.DirectoryPath).Returns(directoryPath);
+		
+		_fileService.Setup(fs => fs.ReadAllText(Path.Combine(directoryPath, contentName)))
+			.Returns(content);
+
+		return pack.Object;
+	}
+}

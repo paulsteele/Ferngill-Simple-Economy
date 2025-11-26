@@ -19,7 +19,8 @@ public class FerngillSimpleEconomy : Mod
 	public override void Entry(IModHelper helper)
 	{
 		ConfigModel.Instance = helper.ReadConfig<ConfigModel>();
-		var contentPackService = new ContentPackService(Monitor, helper);
+		var fileService = new FileService();
+		var contentPackService = new ContentPackService(Monitor, helper, fileService);
 		var equivalentItemsService = new EquivalentItemsService(contentPackService);
 		var multiplayerService = new MultiplayerService(helper);
 		var seedService = new SeedService(Monitor);

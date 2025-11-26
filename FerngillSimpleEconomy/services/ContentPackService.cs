@@ -13,7 +13,7 @@ public interface IContentPackService
 	IEnumerable<T> GetItemsOfType<T>() where T : BaseContentPackItem;
 }
 
-public class ContentPackService(IMonitor monitor, IModHelper helper) : IContentPackService
+public class ContentPackService(IMonitor monitor, IModHelper helper, IFileService fileService) : IContentPackService
 {
 	private const string ContentFileName = "content.json";
 	private readonly List<BaseContentPackItem> _loadedItems = [];
@@ -24,7 +24,7 @@ public class ContentPackService(IMonitor monitor, IModHelper helper) : IContentP
 		
 		if (contentPacks.Length == 0)
 		{
-			monitor.Log("No content packs found.", LogLevel.Info);
+			monitor.Log("No content packs found.");
 			return;
 		}
 		
@@ -35,19 +35,18 @@ public class ContentPackService(IMonitor monitor, IModHelper helper) : IContentP
 			{
 				var filePath = Path.Combine(contentPack.DirectoryPath, ContentFileName);
 				
-				if (!File.Exists(filePath))
+				var jsonText = fileService.ReadAllText(filePath);
+				if (jsonText == null)
 				{
 					monitor.Log($"{packString} has no {ContentFileName}.", LogLevel.Warn);
 					continue;
 				}
-				
-				var jsonText = File.ReadAllText(filePath);
-				
+
 				var items = JsonSerializer.Deserialize<List<BaseContentPackItem>>(jsonText) ?? [];
 				
 				_loadedItems.AddRange(items);
 				
-				monitor.Log($"Loaded {items.Count} item(s) from {packString}", LogLevel.Info);
+				monitor.Log($"Loaded {items.Count} item(s) from {packString}");
 			}
 			catch (Exception ex)
 			{
