@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using fse.core.models;
+using fse.core.models.contentPacks;
 using StardewModdingAPI;
-using StardewValley;
 using StardewValley.GameData.Machines;
 
 namespace fse.core.services;
@@ -13,7 +13,7 @@ public interface IArtisanService
 	ItemModel? GetBaseFromArtisanGood(string modelId);
 }
 
-public class ArtisanService(IMonitor monitor, IModHelper helper) : IArtisanService
+public class ArtisanService(IMonitor monitor, IModHelper helper, IContentPackService contentPackService) : IArtisanService
 {
 	private Dictionary<string, string>? _artisanGoodToBase;
 	private EconomyModel? _economyModel;
@@ -36,6 +36,10 @@ public class ArtisanService(IMonitor monitor, IModHelper helper) : IArtisanServi
 			return;
 		}
 
+		var artisanMappingIgnoreList = contentPackService.GetItemsOfType<IgnoreArtisanMappingContentPackItem>()
+			.Select(i => i.Id)
+			.ToArray();
+
 		_artisanGoodToBase = machineData.Values
 			.Where(m => m.OutputRules != null)
 			.SelectMany(m => m.OutputRules)
@@ -54,7 +58,7 @@ public class ArtisanService(IMonitor monitor, IModHelper helper) : IArtisanServi
 				input: t.trigger.RequiredItemId.Replace("(O)", string.Empty))
 			)
 			.Where(t => !HardcodedEquivalentItemsList.GetEquivalentId(t.input).Equals(HardcodedEquivalentItemsList.GetEquivalentId(t.output)))
-			.Where(t => !ArtisanMappingIgnoreList.IgnoreList.Contains(t.input))
+			.Where(t => !artisanMappingIgnoreList.Contains(t.input))
 			.Where(t => economyModel.HasItem(t.output) && economyModel.HasItem(t.input))
 			.GroupBy(t => t.output)
 			.Select(g =>

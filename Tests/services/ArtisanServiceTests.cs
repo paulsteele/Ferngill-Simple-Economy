@@ -1,4 +1,5 @@
 using fse.core.models;
+using fse.core.models.contentPacks;
 using fse.core.services;
 using Moq;
 using StardewModdingAPI;
@@ -10,6 +11,7 @@ public class ArtisanServiceTests
 {
 	private Mock<IMonitor> _mockMonitor;
 	private Mock<IModHelper> _mockHelper;
+	private Mock<IContentPackService> _mockContentPackService;
 	private Mock<IGameContentHelper> _gameContentHelper;
 	private ArtisanService _artisanService;
 	private EconomyModel _economyModel;
@@ -19,6 +21,7 @@ public class ArtisanServiceTests
 	{
 		_mockMonitor = new Mock<IMonitor>();
 		_mockHelper = new Mock<IModHelper>();
+		_mockContentPackService = new Mock<IContentPackService>();
 		_gameContentHelper = new Mock<IGameContentHelper>();
 		_economyModel = new EconomyModel(new Dictionary<int, Dictionary<string, ItemModel>>
 			{
@@ -38,7 +41,7 @@ public class ArtisanServiceTests
 		
 		_mockHelper.SetupGet(m => m.GameContent).Returns(_gameContentHelper.Object);
 
-		_artisanService = new ArtisanService(_mockMonitor.Object, _mockHelper.Object);
+		_artisanService = new ArtisanService(_mockMonitor.Object, _mockHelper.Object, _mockContentPackService.Object);
 	}
 
 	private void GenerateMachineData(params (string output, string input)[] mappings)
@@ -72,14 +75,11 @@ public class ArtisanServiceTests
 	[Test]
 	public void ShouldGenerateBasicMapping()
 	{
-		// Arrange
 		GenerateMachineData(("2", "1"));
 
-		// Act
 		_artisanService.GenerateArtisanMapping(_economyModel);
 		var result = _artisanService.GetBaseFromArtisanGood("2");
 
-		// Assert
 		Assert.That(result.ObjectId, Is.EqualTo("1"));
 	}
 
@@ -95,48 +95,40 @@ public class ArtisanServiceTests
 	[Test]
 	public void ShouldIgnoreNonExistentItems()
 	{
-		// Arrange
 		GenerateMachineData(
 			("2", "1"),
 			("999", "998") // Non-existent items
 		);
 
-		// Act
 		_artisanService.GenerateArtisanMapping(_economyModel);
 		var result = _artisanService.GetBaseFromArtisanGood("999");
 
-		// Assert
 		Assert.That(result, Is.Null);
 	}
 
 	[Test]
 	public void ShouldHandleMultiStepArtisanChain()
 	{
-		// Arrange
 		GenerateMachineData(
 			("3", "2"),
 			("2", "1")
 		);
 
-		// Act
 		_artisanService.GenerateArtisanMapping(_economyModel);
 		var result = _artisanService.GetBaseFromArtisanGood("3");
 
-		// Assert
 		Assert.That(result.ObjectId, Is.EqualTo("1"));
 	}
 
 	[Test]
 	public void ShouldBreakCyclesAndLogWarning()
 	{
-		// Arrange
 		GenerateMachineData(
 			("2", "1"),
 			("3", "2"),
 			("1", "3") // Creates cycle
 		);
 
-		// Act
 		_artisanService.GenerateArtisanMapping(_economyModel);
 		var result1 = _artisanService.GetBaseFromArtisanGood("1");
 		var result2 = _artisanService.GetBaseFromArtisanGood("2");
@@ -168,14 +160,11 @@ public class ArtisanServiceTests
 	[Test]
 	public void ShouldIgnoreSelfReferencingItems()
 	{
-		// Arrange
 		GenerateMachineData(("1", "1"));
 
-		// Act
 		_artisanService.GenerateArtisanMapping(_economyModel);
 		var result = _artisanService.GetBaseFromArtisanGood("1");
 
-		// Assert
 		Assert.That(result, Is.Null);
 	}
 	
@@ -204,23 +193,43 @@ public class ArtisanServiceTests
 	[Test]
 	public void ShouldHandleEmptyMachineData()
 	{
-		// Arrange
 		var dict = new Dictionary<string, MachineData>();
 
 		_gameContentHelper.Setup(m => m.Load<Dictionary<string, MachineData>>("Data\\Machines")).Returns(dict);
 
-		// Act
 		_artisanService.GenerateArtisanMapping(_economyModel);
 		var result = _artisanService.GetBaseFromArtisanGood("1");
 
-		// Assert
 		Assert.That(result, Is.Null);
 	}
+	
+	[Test]
+	public void ShouldHandleIgnoredArtisanMappings()
+	{
+		GenerateMachineData(
+			("2", "1"),
+			("3", "1")
+		);
+
+		_mockContentPackService.Setup(m => m.GetItemsOfType<IgnoreArtisanMappingContentPackItem>())
+			.Returns([
+				new IgnoreArtisanMappingContentPackItem { Id = "1" },
+			]);
+
+		_artisanService.GenerateArtisanMapping(_economyModel);
+		var result = _artisanService.GetBaseFromArtisanGood("2");
+		var result2 = _artisanService.GetBaseFromArtisanGood("3");
+
+		Assert.Multiple(() =>
+		{
+		 Assert.That(result, Is.Null);
+		 Assert.That(result2, Is.Null);
+		});
+ }
 
 	[Test]
 	public void ShouldHandleMachineWithNoOutputRules()
 	{
-		// Arrange
 		var dict = new Dictionary<string, MachineData>
 		{
 			{
@@ -235,11 +244,9 @@ public class ArtisanServiceTests
 
 		_gameContentHelper.Setup(m => m.Load<Dictionary<string, MachineData>>("Data\\Machines")).Returns(dict);
 
-		// Act
 		_artisanService.GenerateArtisanMapping(_economyModel);
 		var result = _artisanService.GetBaseFromArtisanGood("1");
 
-		// Assert
 		Assert.That(result, Is.Null);
 	}
 }

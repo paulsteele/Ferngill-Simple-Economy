@@ -19,13 +19,13 @@ public class FerngillSimpleEconomy : Mod
 	public override void Entry(IModHelper helper)
 	{
 		ConfigModel.Instance = helper.ReadConfig<ConfigModel>();
+		var contentPackService = new ContentPackService(Monitor, helper);
 		var multiplayerService = new MultiplayerService(helper);
 		var seedService = new SeedService(Monitor);
 		var fishService = new FishService(Monitor);
-		var artisanService = new ArtisanService(Monitor, helper);
+		var artisanService = new ArtisanService(Monitor, helper, contentPackService);
 		var normalDistributionService = new NormalDistributionService();
 		var updateFrequencyService = new UpdateFrequencyService();
-		var contentPackService = new ContentPackService(Monitor, helper);
 		var economyService = new EconomyService(helper, Monitor, multiplayerService, fishService, seedService, artisanService, normalDistributionService, updateFrequencyService);
 		var drawSupplyBarHelper = new DrawSupplyBarHelper(economyService);
 		var forecastMenuService = new ForecastMenuService(helper, economyService, new DrawTextHelper(), drawSupplyBarHelper);
