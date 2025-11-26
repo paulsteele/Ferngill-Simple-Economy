@@ -40,7 +40,8 @@ public class EconomyService(
 	ISeedService seedService,
 	IArtisanService artisanService,
 	INormalDistributionService normalDistributionService,
-	IUpdateFrequencyService updateFrequencyService
+	IUpdateFrequencyService updateFrequencyService,
+	IEquivalentItemsService equivalentItemsService
 ) : IEconomyService
 {
 	private readonly Dictionary<int, List<int>> _categoryMapping = new();
@@ -72,7 +73,7 @@ public class EconomyService(
 				
 				newModel.ForAllItems(i =>
 				{
-					var old = existingModel.GetItem(i.ObjectId);
+					var old = existingModel.GetItem(equivalentItemsService, i.ObjectId);
 					if (old == null)
 					{
 						return;
@@ -263,7 +264,7 @@ public class EconomyService(
 			}
 		}
 
-		var itemModel = Economy.GetItem(obj);
+		var itemModel = Economy.GetItem(equivalentItemsService, obj);
 		if (itemModel == null)
 		{
 			return basePrice;
@@ -355,8 +356,8 @@ public class EconomyService(
 	private void AdjustItemModel(Object? obj, Action<ItemModel> adjustment)
 	{
 		obj = GetArtisanBase(obj) ?? obj;
-			
-		var itemModel = Economy.GetItem(obj);
+
+		var itemModel = Economy.GetItem(equivalentItemsService, obj);
 		if (itemModel == null)
 		{
 			return;
@@ -428,7 +429,7 @@ public class EconomyService(
 
 	public ItemModel GetConsolidatedItem(ItemModel original)
 	{
-		var baseModel = Economy.GetItem(original.ObjectId);
+		var baseModel = Economy.GetItem(equivalentItemsService, original.ObjectId);
 		if (baseModel == null)
 		{
 			return original;
@@ -447,7 +448,7 @@ public class EconomyService(
 			obj = artisanBase;
 		}
 		
-		var model = Economy.GetItem(obj);
+		var model = Economy.GetItem(equivalentItemsService, obj);
 		return model == null ? null : GetConsolidatedItem(model);
 	}
 

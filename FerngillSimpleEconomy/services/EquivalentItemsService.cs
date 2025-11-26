@@ -13,7 +13,7 @@ public class EquivalentItemsService : IEquivalentItemsService
 {
 	private readonly Dictionary<string, string> _equivalentItems;
 	
-	public EquivalentItemsService(ContentPackService contentPackService)
+	public EquivalentItemsService(IContentPackService contentPackService)
 	{
 		_equivalentItems = contentPackService.GetItemsOfType<MapEquivalentItemsContentPackItem>()
 			.ToDictionary(i => i.Id, i => i.Base);

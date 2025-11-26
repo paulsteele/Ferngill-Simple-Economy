@@ -67,7 +67,7 @@ public class ArtisanService(
 			)
 			.Where(t => !equivalentItemsService.ResolveEquivalentId(t.input).Equals(equivalentItemsService.ResolveEquivalentId(t.output)))
 			.Where(t => !artisanMappingIgnoreList.Contains(t.input))
-			.Where(t => economyModel.HasItem(t.output) && economyModel.HasItem(t.input))
+			.Where(t => economyModel.HasItem(equivalentItemsService, t.output) && economyModel.HasItem(equivalentItemsService, t.input))
 			.GroupBy(t => t.output)
 			.Select(g =>
 			{
@@ -106,7 +106,7 @@ public class ArtisanService(
 			id = mappedItem;
 		}
 
-		return _economyModel.GetItem(id);
+		return _economyModel.GetItem(equivalentItemsService, id);
 	}
 
 	private void BreakCycles()

@@ -23,6 +23,8 @@ public class EconomyServiceTests : HarmonyTestBase
 	private Mock<IArtisanService> _mockArtisanService;
 	private Mock<INormalDistributionService> _mockNormalDistributionService;
 	private Mock<IUpdateFrequencyService> _mockUpdateFrequencyService;
+	private Mock<IEquivalentItemsService> _mockEquivalentItemsService;
+
 	private Farmer _player;
 
 	private EconomyService _economyService;
@@ -46,6 +48,7 @@ public class EconomyServiceTests : HarmonyTestBase
 		_mockArtisanService = new Mock<IArtisanService>();
 		_mockNormalDistributionService = new Mock<INormalDistributionService>();
 		_mockUpdateFrequencyService = new Mock<IUpdateFrequencyService>();
+		_mockEquivalentItemsService = new Mock<IEquivalentItemsService>();
 		_player = new Farmer();
 
 		_mockModHelper.Setup(m => m.Data).Returns(_mockDataHelper.Object);
@@ -58,6 +61,8 @@ public class EconomyServiceTests : HarmonyTestBase
 		_mockNormalDistributionService.Setup(m => m.SampleOutOfSeasonDelta()).Returns(25);
 
 		_mockArtisanService.Setup(m => m.GetBaseFromArtisanGood("307")).Returns(new ItemModel("442"));
+		
+		_mockEquivalentItemsService.Setup(m => m.ResolveEquivalentId(It.IsAny<string>())).Returns<string>(id => id);
 
 		Game1.objectData = new Dictionary<string, ObjectData>(new[]
 		{
@@ -82,7 +87,8 @@ public class EconomyServiceTests : HarmonyTestBase
 			_mockSeedService.Object,
 			_mockArtisanService.Object,
 			_mockNormalDistributionService.Object,
-			_mockUpdateFrequencyService.Object
+			_mockUpdateFrequencyService.Object,
+			_mockEquivalentItemsService.Object
 		);
 	}
 
@@ -1495,15 +1501,14 @@ public class EconomyServiceTests : HarmonyTestBase
 	[Test]
 	public void ShouldGetConsolidatedItem()
 	{
-		Game1.objectData = new Dictionary<string, ObjectData>(new[]
-		{
+		Game1.objectData = new Dictionary<string, ObjectData>([
 			GenerateObjectData("176", 1),
 			GenerateObjectData("174", 1),
 			GenerateObjectData("442", 2),
 			GenerateObjectData("307", 2),
 			GenerateObjectData("1", 2),
-		});
-		
+		]);
+
 		_economyService = new EconomyService
 		(
 			_mockModHelper.Object,
@@ -1513,9 +1518,12 @@ public class EconomyServiceTests : HarmonyTestBase
 			_mockSeedService.Object,
 			_mockArtisanService.Object,
 			_mockNormalDistributionService.Object,
-			_mockUpdateFrequencyService.Object
+			_mockUpdateFrequencyService.Object,
+			_mockEquivalentItemsService.Object
 		);
-		
+
+		_mockEquivalentItemsService.Setup(m => m.ResolveEquivalentId("174")).Returns("176");
+
 		_economyService.OnLoaded();
 
 		var itemModel = new ItemModel("2");

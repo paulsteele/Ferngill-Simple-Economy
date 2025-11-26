@@ -41,7 +41,7 @@ namespace fse.core.models
 			}
 		}
 
-		public ItemModel? GetItem(Object? obj)
+		public ItemModel? GetItem(IEquivalentItemsService equivalentItemsService, Object? obj)
 		{
 			if (obj == null)
 			{
@@ -49,15 +49,15 @@ namespace fse.core.models
 			}
 			
 			return CategoryEconomies.TryGetValue(obj.Category, out var category) 
-				? category.GetValueOrDefault(HardcodedEquivalentItemsList.GetEquivalentId(obj.ItemId)) 
+				? category.GetValueOrDefault(equivalentItemsService.ResolveEquivalentId(obj.ItemId)) 
 				: null;
 		}
 		
-		public ItemModel? GetItem(string id)
+		public ItemModel? GetItem(IEquivalentItemsService equivalentItemsService, string id)
 		{
 			foreach (var categoryEconomy in CategoryEconomies)
 			{
-				categoryEconomy.Value.TryGetValue(HardcodedEquivalentItemsList.GetEquivalentId(id), out var model);
+				categoryEconomy.Value.TryGetValue(equivalentItemsService.ResolveEquivalentId(id), out var model);
 				if (model != null)
 				{
 					return model;
@@ -67,7 +67,7 @@ namespace fse.core.models
 			return null;
 		}
 
-		public bool HasItem(string id) => GetItem(id) != null;
+		public bool HasItem(IEquivalentItemsService equivalentItemsService, string id) => GetItem(equivalentItemsService, id) != null;
 
 		public void AdvanceOneDay()
 		{

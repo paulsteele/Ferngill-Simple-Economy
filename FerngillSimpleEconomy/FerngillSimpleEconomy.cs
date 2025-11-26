@@ -27,7 +27,7 @@ public class FerngillSimpleEconomy : Mod
 		var artisanService = new ArtisanService(Monitor, helper, contentPackService, equivalentItemsService);
 		var normalDistributionService = new NormalDistributionService();
 		var updateFrequencyService = new UpdateFrequencyService();
-		var economyService = new EconomyService(helper, Monitor, multiplayerService, fishService, seedService, artisanService, normalDistributionService, updateFrequencyService);
+		var economyService = new EconomyService(helper, Monitor, multiplayerService, fishService, seedService, artisanService, normalDistributionService, updateFrequencyService, equivalentItemsService);
 		var drawSupplyBarHelper = new DrawSupplyBarHelper(economyService);
 		var forecastMenuService = new ForecastMenuService(helper, economyService, new DrawTextHelper(), drawSupplyBarHelper);
 		var betterGameMenuService = new BetterGameMenuService(ModManifest, helper, forecastMenuService);

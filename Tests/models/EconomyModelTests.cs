@@ -1,4 +1,6 @@
 using fse.core.models;
+using fse.core.services;
+using Moq;
 using StardewValley;
 using Object = StardewValley.Object;
 
@@ -7,6 +9,7 @@ namespace Tests.models;
 [TestFixture]
 public class EconomyModelTests : HarmonyTestBase
 {
+	private Mock<IEquivalentItemsService> _mockEquivalentItemsService;
 	private EconomyModel _economyModel;
 	
 	private ItemModel _itemModel1;
@@ -19,7 +22,6 @@ public class EconomyModelTests : HarmonyTestBase
 	public override void Setup()
 	{
 		base.Setup();
-
 		
 		_itemModel1 = new ItemModel("o1");
 		_itemModel2 = new ItemModel("o2");
@@ -47,6 +49,8 @@ public class EconomyModelTests : HarmonyTestBase
 		};
 
 		_economyModel = new EconomyModel(economyDict);
+		_mockEquivalentItemsService = new Mock<IEquivalentItemsService>();
+		_mockEquivalentItemsService.Setup(m => m.ResolveEquivalentId(It.IsAny<string>())).Returns<string>(id => id);
 		
 		Game1.content = new LocalizedContentManager(null, null, null);
 	}
@@ -61,12 +65,12 @@ public class EconomyModelTests : HarmonyTestBase
 		var o5 = new Object("o5", 1) { Category = 2 };
 		var o6 = new Object("o6", 1) { Category = 2 };
 
-		var itemModel1 = _economyModel.GetItem(o1);
-		var itemModel2 = _economyModel.GetItem(o2);
-		var itemModel3 = _economyModel.GetItem(o3);
-		var itemModel4 = _economyModel.GetItem(o4);
-		var itemModel5 = _economyModel.GetItem(o5);
-		var itemModel6 = _economyModel.GetItem(o6);
+		var itemModel1 = _economyModel.GetItem(_mockEquivalentItemsService.Object, o1);
+		var itemModel2 = _economyModel.GetItem(_mockEquivalentItemsService.Object, o2);
+		var itemModel3 = _economyModel.GetItem(_mockEquivalentItemsService.Object, o3);
+		var itemModel4 = _economyModel.GetItem(_mockEquivalentItemsService.Object, o4);
+		var itemModel5 = _economyModel.GetItem(_mockEquivalentItemsService.Object, o5);
+		var itemModel6 = _economyModel.GetItem(_mockEquivalentItemsService.Object, o6);
 
 		Assert.Multiple(() =>
 		{
@@ -82,12 +86,12 @@ public class EconomyModelTests : HarmonyTestBase
 	[Test]
 	public void ShouldReturnItemModelForId()
 	{
-		var itemModel1 = _economyModel.GetItem("o1");
-		var itemModel2 = _economyModel.GetItem("o2");
-		var itemModel3 = _economyModel.GetItem("o3");
-		var itemModel4 = _economyModel.GetItem("o4");
-		var itemModel5 = _economyModel.GetItem("o5");
-		var itemModel6 = _economyModel.GetItem("o6");
+		var itemModel1 = _economyModel.GetItem(_mockEquivalentItemsService.Object, "o1");
+		var itemModel2 = _economyModel.GetItem(_mockEquivalentItemsService.Object, "o2");
+		var itemModel3 = _economyModel.GetItem(_mockEquivalentItemsService.Object, "o3");
+		var itemModel4 = _economyModel.GetItem(_mockEquivalentItemsService.Object, "o4");
+		var itemModel5 = _economyModel.GetItem(_mockEquivalentItemsService.Object, "o5");
+		var itemModel6 = _economyModel.GetItem(_mockEquivalentItemsService.Object, "o6");
 
 		Assert.Multiple(() =>
 		{
@@ -122,6 +126,9 @@ public class EconomyModelTests : HarmonyTestBase
 			},
 		});
 		
+		_mockEquivalentItemsService.Setup(m => m.ResolveEquivalentId("174")).Returns("176");
+		_mockEquivalentItemsService.Setup(m => m.ResolveEquivalentId("186")).Returns("184");
+		
 		var o1 = new Object("176", 1) { Category = 1 };
 		var o2 = new Object("174", 1) { Category = 1 };
 		var o3 = new Object("184", 1) { Category = 2 };
@@ -129,12 +136,12 @@ public class EconomyModelTests : HarmonyTestBase
 		var o5 = new Object("o5", 1) { Category = 2 };
 		var o6 = new Object("o6", 1) { Category = 2 };
 
-		var itemModel1 = _economyModel.GetItem(o1);
-		var itemModel2 = _economyModel.GetItem(o2);
-		var itemModel3 = _economyModel.GetItem(o3);
-		var itemModel4 = _economyModel.GetItem(o4);
-		var itemModel5 = _economyModel.GetItem(o5);
-		var itemModel6 = _economyModel.GetItem(o6);
+		var itemModel1 = _economyModel.GetItem(_mockEquivalentItemsService.Object, o1);
+		var itemModel2 = _economyModel.GetItem(_mockEquivalentItemsService.Object, o2);
+		var itemModel3 = _economyModel.GetItem(_mockEquivalentItemsService.Object, o3);
+		var itemModel4 = _economyModel.GetItem(_mockEquivalentItemsService.Object, o4);
+		var itemModel5 = _economyModel.GetItem(_mockEquivalentItemsService.Object, o5);
+		var itemModel6 = _economyModel.GetItem(_mockEquivalentItemsService.Object, o6);
 
 		Assert.Multiple(() =>
 		{
@@ -168,13 +175,16 @@ public class EconomyModelTests : HarmonyTestBase
 				}
 			},
 		});
+		
+		_mockEquivalentItemsService.Setup(m => m.ResolveEquivalentId("174")).Returns("176");
+		_mockEquivalentItemsService.Setup(m => m.ResolveEquivalentId("186")).Returns("184");
 
-		var itemModel1 = _economyModel.GetItem("176");
-		var itemModel2 = _economyModel.GetItem("174");
-		var itemModel3 = _economyModel.GetItem("184");
-		var itemModel4 = _economyModel.GetItem("186");
-		var itemModel5 = _economyModel.GetItem("o5");
-		var itemModel6 = _economyModel.GetItem("o6");
+		var itemModel1 = _economyModel.GetItem(_mockEquivalentItemsService.Object, "176");
+		var itemModel2 = _economyModel.GetItem(_mockEquivalentItemsService.Object, "174");
+		var itemModel3 = _economyModel.GetItem(_mockEquivalentItemsService.Object, "184");
+		var itemModel4 = _economyModel.GetItem(_mockEquivalentItemsService.Object, "186");
+		var itemModel5 = _economyModel.GetItem(_mockEquivalentItemsService.Object, "o5");
+		var itemModel6 = _economyModel.GetItem(_mockEquivalentItemsService.Object, "o6");
 
 		Assert.Multiple(() =>
 		{
