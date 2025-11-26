@@ -13,7 +13,12 @@ public interface IArtisanService
 	ItemModel? GetBaseFromArtisanGood(string modelId);
 }
 
-public class ArtisanService(IMonitor monitor, IModHelper helper, IContentPackService contentPackService) : IArtisanService
+public class ArtisanService(
+	IMonitor monitor,
+	IModHelper helper,
+	IContentPackService contentPackService,
+	IEquivalentItemsService equivalentItemsService
+) : IArtisanService
 {
 	private Dictionary<string, string>? _artisanGoodToBase;
 	private EconomyModel? _economyModel;
@@ -60,7 +65,7 @@ public class ArtisanService(IMonitor monitor, IModHelper helper, IContentPackSer
 				output: t.output.ItemId.Replace("(O)", string.Empty),
 				input: t.trigger.RequiredItemId.Replace("(O)", string.Empty))
 			)
-			.Where(t => !HardcodedEquivalentItemsList.GetEquivalentId(t.input).Equals(HardcodedEquivalentItemsList.GetEquivalentId(t.output)))
+			.Where(t => !equivalentItemsService.ResolveEquivalentId(t.input).Equals(equivalentItemsService.ResolveEquivalentId(t.output)))
 			.Where(t => !artisanMappingIgnoreList.Contains(t.input))
 			.Where(t => economyModel.HasItem(t.output) && economyModel.HasItem(t.input))
 			.GroupBy(t => t.output)
@@ -70,8 +75,6 @@ public class ArtisanService(IMonitor monitor, IModHelper helper, IContentPackSer
 				return (first.output, first.input);
 			})
 			.ToDictionary(t => t.output, t => t.input);
-		
-		//TODO ADD OVERWRITE CONTENT PACK
 
 		monitor.LogOnce("Artisan Good Mapping Trace");
 		foreach (var mapping in _artisanGoodToBase)

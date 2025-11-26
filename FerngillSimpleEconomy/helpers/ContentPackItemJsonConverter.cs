@@ -25,6 +25,7 @@ public class ContentPackItemJsonConverter : JsonConverter<BaseContentPackItem>
 		{
 			"IgnoreArtisanMapping" => JsonSerializer.Deserialize<IgnoreArtisanMappingContentPackItem>(root.GetRawText(), options),
 			"MapContextTagToItem" => JsonSerializer.Deserialize<MapContextTagToItemContentPackItem>(root.GetRawText(), options),
+			"MapEquivalentItems" => JsonSerializer.Deserialize<MapEquivalentItemsContentPackItem>(root.GetRawText(), options),
 			_ => throw new JsonException($"Unknown action type: {action}"),
 		};
 	}

@@ -13,6 +13,7 @@ public class ArtisanServiceTests
 	private Mock<IModHelper> _mockHelper;
 	private Mock<IContentPackService> _mockContentPackService;
 	private Mock<IGameContentHelper> _gameContentHelper;
+	private Mock<IEquivalentItemsService> _mockEquivalentItemsService;
 	private ArtisanService _artisanService;
 	private EconomyModel _economyModel;
 
@@ -22,6 +23,7 @@ public class ArtisanServiceTests
 		_mockMonitor = new Mock<IMonitor>();
 		_mockHelper = new Mock<IModHelper>();
 		_mockContentPackService = new Mock<IContentPackService>();
+		_mockEquivalentItemsService = new Mock<IEquivalentItemsService>();
 		_gameContentHelper = new Mock<IGameContentHelper>();
 		_economyModel = new EconomyModel(new Dictionary<int, Dictionary<string, ItemModel>>
 			{
@@ -40,8 +42,15 @@ public class ArtisanServiceTests
 		);
 		
 		_mockHelper.SetupGet(m => m.GameContent).Returns(_gameContentHelper.Object);
+		_mockEquivalentItemsService.Setup(m => m.ResolveEquivalentId(It.IsAny<string>()))
+			.Returns<string>(id => id);
 
-		_artisanService = new ArtisanService(_mockMonitor.Object, _mockHelper.Object, _mockContentPackService.Object);
+		_artisanService = new ArtisanService(
+			_mockMonitor.Object,
+			_mockHelper.Object,
+			_mockContentPackService.Object,
+			_mockEquivalentItemsService.Object
+		);
 	}
 
 	private void GenerateMachineData(params (string output, string input)[] mappings)
@@ -204,6 +213,8 @@ public class ArtisanServiceTests
 			("1", "186"),
 			("2", "184")
 		);
+		
+		_mockEquivalentItemsService.Setup(m => m.ResolveEquivalentId("186")).Returns("184");
 
 		_artisanService.GenerateArtisanMapping(_economyModel);
 		var result1 = _artisanService.GetBaseFromArtisanGood("186");

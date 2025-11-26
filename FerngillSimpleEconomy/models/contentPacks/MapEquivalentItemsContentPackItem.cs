@@ -2,12 +2,12 @@
 
 namespace fse.core.models.contentPacks;
 
-public class MapContextTagToItemContentPackItem : BaseContentPackItem
+public class MapEquivalentItemsContentPackItem : BaseContentPackItem
 {
-	[JsonPropertyName("tag")]
-	public string Tag { get; init; } = string.Empty;
-
 	[JsonPropertyName("id")]
 	public string Id { get; init; } = string.Empty;
+
+	[JsonPropertyName("base")]
+	public string Base { get; init; } = string.Empty;
 }
 

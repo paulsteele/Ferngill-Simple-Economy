@@ -20,10 +20,11 @@ public class FerngillSimpleEconomy : Mod
 	{
 		ConfigModel.Instance = helper.ReadConfig<ConfigModel>();
 		var contentPackService = new ContentPackService(Monitor, helper);
+		var equivalentItemsService = new EquivalentItemsService(contentPackService);
 		var multiplayerService = new MultiplayerService(helper);
 		var seedService = new SeedService(Monitor);
 		var fishService = new FishService(Monitor);
-		var artisanService = new ArtisanService(Monitor, helper, contentPackService);
+		var artisanService = new ArtisanService(Monitor, helper, contentPackService, equivalentItemsService);
 		var normalDistributionService = new NormalDistributionService();
 		var updateFrequencyService = new UpdateFrequencyService();
 		var economyService = new EconomyService(helper, Monitor, multiplayerService, fishService, seedService, artisanService, normalDistributionService, updateFrequencyService);
