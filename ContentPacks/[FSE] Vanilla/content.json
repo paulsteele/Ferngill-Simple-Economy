@@ -1,3 +1,47 @@
-﻿{
-	"test": "true"
-}
+﻿[
+	{
+		"action": "IgnoreArtisanMapping",
+		"comment": "Ostrich Egg -> Mayo",
+		"id": "289"
+	},
+	{
+		"action": "IgnoreArtisanMapping",
+		"comment": "Golden Egg -> Mayo",
+		"id": "928"
+	},
+	{
+		"action": "IgnoreArtisanMapping",
+		"comment": "Wood -> coal",
+		"id": "388"
+	},
+	{
+		"action": "IgnoreArtisanMapping",
+		"comment": "Hardwood -> syrup",
+		"id": "709"
+	},
+	{
+		"action": "IgnoreArtisanMapping",
+		"comment": "Radioactive bar -> slot machine",
+		"id": "910"
+	},
+	{
+		"action": "IgnoreArtisanMapping",
+		"comment": "Iridium bar -> slot machine",
+		"id": "337"
+	},
+	{
+		"action": "IgnoreArtisanMapping",
+		"comment": "Gold bar -> slot machine",
+		"id": "336"
+	},
+	{
+		"action": "IgnoreArtisanMapping",
+		"comment": "Iron bar -> slot machine",
+		"id": "335"
+	},
+	{
+		"action": "IgnoreArtisanMapping",
+		"comment": "Copper bar -> slot machine",
+		"id": "334"
+	}
+]
