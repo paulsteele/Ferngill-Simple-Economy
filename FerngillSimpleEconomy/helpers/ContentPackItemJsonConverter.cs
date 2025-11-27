@@ -21,13 +21,30 @@ public class ContentPackItemJsonConverter : JsonConverter<BaseContentPackItem>
 
 		var action = actionProperty.GetString();
 
-		return action switch
+		var rawText = root.GetRawText();
+
+		try
 		{
-			"IgnoreArtisanMapping" => JsonSerializer.Deserialize<IgnoreArtisanMappingContentPackItem>(root.GetRawText(), options),
-			"MapContextTagToItem" => JsonSerializer.Deserialize<MapContextTagToItemContentPackItem>(root.GetRawText(), options),
-			"MapEquivalentItems" => JsonSerializer.Deserialize<MapEquivalentItemsContentPackItem>(root.GetRawText(), options),
-			_ => throw new JsonException($"Unknown action type: {action}"),
-		};
+			BaseContentPackItem? returnValue = action switch
+			{
+				"IgnoreArtisanMapping" => JsonSerializer.Deserialize<IgnoreArtisanMappingContentPackItem>(rawText, options),
+				"MapContextTagToItem" => JsonSerializer.Deserialize<MapContextTagToItemContentPackItem>(rawText, options),
+				"MapEquivalentItems" => JsonSerializer.Deserialize<MapEquivalentItemsContentPackItem>(rawText, options),
+				_ => throw new JsonException($"Unknown action type: {action}"),
+			};
+
+			// ReSharper disable once ConvertIfStatementToNullCoalescingExpression
+			if (returnValue == null)
+			{
+				returnValue = new InvalidContentPackItem { Action = action, RawText = rawText };
+			}
+
+			return returnValue;
+		}
+		catch (Exception e)
+		{
+			return new InvalidContentPackItem { Action = action, RawText = rawText, Exception = e};
+		}
 	}
 
 	public override void Write(Utf8JsonWriter writer, BaseContentPackItem value, JsonSerializerOptions options)

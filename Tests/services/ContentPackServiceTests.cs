@@ -28,22 +28,41 @@ public class ContentPackServiceTests
 	}
 
 	[Test]
-	public void ShouldDeserializeMixedContentPacks()
+	public void ShouldDeserializeMixedContentPacks([Values] bool splitPacks)
 	{
-		var pack = CreateMockContentPack(
-			"pack1",
-			new SemanticVersion(1, 1, 1),
-			"content.json",
-			"""
-			[
-			{"action": "IgnoreArtisanMapping", "id": "item1"},
-			{"action": "MapContextTagToItem", "tag": "tag2", "id": "item2"},
-			{"action": "MapEquivalentItems", "id": "item3", "base": "base3"}
-			]
-			"""
-		);
-		
-		_mockContentPackHelper.Setup(cp => cp.GetOwned()).Returns([pack]);
+		var lines = new List<string>
+		{
+			"""{"action": "IgnoreArtisanMapping", "id": "item1", "comment": "extra field"}""",
+			"""{"action": "MapContextTagToItem", "tag": "tag2", "id": "item2"}""",
+			"""{"action": "Bad"}""",
+			"""{"action": "IgnoreArtisanMapping", "bad": "bad1"}""",
+			"""{"action": "MapEquivalentItems", "id": "item3", "base": "base3"}""",
+		};
+
+		if (splitPacks)
+		{
+			var packs = lines.Select((line, index) =>
+				CreateMockContentPack(
+					$"pack{index + 1}",
+					new SemanticVersion(1, 0, index + 1),
+					"content.json",
+					$"[{line}]"
+				)
+			).ToArray();
+			
+			_mockContentPackHelper.Setup(cp => cp.GetOwned()).Returns(packs);
+		}
+		else
+		{
+			var pack = CreateMockContentPack(
+				"pack1",
+				new SemanticVersion(1, 1, 1),
+				"content.json",
+				$"[{string.Join(",", lines)}]"
+			);
+
+			_mockContentPackHelper.Setup(cp => cp.GetOwned()).Returns([pack]);
+		}
 		
 		_contentPackService.LoadContentPacks();
 

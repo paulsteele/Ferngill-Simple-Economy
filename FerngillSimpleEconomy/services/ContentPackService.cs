@@ -43,8 +43,19 @@ public class ContentPackService(IMonitor monitor, IModHelper helper, IFileServic
 				}
 
 				var items = JsonSerializer.Deserialize<List<BaseContentPackItem>>(jsonText) ?? [];
+
+				var groupedItems = items
+					.ToLookup(g => g.GetType() != typeof(InvalidContentPackItem), g => g);
 				
-				_loadedItems.AddRange(items);
+				foreach (var invalid in groupedItems[false].OfType<InvalidContentPackItem>())
+				{
+					monitor.Log(
+						$"Invalid entry in {packString} skipped: error='{invalid.Exception?.Message}, text={invalid.RawText}'",
+						LogLevel.Error
+					);
+				}
+				
+				_loadedItems.AddRange(groupedItems[true]);
 				
 				monitor.Log($"Loaded {items.Count} item(s) from {packString}");
 			}
