@@ -3,6 +3,8 @@
 		<File Path="README.md" />
 		<File Path="Directory.Build.targets" />
 		<File Path="global.json" />
+		<File Path="docs/api-integration.md" />
+		<File Path="docs/content-packs.md" />
 	</Folder>
 	<Folder Name="/ContentPacks/[FSE] Default/">
 		<File Path="ContentPacks\[FSE] Default\content.json" />

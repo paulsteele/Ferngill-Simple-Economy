@@ -137,6 +137,11 @@ Special artisan goods (e.g., Caviar) will have their own supply. Rule of thumb: 
 ## Contributing
 Interested in contributing? Please read the https://github.com/paulsteele/Ferngill-Simple-Economy/tree/main?tab=contributing-ov-file
 
+### Extensibility
+Starting in version 2.0.0 there is
+* An API for other mods to interact with the economy. See the docs for more details.
+* Content Pack support for adding custom rules for items. See the docs for more details.
+
 ### Bug Reporting
 
 Please report all bugs to https://github.com/paulsteele/Ferngill-Supply-And-Demand/issues
