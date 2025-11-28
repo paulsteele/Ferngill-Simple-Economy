@@ -1,4 +1,4 @@
-﻿using fse.core.models.contentPacks;
+using fse.core.models.contentPacks;
 using fse.core.services;
 using Moq;
 

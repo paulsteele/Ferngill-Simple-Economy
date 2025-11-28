@@ -55,5 +55,8 @@
 	"fse.config.pricing.mode.description": "Price Multiplier",
 	"fse.config.pricing.mode.field": "Update Frequency",
 	"fse.config.pricing.mode.Instant": "Instant",
-	"fse.config.pricing.mode.Batch": "Daily"
+	"fse.config.pricing.mode.Batch": "Daily",
+	"fse.config.content.packs": "Content Packs",
+	"fse.config.content.packs.loaded": "Loaded Content Packs:",
+	"fse.config.content.packs.loaded.items": "item(s)"
 }

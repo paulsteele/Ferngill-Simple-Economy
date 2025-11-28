@@ -23,13 +23,15 @@ public interface IGenericConfigMenuService
 public class GenericConfigMenuService(
 	IModHelper helper,
 	IManifest manifest,
-	IEconomyService economyService
+	IEconomyService economyService,
+	IContentPackService contentPackService
 ) : IGenericConfigMenuService
 {
 	private const string AdvancedPageId = "advanced";
 	private const string CategoriesPageId = "categories";
 	private const string MenuPageId = "menu";
 	private const string FrequencyPageId = "frequency";
+	private const string ContentPackPageId = "contentPacks";
 	
 	public void Register(IGenericModConfigMenuApi? configMenu)
 	{
@@ -89,11 +91,13 @@ public class GenericConfigMenuService(
 		configMenu.AddPageLink(manifest, MenuPageId, () => helper.Translation.Get("fse.config.page.menu"));
 		configMenu.AddPageLink(manifest, CategoriesPageId, () => helper.Translation.Get("fse.config.page.categories"));
 		configMenu.AddPageLink(manifest, AdvancedPageId, () => helper.Translation.Get("fse.config.page.advanced"));
+		configMenu.AddPageLink(manifest, ContentPackPageId, () => helper.Translation.Get("fse.config.content.packs"));
 
 		PopulateFrequencyPage(configMenu);
 		PopulateMenuPage(configMenu);
 		PopulateCategoriesPage(configMenu);
 		PopulateAdvancedPage(configMenu);
+		PopulateContentPackPage(configMenu);
 	}
 
 	private void PopulateAdvancedPage(IGenericModConfigMenuApi configMenu)
@@ -339,5 +343,20 @@ public class GenericConfigMenuService(
 			getValue: () => ConfigModel.Instance.MenuTabOffset,
 			setValue: val => ConfigModel.Instance.MenuTabOffset = val
 		);
+	}
+
+	private void PopulateContentPackPage(IGenericModConfigMenuApi configMenu)
+	{
+		configMenu.AddPage(manifest, ContentPackPageId, () => helper.Translation.Get("fse.config.content.packs"));
+		
+		configMenu.AddSectionTitle(mod: manifest, text: () => helper.Translation.Get("fse.config.content.packs.loaded"));
+		
+		foreach (var packInfo in contentPackService.GetContentPackInfo())
+		{
+			configMenu.AddParagraph(
+				mod: manifest,
+				text: () => $"{packInfo.Name}: {packInfo.LoadedItemsCount} {helper.Translation.Get("fse.config.content.packs.loaded.items")}"
+			);
+		}
 	}
 }

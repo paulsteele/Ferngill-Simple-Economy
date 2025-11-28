@@ -1,4 +1,4 @@
-﻿using fse.core.models.contentPacks;
+using fse.core.models.contentPacks;
 using fse.core.services;
 using Moq;
 using StardewModdingAPI;
@@ -30,17 +30,17 @@ public class ContentPackServiceTests
 	[Test]
 	public void ShouldDeserializeMixedContentPacks([Values] bool splitPacks)
 	{
-		var lines = new List<string>
+		var lines = new List<(string text, bool isValid)>
 		{
-			"""{"action": "IgnoreArtisanMapping", "id": "item1", "comment": "extra field"}""",
-			"""{"action": "MapContextTagToItem", "tag": "tag2", "id": "item2"}""",
-			"""{"action": "Bad"}""",
-			"""{"action": "IgnoreArtisanMapping", "bad": "bad1"}""",
-			"""{"action": "MapEquivalentItems", "id": "item3", "base": "base3"}""",
-			"""{"action": "IgnoreInEconomy", "id": "item4" }""",
-			"{}",
-			"""{"something": "not good", "id": "no" }""",
-			"""{"action": "MapItemToSeason", "id": "item5", "spring": true, "summer": false, "fall": true, "winter": false}""",
+			("""{"action": "IgnoreArtisanMapping", "id": "item1", "comment": "extra field"}""", true),
+			("""{"action": "MapContextTagToItem", "tag": "tag2", "id": "item2"}""", true),
+			("""{"action": "Bad"}""", false),
+			("""{"action": "IgnoreArtisanMapping", "bad": "bad1"}""", false),
+			("""{"action": "MapEquivalentItems", "id": "item3", "base": "base3"}""", true),
+			("""{"action": "IgnoreInEconomy", "id": "item4" }""", true),
+			("{}", false),
+			("""{"something": "not good", "id": "no" }""", false),
+			("""{"action": "MapItemToSeason", "id": "item5", "spring": true, "summer": false, "fall": true, "winter": false}""", true),
 		};
 
 		if (splitPacks)
@@ -50,7 +50,7 @@ public class ContentPackServiceTests
 					$"pack{index + 1}",
 					new SemanticVersion(1, 0, index + 1),
 					"content.json",
-					$"[{line}]"
+					$"[{line.text}]"
 				)
 			).ToArray();
 			
@@ -62,7 +62,7 @@ public class ContentPackServiceTests
 				"pack1",
 				new SemanticVersion(1, 1, 1),
 				"content.json",
-				$"[{string.Join(",", lines)}]"
+				$"[{string.Join(",", lines.Select(l => l.text))}]"
 			);
 
 			_mockContentPackHelper.Setup(cp => cp.GetOwned()).Returns([pack]);
@@ -74,6 +74,7 @@ public class ContentPackServiceTests
 		var mapContextTagToItemContentPackItems = _contentPackService.GetItemsOfType<MapContextTagToItemContentPackItem>().ToArray();
 		var mapEquivalentItemsContentPackItems = _contentPackService.GetItemsOfType<MapEquivalentItemsContentPackItem>().ToArray();
 		var ignoreInEconomyContentPackItems = _contentPackService.GetItemsOfType<IgnoreInEconomyContentPackItem>().ToArray();
+		var packInfo = _contentPackService.GetContentPackInfo().ToArray();
 
 		Assert.Multiple(() =>
 		{
@@ -90,6 +91,21 @@ public class ContentPackServiceTests
 			
 			Assert.That(ignoreInEconomyContentPackItems, Has.Length.EqualTo(1));
 			Assert.That(ignoreInEconomyContentPackItems[0].Id, Is.EqualTo("item4"));
+	
+			Assert.That(packInfo, Has.Length.EqualTo(splitPacks ? lines.Count : 1));
+			if (splitPacks)
+			{
+				for (var i = 0; i < lines.Count; i++)
+				{
+					Assert.That(packInfo[i].Name, Is.EqualTo($"pack{i + 1} v1.0.{i + 1}"));
+					Assert.That(packInfo[i].LoadedItemsCount, Is.EqualTo(lines[i].isValid ? 1 : 0));
+				}
+			}
+			else
+			{
+				Assert.That(packInfo[0].Name, Is.EqualTo("pack1 v1.1.1"));
+				Assert.That(packInfo[0].LoadedItemsCount, Is.EqualTo(lines.Count(l => l.isValid)));
+			}
 		});
 	}
 	

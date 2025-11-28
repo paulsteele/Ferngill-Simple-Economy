@@ -11,12 +11,14 @@ namespace fse.core.services;
 public interface IContentPackService
 {
 	IEnumerable<T> GetItemsOfType<T>() where T : BaseContentPackItem;
+	IEnumerable<ContentPackInfo> GetContentPackInfo();
 }
 
 public class ContentPackService : IContentPackService
 {
 	private const string ContentFileName = "content.json";
 	private readonly List<BaseContentPackItem> _loadedItems = [];
+	private readonly List<ContentPackInfo> _contentPackInfos = [];
 
 	public ContentPackService(IMonitor monitor, IModHelper helper, IFileService fileService)
 	{
@@ -55,7 +57,15 @@ public class ContentPackService : IContentPackService
 					);
 				}
 				
-				_loadedItems.AddRange(groupedItems[true]);
+				var validItems = groupedItems[true].ToArray();
+				
+				var packInfo = new ContentPackInfo(
+					packString,
+					validItems.ToArray().Length
+				);
+				
+				_loadedItems.AddRange(validItems);
+				_contentPackInfos.Add(packInfo);
 				
 				monitor.Log($"Loaded {items.Count} item(s) from {packString}");
 			}
@@ -67,4 +77,5 @@ public class ContentPackService : IContentPackService
 	}
 
 	public IEnumerable<T> GetItemsOfType<T>() where T : BaseContentPackItem => _loadedItems.OfType<T>();
+	public IEnumerable<ContentPackInfo> GetContentPackInfo() => _contentPackInfos;
 }
