@@ -84,6 +84,56 @@ public class ContentPackServiceTests
 			Assert.That(mapEquivalentItemsContentPackItems[0].Base, Is.EqualTo("base3"));
 		});
 	}
+	
+	[Test]
+	public void ShouldHandleNoContentPacks()
+	{
+		_mockContentPackHelper.Setup(cp => cp.GetOwned()).Returns([]);
+
+		_contentPackService.LoadContentPacks();
+
+		var allItems = _contentPackService.GetItemsOfType<BaseContentPackItem>().ToArray();
+
+		Assert.That(allItems, Is.Empty);
+	}
+
+	[Test]
+	public void ShouldHandleContentPackWithNoContentFile()
+	{
+		var pack = CreateMockContentPack(
+			"pack1",
+			new SemanticVersion(1, 1, 1),
+			"misspelled.json",
+			"""[{"action": "IgnoreArtisanMapping", "id": "item1", "comment": "extra field"}]"""
+		);
+		
+		_mockContentPackHelper.Setup(cp => cp.GetOwned()).Returns([pack]);
+			
+		_contentPackService.LoadContentPacks();
+
+		var allItems = _contentPackService.GetItemsOfType<BaseContentPackItem>().ToArray();
+
+		Assert.That(allItems, Is.Empty);
+	}
+
+	[Test]
+	public void ShouldHandleBadJson()
+	{
+		var pack = CreateMockContentPack(
+			"pack1",
+			new SemanticVersion(1, 1, 1),
+			"content.json",
+			"""{"action": "IgnoreArtisanMapping", "id": "item1", "comment": "extra field"}"""
+		);
+		
+		_mockContentPackHelper.Setup(cp => cp.GetOwned()).Returns([pack]);
+			
+		_contentPackService.LoadContentPacks();
+
+		var allItems = _contentPackService.GetItemsOfType<BaseContentPackItem>().ToArray();
+
+		Assert.That(allItems, Is.Empty);
+	}
 
 	private IContentPack CreateMockContentPack(string name, SemanticVersion version, string contentName, string content)
 	{
