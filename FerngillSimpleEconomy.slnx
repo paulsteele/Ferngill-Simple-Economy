@@ -4,9 +4,9 @@
 		<File Path="Directory.Build.targets" />
 		<File Path="global.json" />
 	</Folder>
-	<Folder Name="/ContentPacks/[FSE] Vanilla/">
-		<File Path="ContentPacks\[FSE] Vanilla\content.json" />
-		<File Path="ContentPacks\[FSE] Vanilla\manifest.json" />
+	<Folder Name="/ContentPacks/[FSE] Default/">
+		<File Path="ContentPacks\[FSE] Default\content.json" />
+		<File Path="ContentPacks\[FSE] Default\manifest.json" />
 	</Folder>
 	<Project Path="FerngillSimpleEconomy\FerngillSimpleEconomy.csproj" />
 	<Project Path="Tests\Tests.csproj" />
