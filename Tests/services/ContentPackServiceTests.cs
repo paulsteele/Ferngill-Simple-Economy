@@ -38,6 +38,9 @@ public class ContentPackServiceTests
 			"""{"action": "IgnoreArtisanMapping", "bad": "bad1"}""",
 			"""{"action": "MapEquivalentItems", "id": "item3", "base": "base3"}""",
 			"""{"action": "IgnoreInEconomy", "id": "item4" }""",
+			"{}",
+			"""{"something": "not good", "id": "no" }""",
+			"""{"action": "MapItemToSeason", "id": "item5", "spring": true, "summer": false, "fall": true, "winter": false}""",
 		};
 
 		if (splitPacks)

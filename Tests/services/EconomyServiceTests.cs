@@ -71,6 +71,10 @@ public class EconomyServiceTests : HarmonyTestBase
 			new IgnoreInEconomyContentPackItem{Id = "5"},
 		]);
 
+		_mockContentPackService.Setup(m => m.GetItemsOfType<MapItemToSeasonContentPackItem>()).Returns([
+			new MapItemToSeasonContentPackItem{Id = "3", Spring = false, Summer = false, Fall = true, Winter = false},
+		]);
+
 		Game1.objectData = new Dictionary<string, ObjectData>([
 			GenerateObjectData("1", 1),
 			GenerateObjectData("2", 1),
@@ -377,6 +381,8 @@ public class EconomyServiceTests : HarmonyTestBase
 	[Test]
 	public void ShouldHandleEndOfDay([Values] bool shouldUpdateSupply, [Values] bool shouldUpdateDelta, [Values]Seasons updateSeason)
 	{
+		_mockContentPackService.Setup(m => m.GetItemsOfType<MapItemToSeasonContentPackItem>()).Returns([
+		]);
 		_economyService.OnLoaded();
 		_mockNormalDistributionService.Invocations.Clear();
 		_mockDataHelper.Invocations.Clear();
@@ -463,7 +469,7 @@ public class EconomyServiceTests : HarmonyTestBase
 			
 			Assert.That(cat1Items[0].DailyDelta, Is.EqualTo(27));
 			Assert.That(cat1Items[1].DailyDelta, Is.EqualTo(27));
-			Assert.That(cat2Items[0].DailyDelta, Is.EqualTo(27));
+			Assert.That(cat2Items[0].DailyDelta, Is.EqualTo(25));
 			Assert.That(cat2Items[1].DailyDelta, Is.EqualTo(27));
 		});
 		
@@ -512,7 +518,7 @@ public class EconomyServiceTests : HarmonyTestBase
 			
 			Assert.That(cat1Items[0].DailyDelta, Is.EqualTo(25));
 			Assert.That(cat1Items[1].DailyDelta, Is.EqualTo(26));
-			Assert.That(cat2Items[0].DailyDelta, Is.EqualTo(27));
+			Assert.That(cat2Items[0].DailyDelta, Is.EqualTo(26));
 			Assert.That(cat2Items[1].DailyDelta, Is.EqualTo(27));
 		});
 		
@@ -561,7 +567,7 @@ public class EconomyServiceTests : HarmonyTestBase
 			
 			Assert.That(cat1Items[0].DailyDelta, Is.EqualTo(25));
 			Assert.That(cat1Items[1].DailyDelta, Is.EqualTo(26));
-			Assert.That(cat2Items[0].DailyDelta, Is.EqualTo(27));
+			Assert.That(cat2Items[0].DailyDelta, Is.EqualTo(26));
 			Assert.That(cat2Items[1].DailyDelta, Is.EqualTo(27));
 		});
 		
@@ -639,7 +645,7 @@ public class EconomyServiceTests : HarmonyTestBase
 			
 			Assert.That(cat1Items[0].DailyDelta, Is.EqualTo(27)); 
 			Assert.That(cat1Items[1].DailyDelta, Is.EqualTo(27)); 
-			Assert.That(cat2Items[0].DailyDelta, Is.EqualTo(27)); 
+			Assert.That(cat2Items[0].DailyDelta, Is.EqualTo(25)); 
 			Assert.That(cat2Items[1].DailyDelta, Is.EqualTo(27));
 		});
 		
@@ -689,7 +695,7 @@ public class EconomyServiceTests : HarmonyTestBase
 			
 			Assert.That(cat1Items[0].DailyDelta, Is.EqualTo(25)); 
 			Assert.That(cat1Items[1].DailyDelta, Is.EqualTo(26)); 
-			Assert.That(cat2Items[0].DailyDelta, Is.EqualTo(27)); 
+			Assert.That(cat2Items[0].DailyDelta, Is.EqualTo(25)); 
 			Assert.That(cat2Items[1].DailyDelta, Is.EqualTo(27));
 		});
 		
@@ -738,7 +744,7 @@ public class EconomyServiceTests : HarmonyTestBase
 			
 			Assert.That(cat1Items[0].DailyDelta, Is.EqualTo(25)); 
 			Assert.That(cat1Items[1].DailyDelta, Is.EqualTo(26)); 
-			Assert.That(cat2Items[0].DailyDelta, Is.EqualTo(27)); 
+			Assert.That(cat2Items[0].DailyDelta, Is.EqualTo(25)); 
 			Assert.That(cat2Items[1].DailyDelta, Is.EqualTo(27));
 		});
 		
@@ -824,7 +830,7 @@ public class EconomyServiceTests : HarmonyTestBase
 			
 			Assert.That(cat1Items[0].DailyDelta, Is.EqualTo(26));
 			Assert.That(cat1Items[1].DailyDelta, Is.EqualTo(25));
-			Assert.That(cat2Items[0].DailyDelta, Is.EqualTo(27));
+			Assert.That(cat2Items[0].DailyDelta, Is.EqualTo(25));
 			Assert.That(cat2Items[1].DailyDelta, Is.EqualTo(27));
 		});
 		
@@ -870,7 +876,7 @@ public class EconomyServiceTests : HarmonyTestBase
 			
 			Assert.That(cat1Items[0].DailyDelta, Is.EqualTo(26));
 			Assert.That(cat1Items[1].DailyDelta, Is.EqualTo(25));
-			Assert.That(cat2Items[0].DailyDelta, Is.EqualTo(27));
+			Assert.That(cat2Items[0].DailyDelta, Is.EqualTo(25));
 			Assert.That(cat2Items[1].DailyDelta, Is.EqualTo(27));
 		});
 		

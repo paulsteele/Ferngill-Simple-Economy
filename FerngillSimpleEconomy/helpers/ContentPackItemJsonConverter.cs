@@ -14,37 +14,38 @@ public class ContentPackItemJsonConverter : JsonConverter<BaseContentPackItem>
 		using var doc = JsonDocument.ParseValue(ref reader);
 		var root = doc.RootElement;
 
-		if (!root.TryGetProperty(DiscriminatorField, out var actionProperty))
-		{
-			throw new JsonException($"Missing '{DiscriminatorField}' property in ContentPackItem");
-		}
-
-		var action = actionProperty.GetString();
-
 		var rawText = root.GetRawText();
 
 		try
 		{
+			if (!root.TryGetProperty(DiscriminatorField, out var actionProperty))
+			{
+				throw new JsonException($"Missing '{DiscriminatorField}' property in ContentPackItem");
+			}
+
+			var action = actionProperty.GetString();
+			
 			BaseContentPackItem? returnValue = action switch
 			{
 				"IgnoreArtisanMapping" => JsonSerializer.Deserialize<IgnoreArtisanMappingContentPackItem>(rawText, options),
 				"MapContextTagToItem" => JsonSerializer.Deserialize<MapContextTagToItemContentPackItem>(rawText, options),
 				"MapEquivalentItems" => JsonSerializer.Deserialize<MapEquivalentItemsContentPackItem>(rawText, options),
 				"IgnoreInEconomy" => JsonSerializer.Deserialize<IgnoreInEconomyContentPackItem>(rawText, options),
+				"MapItemToSeason" => JsonSerializer.Deserialize<MapItemToSeasonContentPackItem>(rawText, options),
 				_ => throw new JsonException($"Unknown action type: {action}"),
 			};
 
 			// ReSharper disable once ConvertIfStatementToNullCoalescingExpression
 			if (returnValue == null)
 			{
-				returnValue = new InvalidContentPackItem { Action = action, RawText = rawText };
+				returnValue = new InvalidContentPackItem { RawText = rawText };
 			}
 
 			return returnValue;
 		}
 		catch (Exception e)
 		{
-			return new InvalidContentPackItem { Action = action, RawText = rawText, Exception = e};
+			return new InvalidContentPackItem { RawText = rawText, Exception = e};
 		}
 	}
 

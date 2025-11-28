@@ -47,6 +47,7 @@ public class EconomyService(
 ) : IEconomyService
 {
 	private readonly Dictionary<int, List<int>> _categoryMapping = new();
+	private Dictionary<string, Seasons> _seasonalItemDictionary = new();
 
 	public bool Loaded { get; private set; }
 
@@ -119,6 +120,7 @@ public class EconomyService(
 		fishService.GenerateFishMapping(Economy);
 		artisanService.GenerateArtisanMapping(Economy);
 		Economy.UpdateAllMultipliers();
+		CreateSeasonalMapping();
 	}
 
 	public void SendEconomyMessage() => multiplayerService.SendMessageToPeers(new EconomyModelMessage(Economy));
@@ -136,6 +138,12 @@ public class EconomyService(
 				
 			_categoryMapping.TryAdd(key, remainingCategories);
 		}
+	}
+
+	private void CreateSeasonalMapping()
+	{
+		_seasonalItemDictionary = contentPackService.GetItemsOfType<MapItemToSeasonContentPackItem>()
+			.ToDictionary(i => i.Id, i => i.Seasons);
 	}
 
 	private void QueueSave()
@@ -394,7 +402,7 @@ public class EconomyService(
 			return (fish.Seasons & seasonsFilter) != 0;
 		}
 
-		return (HardcodedSeasonsList.GetSeasonForItem(model.ObjectId) & seasonsFilter) != 0;
+		return (GetSeasonForItem(model.ObjectId) & seasonsFilter) != 0;
 	}
 
 	private bool ItemIsSeasonal(ItemModel model)
@@ -414,8 +422,10 @@ public class EconomyService(
 			return true;
 		}
 
-		return HardcodedSeasonsList.GetSeasonForItem(model.ObjectId) != (Seasons.Spring | Seasons.Summer | Seasons.Fall | Seasons.Winter);
+		return GetSeasonForItem(model.ObjectId) != (Seasons.Spring | Seasons.Summer | Seasons.Fall | Seasons.Winter);
 	}
+
+	private Seasons GetSeasonForItem(string id) => _seasonalItemDictionary.GetValueOrDefault(id, Seasons.Spring | Seasons.Summer | Seasons.Fall | Seasons.Winter);
 
 	public int GetPricePerDay(ItemModel model)
 	{
