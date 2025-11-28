@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using fse.core.helpers;
 using fse.core.models;
+using fse.core.models.contentPacks;
 using fse.core.multiplayer;
 using StardewModdingAPI;
 using StardewValley;
@@ -41,7 +42,8 @@ public class EconomyService(
 	IArtisanService artisanService,
 	INormalDistributionService normalDistributionService,
 	IUpdateFrequencyService updateFrequencyService,
-	IEquivalentItemsService equivalentItemsService
+	IEquivalentItemsService equivalentItemsService,
+	IContentPackService contentPackService
 ) : IEconomyService
 {
 	private readonly Dictionary<int, List<int>> _categoryMapping = new();
@@ -145,10 +147,12 @@ public class EconomyService(
 		modHelper.Data.WriteSaveData(EconomyModel.ModelKey, Economy);
 	}
 
-	private static EconomyModel GenerateBlankEconomy()
+	private EconomyModel GenerateBlankEconomy()
 	{
+		var ignoreList = contentPackService.GetItemsOfType<IgnoreInEconomyContentPackItem>().Select(i => i.Id).ToArray();
+
 		var validItems = Game1.objectData.Keys
-			.Where(key => !EconomyIgnoreList.IgnoreList.Contains(key))
+			.Where(key => !ignoreList.Contains(key))
 			.Select(id => new Object(id, 1))
 			.Where(obj => ConfigModel.Instance.ValidCategories.Contains(obj.Category))
 			.GroupBy(obj => obj.Category, obj => new ItemModel(obj.ItemId))

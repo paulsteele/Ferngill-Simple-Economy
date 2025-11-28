@@ -1,4 +1,5 @@
 using fse.core.models;
+using fse.core.models.contentPacks;
 using fse.core.multiplayer;
 using fse.core.services;
 using Moq;
@@ -24,6 +25,7 @@ public class EconomyServiceTests : HarmonyTestBase
 	private Mock<INormalDistributionService> _mockNormalDistributionService;
 	private Mock<IUpdateFrequencyService> _mockUpdateFrequencyService;
 	private Mock<IEquivalentItemsService> _mockEquivalentItemsService;
+	private Mock<IContentPackService> _mockContentPackService;
 
 	private Farmer _player;
 
@@ -49,6 +51,7 @@ public class EconomyServiceTests : HarmonyTestBase
 		_mockNormalDistributionService = new Mock<INormalDistributionService>();
 		_mockUpdateFrequencyService = new Mock<IUpdateFrequencyService>();
 		_mockEquivalentItemsService = new Mock<IEquivalentItemsService>();
+		_mockContentPackService = new Mock<IContentPackService>();
 		_player = new Farmer();
 
 		_mockModHelper.Setup(m => m.Data).Returns(_mockDataHelper.Object);
@@ -63,14 +66,18 @@ public class EconomyServiceTests : HarmonyTestBase
 		_mockArtisanService.Setup(m => m.GetBaseFromArtisanGood("307")).Returns(new ItemModel("442"));
 		
 		_mockEquivalentItemsService.Setup(m => m.ResolveEquivalentId(It.IsAny<string>())).Returns<string>(id => id);
+		
+		_mockContentPackService.Setup(m => m.GetItemsOfType<IgnoreInEconomyContentPackItem>()).Returns([
+			new IgnoreInEconomyContentPackItem{Id = "5"},
+		]);
 
-		Game1.objectData = new Dictionary<string, ObjectData>(new[]
-		{
+		Game1.objectData = new Dictionary<string, ObjectData>([
 			GenerateObjectData("1", 1),
 			GenerateObjectData("2", 1),
 			GenerateObjectData("3", 2),
 			GenerateObjectData("4", 2),
-		});
+			GenerateObjectData("5", 2),
+		]);
 		
 		HarmonyObject.CategoryIdToNameMapping.Add(1, "Cat1");
 		HarmonyObject.CategoryIdToNameMapping.Add(2, "Cat2");
@@ -88,7 +95,8 @@ public class EconomyServiceTests : HarmonyTestBase
 			_mockArtisanService.Object,
 			_mockNormalDistributionService.Object,
 			_mockUpdateFrequencyService.Object,
-			_mockEquivalentItemsService.Object
+			_mockEquivalentItemsService.Object,
+			_mockContentPackService.Object
 		);
 	}
 
@@ -138,7 +146,7 @@ public class EconomyServiceTests : HarmonyTestBase
 			Assert.That(cat2Items[1].DailyDelta, Is.EqualTo(27));
 		});
 	}
-	
+
 	[Test]
 	public void ShouldGenerateNewEconomyOnLoadIfEmptyWithCurrentSeasonsCrop()
 	{
@@ -1519,7 +1527,8 @@ public class EconomyServiceTests : HarmonyTestBase
 			_mockArtisanService.Object,
 			_mockNormalDistributionService.Object,
 			_mockUpdateFrequencyService.Object,
-			_mockEquivalentItemsService.Object
+			_mockEquivalentItemsService.Object,
+			_mockContentPackService.Object
 		);
 
 		_mockEquivalentItemsService.Setup(m => m.ResolveEquivalentId("174")).Returns("176");
