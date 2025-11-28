@@ -139,8 +139,8 @@ Interested in contributing? Please read the https://github.com/paulsteele/Ferngi
 
 ### Extensibility
 Starting in version 2.0.0 there is
-* An API for other mods to interact with the economy. See the docs for more details.
-* Content Pack support for adding custom rules for items. See the docs for more details.
+* An API for other mods to interact with the economy. See [the docs](https://github.com/paulsteele/Ferngill-Simple-Economy/blob/main/docs/api-integration.md) for more details.
+* Content Pack support for adding custom rules for items. See [the docs](https://github.com/paulsteele/Ferngill-Simple-Economy/blob/main/docs/content-packs.md) more details.
 
 ### Bug Reporting
 
