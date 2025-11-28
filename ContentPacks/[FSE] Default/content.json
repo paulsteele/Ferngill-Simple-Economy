@@ -48,13 +48,13 @@
 		"action": "MapContextTagToItem",
 		"comment": "Link eggs",
 		"tag": "egg_item",
-		"id": "(O)176"
+		"id": "176"
 	},
 	{
 		"action": "MapContextTagToItem",
 		"comment": "Link milk",
 		"tag": "milk_item",
-		"id": "(O)184"
+		"id": "184"
 	},
 	{
 		"action": "MapEquivalentItems",

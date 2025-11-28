@@ -20,6 +20,7 @@ public class ArtisanService(
 	IEquivalentItemsService equivalentItemsService
 ) : IArtisanService
 {
+	private const string ObjectPrefix = "(O)";
 	private Dictionary<string, string>? _artisanGoodToBase;
 	private EconomyModel? _economyModel;
 	
@@ -55,15 +56,15 @@ public class ArtisanService(
 			.SelectMany(r => r.OutputItem.SelectMany(output => r.Triggers.Select(trigger => (output, trigger))))
 			.Select(t =>
 			{
-				t.trigger.RequiredItemId ??= t.trigger.RequiredTags?.Select(tag => contextTagItemMapping.GetValueOrDefault(tag))
+				t.trigger.RequiredItemId ??= t.trigger.RequiredTags?.Select(tag => contextTagItemMapping.GetValueOrDefault(tag.Replace(ObjectPrefix, string.Empty)))
 					.FirstOrDefault(item => !string.IsNullOrWhiteSpace(item));
 				return t;
 			})
 			.Where(t => !string.IsNullOrWhiteSpace(t.trigger.RequiredItemId))
 			.Where(t => !string.IsNullOrWhiteSpace(t.output.ItemId))
 			.Select(t => (
-				output: t.output.ItemId.Replace("(O)", string.Empty),
-				input: t.trigger.RequiredItemId.Replace("(O)", string.Empty))
+				output: t.output.ItemId.Replace(ObjectPrefix, string.Empty),
+				input: t.trigger.RequiredItemId.Replace(ObjectPrefix, string.Empty))
 			)
 			.Where(t => !equivalentItemsService.ResolveEquivalentId(t.input).Equals(equivalentItemsService.ResolveEquivalentId(t.output)))
 			.Where(t => !artisanMappingIgnoreList.Contains(t.input))
