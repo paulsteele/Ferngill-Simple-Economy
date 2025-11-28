@@ -13,12 +13,12 @@ public interface IContentPackService
 	IEnumerable<T> GetItemsOfType<T>() where T : BaseContentPackItem;
 }
 
-public class ContentPackService(IMonitor monitor, IModHelper helper, IFileService fileService) : IContentPackService
+public class ContentPackService : IContentPackService
 {
 	private const string ContentFileName = "content.json";
 	private readonly List<BaseContentPackItem> _loadedItems = [];
 
-	public void LoadContentPacks()
+	public ContentPackService(IMonitor monitor, IModHelper helper, IFileService fileService)
 	{
 		var contentPacks = helper.ContentPacks.GetOwned().ToArray();
 		

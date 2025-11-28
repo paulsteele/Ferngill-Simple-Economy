@@ -64,8 +64,8 @@ public class ContentPackServiceTests
 
 			_mockContentPackHelper.Setup(cp => cp.GetOwned()).Returns([pack]);
 		}
-		
-		_contentPackService.LoadContentPacks();
+
+		ReInitialize();
 
 		var ignoreArtisanMappingContentPackItems = _contentPackService.GetItemsOfType<IgnoreArtisanMappingContentPackItem>().ToArray();
 		var mapContextTagToItemContentPackItems = _contentPackService.GetItemsOfType<MapContextTagToItemContentPackItem>().ToArray();
@@ -95,7 +95,7 @@ public class ContentPackServiceTests
 	{
 		_mockContentPackHelper.Setup(cp => cp.GetOwned()).Returns([]);
 
-		_contentPackService.LoadContentPacks();
+		ReInitialize();
 
 		var allItems = _contentPackService.GetItemsOfType<BaseContentPackItem>().ToArray();
 
@@ -113,8 +113,8 @@ public class ContentPackServiceTests
 		);
 		
 		_mockContentPackHelper.Setup(cp => cp.GetOwned()).Returns([pack]);
-			
-		_contentPackService.LoadContentPacks();
+
+		ReInitialize();
 
 		var allItems = _contentPackService.GetItemsOfType<BaseContentPackItem>().ToArray();
 
@@ -132,8 +132,8 @@ public class ContentPackServiceTests
 		);
 		
 		_mockContentPackHelper.Setup(cp => cp.GetOwned()).Returns([pack]);
-			
-		_contentPackService.LoadContentPacks();
+
+		ReInitialize();
 
 		var allItems = _contentPackService.GetItemsOfType<BaseContentPackItem>().ToArray();
 
@@ -156,5 +156,10 @@ public class ContentPackServiceTests
 			.Returns(content);
 
 		return pack.Object;
+	}
+
+	private void ReInitialize()
+	{
+		_contentPackService = new ContentPackService(_mockMonitor.Object, _mockHelper.Object, _fileService.Object);
 	}
 }

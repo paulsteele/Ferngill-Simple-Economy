@@ -70,7 +70,6 @@ public class FerngillSimpleEconomy : Mod
 		});
 
 		_api = new FerngillSimpleEconomyApi(economyService);
-		contentPackService.LoadContentPacks();
 	}
 
 	private void RegisterPatches
