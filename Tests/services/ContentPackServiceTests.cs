@@ -37,6 +37,7 @@ public class ContentPackServiceTests
 			"""{"action": "Bad"}""",
 			"""{"action": "IgnoreArtisanMapping", "bad": "bad1"}""",
 			"""{"action": "MapEquivalentItems", "id": "item3", "base": "base3"}""",
+			"""{"action": "IgnoreInEconomy", "id": "item4" }""",
 		};
 
 		if (splitPacks)
@@ -69,6 +70,7 @@ public class ContentPackServiceTests
 		var ignoreArtisanMappingContentPackItems = _contentPackService.GetItemsOfType<IgnoreArtisanMappingContentPackItem>().ToArray();
 		var mapContextTagToItemContentPackItems = _contentPackService.GetItemsOfType<MapContextTagToItemContentPackItem>().ToArray();
 		var mapEquivalentItemsContentPackItems = _contentPackService.GetItemsOfType<MapEquivalentItemsContentPackItem>().ToArray();
+		var ignoreInEconomyContentPackItems = _contentPackService.GetItemsOfType<IgnoreInEconomyContentPackItem>().ToArray();
 
 		Assert.Multiple(() =>
 		{
@@ -82,6 +84,9 @@ public class ContentPackServiceTests
 			Assert.That(mapEquivalentItemsContentPackItems, Has.Length.EqualTo(1));
 			Assert.That(mapEquivalentItemsContentPackItems[0].Id, Is.EqualTo("item3"));
 			Assert.That(mapEquivalentItemsContentPackItems[0].Base, Is.EqualTo("base3"));
+			
+			Assert.That(ignoreInEconomyContentPackItems, Has.Length.EqualTo(1));
+			Assert.That(ignoreInEconomyContentPackItems[0].Id, Is.EqualTo("item4"));
 		});
 	}
 	

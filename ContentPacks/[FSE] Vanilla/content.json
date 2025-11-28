@@ -253,5 +253,115 @@
 		"comment": "phoenix feather",
 		"id": "BrianOvaltine.Phoenixes_VoidPhoenixFeather",
 		"base": "BrianOvaltine.Phoenixes_RedPhoenixFeather"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "prismatic shard",
+		"id": "74"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "sap",
+		"id": "92"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "crimsonfish",
+		"id": "159"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "anglerfish",
+		"id": "160"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "legendfish",
+		"id": "163"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "pickles",
+		"id": "342"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "jelly",
+		"id": "344"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "wine",
+		"id": "348"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "juice",
+		"id": "350"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "aged roe",
+		"id": "447"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "glacierfish",
+		"id": "775"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "mutantcarp",
+		"id": "682"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "roe",
+		"id": "812"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "qi fruit",
+		"id": "889"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "son of crimsonfish",
+		"id": "898"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "anglerfish",
+		"id": "899"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "legendfish",
+		"id": "900"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "glacierfish",
+		"id": "902"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "mutantcarp",
+		"id": "901"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "smoked fish",
+		"id": "SmokedFish"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "dried fruit",
+		"id": "DriedFruit"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "dried mushrooms",
+		"id": "DriedMushrooms"
 	}
 ]
