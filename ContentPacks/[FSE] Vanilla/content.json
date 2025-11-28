@@ -363,5 +363,203 @@
 		"action": "IgnoreInEconomy",
 		"comment": "dried mushrooms",
 		"id": "DriedMushrooms"
+	},
+	{
+		"action": "MapItemToSeason",
+		"comment": "wild horseradish",
+		"id": "16",
+		"spring": true,
+		"summer": false,
+		"fall": false,
+		"winter": false
+	},
+	{
+		"action": "MapItemToSeason",
+		"comment": "daffodil",
+		"id": "18",
+		"spring": true,
+		"summer": false,
+		"fall": false,
+		"winter": false
+	},
+	{
+		"action": "MapItemToSeason",
+		"comment": "leek",
+		"id": "20",
+		"spring": true,
+		"summer": false,
+		"fall": false,
+		"winter": false
+	},
+	{
+		"action": "MapItemToSeason",
+		"comment": "dandelion",
+		"id": "22",
+		"spring": true,
+		"summer": false,
+		"fall": false,
+		"winter": false
+	},
+	{
+		"action": "MapItemToSeason",
+		"comment": "morel",
+		"id": "257",
+		"spring": true,
+		"summer": false,
+		"fall": false,
+		"winter": false
+	},
+	{
+		"action": "MapItemToSeason",
+		"comment": "chanterelle",
+		"id": "281",
+		"spring": false,
+		"summer": false,
+		"fall": true,
+		"winter": false
+	},
+	{
+		"action": "MapItemToSeason",
+		"comment": "holly",
+		"id": "283",
+		"spring": false,
+		"summer": false,
+		"fall": false,
+		"winter": true
+	},
+	{
+		"action": "MapItemToSeason",
+		"comment": "salmonberry",
+		"id": "296",
+		"spring": true,
+		"summer": false,
+		"fall": false,
+		"winter": false
+	},
+	{
+		"action": "MapItemToSeason",
+		"comment": "spice berry",
+		"id": "396",
+		"spring": false,
+		"summer": true,
+		"fall": false,
+		"winter": false
+	},
+	{
+		"action": "MapItemToSeason",
+		"comment": "grape",
+		"id": "398",
+		"spring": false,
+		"summer": true,
+		"fall": false,
+		"winter": false
+	},
+	{
+		"action": "MapItemToSeason",
+		"comment": "spring onion",
+		"id": "399",
+		"spring": true,
+		"summer": false,
+		"fall": false,
+		"winter": false
+	},
+	{
+		"action": "MapItemToSeason",
+		"comment": "sweet pea",
+		"id": "402",
+		"spring": false,
+		"summer": true,
+		"fall": false,
+		"winter": false
+	},
+	{
+		"action": "MapItemToSeason",
+		"comment": "common mushroom",
+		"id": "404",
+		"spring": true,
+		"summer": true,
+		"fall": true,
+		"winter": false
+	},
+	{
+		"action": "MapItemToSeason",
+		"comment": "wild plum",
+		"id": "406",
+		"spring": false,
+		"summer": false,
+		"fall": true,
+		"winter": false
+	},
+	{
+		"action": "MapItemToSeason",
+		"comment": "hazelnut",
+		"id": "408",
+		"spring": false,
+		"summer": false,
+		"fall": true,
+		"winter": false
+	},
+	{
+		"action": "MapItemToSeason",
+		"comment": "blackberry",
+		"id": "410",
+		"spring": false,
+		"summer": false,
+		"fall": true,
+		"winter": false
+	},
+	{
+		"action": "MapItemToSeason",
+		"comment": "winter root",
+		"id": "412",
+		"spring": false,
+		"summer": false,
+		"fall": false,
+		"winter": true
+	},
+	{
+		"action": "MapItemToSeason",
+		"comment": "crystal fruit",
+		"id": "414",
+		"spring": false,
+		"summer": false,
+		"fall": false,
+		"winter": true
+	},
+	{
+		"action": "MapItemToSeason",
+		"comment": "snow yam",
+		"id": "416",
+		"spring": false,
+		"summer": false,
+		"fall": false,
+		"winter": true
+	},
+	{
+		"action": "MapItemToSeason",
+		"comment": "crocus",
+		"id": "418",
+		"spring": false,
+		"summer": false,
+		"fall": false,
+		"winter": true
+	},
+	{
+		"action": "MapItemToSeason",
+		"comment": "red mushroom",
+		"id": "420",
+		"spring": false,
+		"summer": true,
+		"fall": true,
+		"winter": false
+	},
+	{
+		"action": "MapItemToSeason",
+		"comment": "purple mushroom",
+		"id": "422",
+		"spring": false,
+		"summer": false,
+		"fall": true,
+		"winter": false
 	}
 ]
