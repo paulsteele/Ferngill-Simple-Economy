@@ -1,61 +1,35 @@
 <Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<IsPackable>false</IsPackable>
+		<IsTestProject>true</IsTestProject>
+		<EnableGameDebugging>false</EnableGameDebugging>
+		<EnableModDeploy>false</EnableModDeploy>
+		<EnableModZip>false</EnableModZip>
+		<BundleExtraAssemblies>All</BundleExtraAssemblies>
+	</PropertyGroup>
+	<!-- Necesary due to https://youtrack.jetbrains.com/issue/RIDER-134932/Rider-fails-to-debug-self-contained-projects-with-spaces-in-the-directory-path -->
+	<PropertyGroup>
+		<GamePath>$(HOME)/.steam/steam/steamapps/common/Stardew-Valley</GamePath>
+	</PropertyGroup>
 
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
+	<ItemGroup>
+		<PackageReference Include="coverlet.collector" Version="6.0.4"/>
+		<PackageReference Include="Lib.Harmony.Thin" Version="2.3.3"/>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0"/>
+		<PackageReference Include="Moq" Version="4.20.70"/>
+		<PackageReference Include="NUnit" Version="3.14.0"/>
+		<PackageReference Include="NUnit.Analyzers" Version="3.9.0"/>
+		<PackageReference Include="NUnit3TestAdapter" Version="4.5.0"/>
+	</ItemGroup>
 
-        <IsPackable>false</IsPackable>
-        <IsTestProject>true</IsTestProject>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <PackageReference Include="coverlet.collector" Version="6.0.4"/>
-        <PackageReference Include="Lib.Harmony.Thin" Version="2.3.3" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0"/>
-        <PackageReference Include="Moq" Version="4.20.70" />
-        <PackageReference Include="NUnit" Version="3.14.0"/>
-        <PackageReference Include="NUnit.Analyzers" Version="3.9.0"/>
-        <PackageReference Include="NUnit3TestAdapter" Version="4.5.0"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Using Include="NUnit.Framework"/>
-    </ItemGroup>
-	<!-- Update these paths to match local install-->
-    <ItemGroup>
-      <Reference Include="Stardew Valley">
-				<HintPath Condition="Exists('C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\Stardew Valley.dll')">C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\Stardew Valley.dll</HintPath>
-				<HintPath Condition="Exists('../../../Library/Application Support/Steam/steamapps/common/Stardew Valley/Contents/MacOS/Stardew Valley.dll')">../../../Library/Application Support/Steam/steamapps/common/Stardew Valley/Contents/MacOS/Stardew Valley.dll</HintPath>
-      </Reference>
-			<Reference Include="Stardew Valley Game Data">
-				<HintPath Condition="Exists('C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\StardewValley.GameData.dll')">C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\StardewValley.GameData.dll</HintPath>
-				<HintPath Condition="Exists('../../../Library/Application Support/Steam/steamapps/common/Stardew Valley/Contents/MacOS/StardewValley.GameData.dll')">../../../Library/Application Support/Steam/steamapps/common/Stardew Valley/Contents/MacOS/StardewValley.GameData.dll</HintPath>
-			</Reference>
-      <Reference Include="StardewModdingAPI">
-				<HintPath Condition="Exists('C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\StardewModdingAPI.dll')">C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\StardewModdingAPI.dll</HintPath>
-				<HintPath Condition="Exists('../../../Library/Application Support/Steam/steamapps/common/Stardew Valley/Contents/MacOS/StardewModdingAPI.dll')">../../../Library/Application Support/Steam/steamapps/common/Stardew Valley/Contents/MacOS/StardewModdingAPI.dll</HintPath>
-      </Reference>
-			<Reference Include="SMAPI.Toolkit">
-				<HintPath Condition="Exists('C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\smapi-internal\SMAPI.Toolkit.dll')">C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\smapi-internal\SMAPI.Toolkit.dll</HintPath>
-				<HintPath Condition="Exists('../../../Library/Application Support/Steam/steamapps/common/Stardew Valley/Contents/MacOS/smapi-internal/SMAPI.Toolkit.dll')">../../../Library/Application Support/Steam/steamapps/common/Stardew Valley/Contents/MacOS/smapi-internal/SMAPI.Toolkit.dll</HintPath>
-			</Reference>
-			<Reference Include="SMAPI.Toolkit.CoreInterfaces">
-				<HintPath Condition="Exists('C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\smapi-internal\SMAPI.Toolkit.CoreInterfaces.dll')">C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\smapi-internal\SMAPI.Toolkit.CoreInterfaces.dll</HintPath>
-				<HintPath Condition="Exists('../../../Library/Application Support/Steam/steamapps/common/Stardew Valley/Contents/MacOS/smapi-internal/SMAPI.Toolkit.CoreInterfaces.dll')">../../../Library/Application Support/Steam/steamapps/common/Stardew Valley/Contents/MacOS/smapi-internal/SMAPI.Toolkit.CoreInterfaces.dll</HintPath>
-			</Reference>
-			<Reference Include="MonoGame Framework">
-				<HintPath Condition="Exists('C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\MonoGame.Framework.dll')">C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\MonoGame.Framework.dll</HintPath>
-				<HintPath Condition="Exists('../../../Library/Application Support/Steam/steamapps/common/Stardew Valley/Contents/MacOS/MonoGame.Framework.dll')">../../../Library/Application Support/Steam/steamapps/common/Stardew Valley/Contents/MacOS/MonoGame.Framework.dll</HintPath>
-			</Reference>
-			<Reference Include="xTile">
-				<HintPath Condition="Exists('C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\xTile.dll')">C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\xTile.dll</HintPath>
-				<HintPath Condition="Exists('../../../Library/Application Support/Steam/steamapps/common/Stardew Valley/Contents/MacOS/xTile.dll')">../../../Library/Application Support/Steam/steamapps/common/Stardew Valley/Contents/MacOS/xTile.dll</HintPath>
-			</Reference>
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\FerngillSimpleEconomy\FerngillSimpleEconomy.csproj" />
-    </ItemGroup>
-
+	<ItemGroup>
+		<Using Include="NUnit.Framework"/>
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.4.0"/>
+		<ProjectReference Include="..\FerngillSimpleEconomy\FerngillSimpleEconomy.csproj"/>
+	</ItemGroup>
 </Project>
