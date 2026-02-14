@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using fse.core.actions;
 using fse.core.extensions;
@@ -65,7 +66,7 @@ public class GameLoadedHandler(
 			return;
 		}
 
-		var contentPack = helper.ContentPacks.CreateTemporary($"{helper.DirectoryPath}/assets/mail", $"{helper.ModContent.ModID}.mail", "fsemail", "fsemail", "fse", manifest.Version);
+		var contentPack = helper.ContentPacks.CreateTemporary(Path.Combine(helper.DirectoryPath, "assets", "mail"), $"{helper.ModContent.ModID}.mail", "fsemail", "fsemail", "fse", manifest.Version);
 		mailFrameworkModApi.RegisterContentPack(contentPack);
 	}
 
