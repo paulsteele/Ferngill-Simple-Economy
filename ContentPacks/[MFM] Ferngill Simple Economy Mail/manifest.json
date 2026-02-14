@@ -1,0 +1,14 @@
+{
+	"Name": "Ferngill Simple Economy Mail",
+	"Author": "Paul Steele",
+	"Version": "%ProjectVersion%",
+	"Description": "Mail content pack for Ferngill Simple Economy",
+	"UniqueID": "paulsteele.fse.mail",
+	"MinimumApiVersion": "3.0.0",
+	"UpdateKeys": [
+		"ferngill.simple.economy", "Nexus:21414"
+	],
+	"ContentPackFor": {
+		"UniqueID": "DIGUS.MailFrameworkMod"
+	}
+}

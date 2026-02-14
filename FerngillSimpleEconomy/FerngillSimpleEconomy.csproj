@@ -20,6 +20,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<ContentPacks Include="..\ContentPacks\[FSE] Default\" Version="$(Version)" FolderName="[FSE] Default"/>
+		<ContentPacks Include="..\ContentPacks\[MFM] Ferngill Simple Economy Mail\" Version="$(Version)" FolderName="[MFM] Ferngill Simple Economy Mail"/>
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="MathNet.Numerics" Version="6.0.0-beta1" />

@@ -1,29 +1,16 @@
-using System;
-using System.IO;
-using System.Linq;
 using fse.core.actions;
-using fse.core.extensions;
-using fse.core.helpers;
-using fse.core.models;
 using fse.core.services;
 using GenericModConfigMenu;
-
 using Leclair.Stardew.BetterGameMenu;
 using LeFauxMods.Common.Integrations.IconicFramework;
-using MailFrameworkMod.Api;
-using Microsoft.Xna.Framework;
 using StarControl;
 using StardewModdingAPI;
-using StardewValley;
-using StardewValley.Menus;
-using Object = StardewValley.Object;
 
 namespace fse.core.handlers;
 
 public class GameLoadedHandler(
 	IModHelper helper,
 	IMonitor monitor,
-	IManifest manifest,
 	IBetterGameMenuService betterGameMenuService,
 	IIconicFrameworkService iconicFrameworkService,
 	IStarControlService starControlService,
@@ -39,7 +26,6 @@ public class GameLoadedHandler(
 	{
 		RegisterBetterGameMenu();
 		RegisterIconicAndStarControl();
-		RegisterMailFramework();
 		RegisterGenericConfigMenu();
 	}
 	
@@ -56,18 +42,6 @@ public class GameLoadedHandler(
 	{
 		var betterGameMenuApi = helper.ModRegistry.GetApi<IBetterGameMenuApi>("leclair.bettergamemenu");
 		betterGameMenuService.Register(betterGameMenuApi);
-	}
-
-	private void RegisterMailFramework()
-	{
-		var mailFrameworkModApi = helper.ModRegistry.GetApi<IMailFrameworkModApi>("DIGUS.MailFrameworkMod");
-		if (mailFrameworkModApi == null)
-		{
-			return;
-		}
-
-		var contentPack = helper.ContentPacks.CreateTemporary(Path.Combine(helper.DirectoryPath, "assets", "mail"), $"{helper.ModContent.ModID}.mail", "fsemail", "fsemail", "fse", manifest.Version);
-		mailFrameworkModApi.RegisterContentPack(contentPack);
 	}
 
 	private void RegisterGenericConfigMenu()

@@ -10,6 +10,13 @@
 		<File Path="ContentPacks\[FSE] Default\content.json" />
 		<File Path="ContentPacks\[FSE] Default\manifest.json" />
 	</Folder>
+	<Folder Name="/ContentPacks/[MFM] Ferngill Simple Economy Mail/">
+		<File Path="ContentPacks\[MFM] Ferngill Simple Economy Mail\manifest.json" />
+		<File Path="ContentPacks\[MFM] Ferngill Simple Economy Mail\mail.json" />
+		<File Path="ContentPacks\[MFM] Ferngill Simple Economy Mail\i18n\default.json" />
+		<File Path="ContentPacks\[MFM] Ferngill Simple Economy Mail\i18n\ko.json" />
+		<File Path="ContentPacks\[MFM] Ferngill Simple Economy Mail\i18n\fr.json" />
+	</Folder>
 	<Project Path="FerngillSimpleEconomy\FerngillSimpleEconomy.csproj" />
 	<Project Path="Tests\Tests.csproj" />
 </Solution>

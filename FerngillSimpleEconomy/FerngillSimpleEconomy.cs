@@ -100,7 +100,7 @@ public class FerngillSimpleEconomy : Mod
 	{
 		new DayEndHandler(helper, Monitor, economyService).Register();
 		new SaveLoadedHandler(helper, Monitor, economyService).Register();
-		new GameLoadedHandler(helper, Monitor, ModManifest, betterGameMenuService, iconicFrameworkService, starControlService, genericConfigMenuService).Register();
+		new GameLoadedHandler(helper, Monitor, betterGameMenuService, iconicFrameworkService, starControlService, genericConfigMenuService).Register();
 		new GameMenuLoadedHandler(helper, Monitor, forecastMenuService, tooltipMenu).Register();
 		new MultiplayerHandler(helper, economyService, multiplayerService).Register();
 		new HotkeyHandler(helper, forecastMenuService).Register();
