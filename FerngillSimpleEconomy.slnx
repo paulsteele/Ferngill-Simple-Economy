@@ -1,7 +1,6 @@
 <Solution>
 	<Folder Name="/Solution Items/">
 		<File Path="README.md" />
-		<File Path="Directory.Build.targets" />
 		<File Path="global.json" />
 		<File Path="docs/api-integration.md" />
 		<File Path="docs/content-packs.md" />
@@ -13,9 +12,11 @@
 	<Folder Name="/ContentPacks/[MFM] Ferngill Simple Economy Mail/">
 		<File Path="ContentPacks\[MFM] Ferngill Simple Economy Mail\manifest.json" />
 		<File Path="ContentPacks\[MFM] Ferngill Simple Economy Mail\mail.json" />
-		<File Path="ContentPacks\[MFM] Ferngill Simple Economy Mail\i18n\default.json" />
-		<File Path="ContentPacks\[MFM] Ferngill Simple Economy Mail\i18n\ko.json" />
-		<File Path="ContentPacks\[MFM] Ferngill Simple Economy Mail\i18n\fr.json" />
+	</Folder>
+	<Folder Name="/ContentPacks/[MFM] Ferngill Simple Economy Mail i18n/">
+		<File Path="ContentPacks\[MFM] Ferngill Simple Economy Mail/i18n/default.json" />
+		<File Path="ContentPacks\[MFM] Ferngill Simple Economy Mail/i18n/ko.json" />
+		<File Path="ContentPacks\[MFM] Ferngill Simple Economy Mail/i18n/fr.json" />
 	</Folder>
 	<Project Path="FerngillSimpleEconomy\FerngillSimpleEconomy.csproj" />
 	<Project Path="Tests\Tests.csproj" />
