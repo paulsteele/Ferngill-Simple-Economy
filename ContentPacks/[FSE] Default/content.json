@@ -561,5 +561,571 @@
 		"summer": false,
 		"fall": true,
 		"winter": false
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Weeds",
+		"id": "0"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "2"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "4"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "6"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "8"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "10"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "12"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "14"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "32"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "34"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "36"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "38"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "40"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "42"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "44"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "46"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "48"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "50"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "52"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "54"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "56"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "58"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "75"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "76"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "77"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "95"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "290"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Twig",
+		"id": "294"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Twig",
+		"id": "295"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Weeds",
+		"id": "313"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Weeds",
+		"id": "314"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Weeds",
+		"id": "315"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Weeds",
+		"id": "316"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Weeds",
+		"id": "317"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Weeds",
+		"id": "318"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Weeds",
+		"id": "319"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Weeds",
+		"id": "320"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Weeds",
+		"id": "321"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "343"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "450"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Weeds",
+		"id": "452"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "668"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "670"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Weeds",
+		"id": "674"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Weeds",
+		"id": "675"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Weeds",
+		"id": "676"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Weeds",
+		"id": "677"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Weeds",
+		"id": "678"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Weeds",
+		"id": "679"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Weeds",
+		"id": "750"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "751"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "760"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "762"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "764"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "765"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Weeds",
+		"id": "784"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Weeds",
+		"id": "785"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Weeds",
+		"id": "786"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Weeds",
+		"id": "792"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Weeds",
+		"id": "793"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Weeds",
+		"id": "794"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "25"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "816"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "817"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "818"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "819"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "843"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "844"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "845"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "846"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "847"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "849"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "850"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Weeds",
+		"id": "882"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Weeds",
+		"id": "883"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Weeds",
+		"id": "884"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "CalicoEggStone_0"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "CalicoEggStone_1"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "CalicoEggStone_2"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "GreenRainWeeds0",
+		"id": "GreenRainWeeds0"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "GreenRainWeeds1",
+		"id": "GreenRainWeeds1"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "GreenRainWeeds2",
+		"id": "GreenRainWeeds2"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "GreenRainWeeds3",
+		"id": "GreenRainWeeds3"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "GreenRainWeeds4",
+		"id": "GreenRainWeeds4"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "GreenRainWeeds5",
+		"id": "GreenRainWeeds5"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "GreenRainWeeds6",
+		"id": "GreenRainWeeds6"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "GreenRainWeeds7",
+		"id": "GreenRainWeeds7"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "VolcanoGoldNode"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "VolcanoCoalNode0"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "VolcanoCoalNode1"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "PotOfGold",
+		"id": "PotOfGold"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "BasicCoalNode0"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "BasicCoalNode1"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Cornucopia_SeaSaltRock",
+		"id": "Cornucopia_SeaSaltRock"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Iridium Phoenix Stone",
+		"id": "Iridium Phoenix Stone"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Golden Phoenix Stone",
+		"id": "Golden Phoenix Stone"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Ice Phoenix Stone",
+		"id": "Ice Phoenix Stone"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Magma Phoenix Stone",
+		"id": "Magma Phoenix Stone"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Junimatic.OldJunimoPortal",
+		"id": "Junimatic.OldJunimoPortal"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Junimatic.JunimoChrysalis",
+		"id": "Junimatic.JunimoChrysalis"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "DN.SnS_StygiumOreStone"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "DN.SnS_StygiumOreStone1"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "DN.SnS_StygiumOreStone2"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "DN.SnS_StygiumOreStone3"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "DN.SnS_StygiumOreStone4"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "DN.SnS_StygiumOreStone5"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "DN.SnS_StygiumOreStone6"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "DN.SnS_StygiumOreStone8"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Stone",
+		"id": "DN.SnS_StygiumOreStone9"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Trimmed Lucky Purple Shorts",
+		"id": "71"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Secret Note",
+		"id": "79"
+	},
+	{
+		"action": "IgnoreInEconomy",
+		"comment": "Lost Book",
+		"id": "102"
+	},
+	{
+		"action": "MapEquivalentItems",
+		"comment": "ES Pheasant eggs",
+		"id": "EastScarp_PheasantEgg_female",
+		"base": "EastScarp_PheasantEgg_male"
 	}
 ]
