@@ -1123,6 +1123,11 @@
 		"id": "102"
 	},
 	{
+		"action": "IgnoreInEconomy",
+		"comment": "Honey",
+		"id": "340"
+	},
+	{
 		"action": "MapEquivalentItems",
 		"comment": "ES Pheasant eggs",
 		"id": "EastScarp_PheasantEgg_female",
