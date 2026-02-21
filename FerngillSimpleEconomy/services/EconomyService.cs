@@ -317,6 +317,10 @@ public class EconomyService(
 			return null;
 		}
 		var preserveId = obj.preservedParentSheetIndex?.Get();
+		if (preserveId == "-1") // Happens with wild honey
+		{
+			preserveId = null;
+		}
 		var artisanBase = artisanService.GetBaseFromArtisanGood(obj.ItemId);
 		if (artisanBase != null)
 		{
