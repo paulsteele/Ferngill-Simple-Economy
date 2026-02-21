@@ -1127,5 +1127,15 @@
 		"comment": "ES Pheasant eggs",
 		"id": "EastScarp_PheasantEgg_female",
 		"base": "EastScarp_PheasantEgg_male"
+	},
+	{
+		"action": "IgnoreArtisanMapping",
+		"comment": "Queen Wasp -> Honey",
+		"id": "Harry_QueenWasp"
+	},
+	{
+		"action": "IgnoreArtisanMapping",
+		"comment": "Queen Bee -> Honey",
+		"id": "Harry_QueenBee"
 	}
 ]
