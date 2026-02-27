@@ -60,12 +60,10 @@ Looking through the entire menu for crops can be a little daunting when purchasi
 
 ### Features
 
-| Feature                | Status | Notes                                                                                                 |
-|------------------------|--------|-------------------------------------------------------------------------------------------------------|
-| Installing Mid Save    | ✔️     | Your current crops might not be profitable though! I'd recommend installing on season boundaries      |
-| Un-Installing Mid Save | ✔️     | Prices are altered dynamically so there is no persistent information changed in the vanilla save file |
-| Multiplayer Support    | ✔️     | As of 1.3.0 multiplayer is supported. (split screen not tested).                                      |
-| Controller Support     | ✔️     | As of 1.7.0 controller is supported!. Please report any issues you have!                              |
+* Installing Mid-Save - ✔️ - Your current crops might not be profitable though! I'd recommend installing on season boundaries
+* Un-Installing Mid-Save - ✔️ -Prices are altered dynamically so there is no persistent information changed in the vanilla save file
+* Multiplayer Support - ✔️ - As of 1.3.0 multiplayer is supported. (split screen not tested).
+* Controller Support - ✔️ - As of 1.7.0 controller is supported!. Please report any issues you have!
 
 ### Mod Compatibility
 
@@ -75,15 +73,13 @@ As mentioned, one of the key aspects of this mod was that modded crops would sea
 
 **Tested Mods:**
 
-| Mod                                                                                    | Status | Notes                                                                                                                                                                                                                  |
-|----------------------------------------------------------------------------------------|--------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [Better Balance](https://www.nexusmods.com/stardewvalley/mods/8141)                    | ✔️     | N/A                                                                                                                                                                                                                    |
-| [Stardew Valley Balance Overhaul]( https://www.nexusmods.com/stardewvalley/mods/13426) | ✔️     | N/A                                                                                                                                                                                                                    |
-| [Cornucopia - More Crops](https://www.nexusmods.com/stardewvalley/mods/19508)          | ✔️     | N/A                                                                                                                                                                                                                    |
-| [Informant - Updated and Improved](https://www.nexusmods.com/stardewvalley/mods/21286) | ✔️     | N/A                                                                                                                                                                                                                    |
-| [Overgrown Flowery Interface](https://www.nexusmods.com/stardewvalley/mods/6166)       | ✔️     | [Ferngill Simple Economy for Flowery Interface](https://www.nexusmods.com/stardewvalley/mods/22472)                                                                                                                    |
-| [UIInfoSuite2](https://github.com/Annosz/UIInfoSuite2)                                 | ⚠️     | UIInfoSuite2 also adds a tab to the main menu and they overlap. Setting MenuTabOffset in simple economy to 70 should make both tabs accessible. The mod will attempt to do so automatically if it detects UiInfoSuite2 |
-| Other mods?                                                                            | ❓      | Please report any compatibility issues you find!                                                                                                                                                                       |
+* [Better Balance](https://www.nexusmods.com/stardewvalley/mods/8141) - ✔️ 
+* [Stardew Valley Balance Overhaul]( https://www.nexusmods.com/stardewvalley/mods/13426) - ✔️
+* [Cornucopia - More Crops](https://www.nexusmods.com/stardewvalley/mods/19508) - ✔️
+* [Informant - Updated and Improved](https://www.nexusmods.com/stardewvalley/mods/21286) - ✔️ 
+* [Overgrown Flowery Interface](https://www.nexusmods.com/stardewvalley/mods/6166) - ✔️ - [Ferngill Simple Economy for Flowery Interface](https://www.nexusmods.com/stardewvalley/mods/22472)                                                                                                                    |
+* [UIInfoSuite2](https://github.com/Annosz/UIInfoSuite2)- ⚠️ - UIInfoSuite2 also adds a tab to the main menu and they overlap. Setting MenuTabOffset in simple economy to 70 should make both tabs accessible. The mod will attempt to do so automatically if it detects UiInfoSuite2 |
+* Other mods? - ❓ - Please report any compatibility issues you find!                                                                                                                                                                       |
 
 ## Configuration
 
