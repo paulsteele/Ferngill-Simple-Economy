@@ -266,21 +266,6 @@
 	},
 	{
 		"action": "IgnoreInEconomy",
-		"comment": "crimsonfish",
-		"id": "159"
-	},
-	{
-		"action": "IgnoreInEconomy",
-		"comment": "anglerfish",
-		"id": "160"
-	},
-	{
-		"action": "IgnoreInEconomy",
-		"comment": "legendfish",
-		"id": "163"
-	},
-	{
-		"action": "IgnoreInEconomy",
 		"comment": "pickles",
 		"id": "342"
 	},
@@ -306,16 +291,6 @@
 	},
 	{
 		"action": "IgnoreInEconomy",
-		"comment": "glacierfish",
-		"id": "775"
-	},
-	{
-		"action": "IgnoreInEconomy",
-		"comment": "mutantcarp",
-		"id": "682"
-	},
-	{
-		"action": "IgnoreInEconomy",
 		"comment": "roe",
 		"id": "812"
 	},
@@ -323,31 +298,6 @@
 		"action": "IgnoreInEconomy",
 		"comment": "qi fruit",
 		"id": "889"
-	},
-	{
-		"action": "IgnoreInEconomy",
-		"comment": "son of crimsonfish",
-		"id": "898"
-	},
-	{
-		"action": "IgnoreInEconomy",
-		"comment": "anglerfish",
-		"id": "899"
-	},
-	{
-		"action": "IgnoreInEconomy",
-		"comment": "legendfish",
-		"id": "900"
-	},
-	{
-		"action": "IgnoreInEconomy",
-		"comment": "glacierfish",
-		"id": "902"
-	},
-	{
-		"action": "IgnoreInEconomy",
-		"comment": "mutantcarp",
-		"id": "901"
 	},
 	{
 		"action": "IgnoreInEconomy",
