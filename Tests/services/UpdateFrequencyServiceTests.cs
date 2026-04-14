@@ -36,9 +36,11 @@ public class UpdateFrequencyServiceTests
 			(UpdateFrequency.Yearly, 1, new DayModel(1, Seasons.Spring | Seasons.Summer | Seasons.Fall | Seasons.Winter, 1), false),
 			(UpdateFrequency.Yearly, 1, new DayModel(1, Seasons.Spring | Seasons.Summer | Seasons.Fall | Seasons.Winter, 27), false),
 			(UpdateFrequency.Yearly, 1, new DayModel(1, Seasons.Spring | Seasons.Summer | Seasons.Fall, 28),false),
+			(UpdateFrequency.Yearly, 1, new DayModel(1, Seasons.Winter, 28),true),
 			(UpdateFrequency.Yearly, 1, new DayModel(2, Seasons.Spring | Seasons.Summer | Seasons.Fall | Seasons.Winter, 1), false),
 			(UpdateFrequency.Yearly, 1, new DayModel(2, Seasons.Spring | Seasons.Summer | Seasons.Fall | Seasons.Winter, 27), false),
 			(UpdateFrequency.Yearly, 1, new DayModel(2, Seasons.Spring | Seasons.Summer | Seasons.Fall, 28),false),
+			(UpdateFrequency.Yearly, 1, new DayModel(2, Seasons.Winter, 28),true),
 			// Seasonally
 			(UpdateFrequency.Seasonally, 1, new DayModel(1, Seasons.Spring | Seasons.Summer | Seasons.Fall | Seasons.Winter, 1), false),
 			(UpdateFrequency.Seasonally, 1, new DayModel(1, Seasons.Spring | Seasons.Summer | Seasons.Fall | Seasons.Winter, 27), false),
