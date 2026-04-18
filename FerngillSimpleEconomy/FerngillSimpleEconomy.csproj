@@ -11,9 +11,7 @@
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<Version>2.0.2</Version>
 	</PropertyGroup>
-	<!-- Necesary due to https://youtrack.jetbrains.com/issue/RIDER-134932/Rider-fails-to-debug-self-contained-projects-with-spaces-in-the-directory-path -->
-	<PropertyGroup Condition="Exists('$(HOME)/.steam/steam/steamapps/common/Stardew-Valley')">
-		<GamePath>$(HOME)/.steam/steam/steamapps/common/Stardew-Valley</GamePath>
+	<PropertyGroup Condition="'$(GamePath)' != ''">
 		<StartAction>Program</StartAction>
 		<StartProgram>$(GamePath)/StardewModdingAPI</StartProgram>
 		<StartWorkingDirectory>$(GamePath)</StartWorkingDirectory>

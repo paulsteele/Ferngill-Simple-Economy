@@ -10,11 +10,6 @@
 		<EnableModZip>false</EnableModZip>
 		<BundleExtraAssemblies>All</BundleExtraAssemblies>
 	</PropertyGroup>
-	<!-- Necesary due to https://youtrack.jetbrains.com/issue/RIDER-134932/Rider-fails-to-debug-self-contained-projects-with-spaces-in-the-directory-path -->
-	<PropertyGroup Condition="Exists('$(HOME)/.steam/steam/steamapps/common/Stardew-Valley')">
-		<GamePath>$(HOME)/.steam/steam/steamapps/common/Stardew-Valley</GamePath>
-	</PropertyGroup>
-
 	<ItemGroup>
 		<PackageReference Include="coverlet.collector" Version="6.0.4"/>
 		<PackageReference Include="Lib.Harmony.Thin" Version="2.4.2" />

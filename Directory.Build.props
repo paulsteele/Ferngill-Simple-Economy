@@ -1,0 +1,9 @@
+<Project>
+	<!-- Necesary due to https://youtrack.jetbrains.com/issue/RIDER-134932/Rider-fails-to-debug-self-contained-projects-with-spaces-in-the-directory-path -->
+	<PropertyGroup Condition="Exists('$(HOME)/.steam/steam/steamapps/common/Stardew-Valley')">
+		<GamePath>$(HOME)/.steam/steam/steamapps/common/Stardew-Valley</GamePath>
+	</PropertyGroup>
+	<PropertyGroup Condition="Exists('$(HOME)/Library/Application Support/Steam/steamapps/common/Stardew Valley/Contents/MacOS')">
+		<GamePath>$(HOME)/Library/Application Support/Steam/steamapps/common/Stardew Valley/Contents/MacOS</GamePath>
+	</PropertyGroup>
+</Project>
