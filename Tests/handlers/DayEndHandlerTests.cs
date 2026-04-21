@@ -190,6 +190,7 @@ public class DayEndHandlerTests : HarmonyTestBase
 
 		_mockGameLoopEvents.InvokeDayEnding();
 		ClearShippingBins();
+		Game1.dayOfMonth = dayOfMonth + 1;
 		_mockGameLoopEvents.InvokeSaving();
 
 		_mockEconomyService.Verify(m => m.HandleDayEnd(new DayModel(year, SeasonHelper.GetCurrentSeason(), dayOfMonth)), Times.Once);

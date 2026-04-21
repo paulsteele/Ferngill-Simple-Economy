@@ -26,7 +26,7 @@ public class DayEndHandler(
 	}
 	
 	private IList<Object> _cachedShippedItems = [];
-	private bool _shouldHandleEndOfDay; // super defensive in case midday save mods trigger this
+	private DayModel? _dayEndModel; // nullability is intentionally super defensive in case midday save mods trigger this
 
 	// This is the correct time to read the shipping bin as after _newDayAfterFade the shipping bin is cleared.
 	// Trying to handle supply in _newDayAfterFade is problematic as each client handles their own shipping bin.
@@ -47,12 +47,14 @@ public class DayEndHandler(
 		}
 
 		_cachedShippedItems = farmers.SelectMany(f => Game1.getFarm().getShippingBin(f).OfType<Object>()).ToList();
-		_shouldHandleEndOfDay = true;
+
+		// need to cache here as OnSaving will be on the next day.
+		_dayEndModel = new DayModel(Game1.year, SeasonHelper.GetCurrentSeason(), Game1.dayOfMonth);
 	}
 
 	private void OnSaving()
 	{
-		if (!Game1.player.IsMainPlayer || !_shouldHandleEndOfDay)
+		if (!Game1.player.IsMainPlayer || !_dayEndModel.HasValue)
 		{
 			return;
 		}
@@ -63,9 +65,9 @@ public class DayEndHandler(
 			economyService.AdjustSupply(item, item.Stack, false);
 		}
 
-		economyService.HandleDayEnd(new DayModel(Game1.year, SeasonHelper.GetCurrentSeason(), Game1.dayOfMonth));
+		economyService.HandleDayEnd(_dayEndModel.Value);
 		
 		_cachedShippedItems = [];
-		_shouldHandleEndOfDay = false;
+		_dayEndModel = null;
 	}
 }
