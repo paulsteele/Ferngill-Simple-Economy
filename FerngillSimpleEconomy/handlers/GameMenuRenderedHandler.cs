@@ -45,6 +45,7 @@ public class GameMenuLoadedHandler : IHandler
 	{
 		_helper.Events.Display.RenderedActiveMenu += (_, args) => SafeAction.Run(() => DrawTab(args.SpriteBatch), _monitor, nameof(DrawTab));
 		_helper.Events.Input.ButtonPressed += (_, args) => SafeAction.Run(() => HandleButtonPressed(args), _monitor, nameof(HandleButtonPressed));
+		_helper.Events.Display.Rendering += (_, args) => SafeAction.Run(() => _tooltipMenu.PostRendering(args), _monitor, nameof(_tooltipMenu.PostRendering));
 		_helper.Events.Display.RenderedHud += (_, args) => SafeAction.Run(() => _tooltipMenu.PostRenderHud(args), _monitor, nameof(_tooltipMenu.PostRenderHud));
 		_helper.Events.Display.RenderedActiveMenu += (_, args) => SafeAction.Run(() => _tooltipMenu.PostRenderGui(args), _monitor, nameof(_tooltipMenu.PostRenderHud));
 	}
