@@ -36,7 +36,7 @@ public class EconomyServiceTests : HarmonyTestBase
 	{
 		base.Setup();
 
-		ConfigModel.Instance = new ConfigModel()
+		ConfigModel.Instance = new ConfigModel
 		{
 			ValidCategories = [1, 2, 3, 4, 5],
 		};
@@ -71,6 +71,10 @@ public class EconomyServiceTests : HarmonyTestBase
 			new IgnoreInEconomyContentPackItem{Id = "5"},
 		]);
 
+		_mockContentPackService.Setup(m => m.GetItemsOfType<AddToEconomyContentPackItem>()).Returns([
+			new AddToEconomyContentPackItem{Id = "99"},
+		]);
+
 		_mockContentPackService.Setup(m => m.GetItemsOfType<MapItemToSeasonContentPackItem>()).Returns([
 			new MapItemToSeasonContentPackItem{Id = "3", Spring = false, Summer = false, Fall = true, Winter = false},
 		]);
@@ -81,10 +85,12 @@ public class EconomyServiceTests : HarmonyTestBase
 			GenerateObjectData("3", 2),
 			GenerateObjectData("4", 2),
 			GenerateObjectData("5", 2),
+			GenerateObjectData("99", 99),
 		]);
 		
 		HarmonyObject.CategoryIdToNameMapping.Add(1, "Cat1");
 		HarmonyObject.CategoryIdToNameMapping.Add(2, "Cat2");
+		HarmonyObject.CategoryIdToNameMapping.Add(99, "Cat99");
 
 		HarmonyGame.GetPlayerResult = _player; 
 		HarmonyFarmer.IsMainPlayerDictionary.Add(_player, true);
@@ -105,8 +111,13 @@ public class EconomyServiceTests : HarmonyTestBase
 	}
 
 	[Test]
-	public void ShouldGenerateNewEconomyOnLoadIfEmpty()
+	public void ShouldGenerateNewEconomyOnLoadIfEmpty([Values] bool hasAddContent)
 	{
+		if (!hasAddContent)
+		{
+			_mockContentPackService.Setup(m => m.GetItemsOfType<AddToEconomyContentPackItem>()).Returns([]);
+		}
+
 		_economyService.OnLoaded();
 		
 		_mockMultiplayerService.Verify(m => m.SendMessageToPeers(It.IsAny<RequestEconomyModelMessage>()), Times.Exactly(0));
@@ -117,20 +128,26 @@ public class EconomyServiceTests : HarmonyTestBase
 
 		var categories = _economyService.GetCategories();
 		
-		Assert.That(categories, Has.Count.EqualTo(2));
+		Assert.That(categories, Has.Count.EqualTo(hasAddContent ? 3 : 2));
 		Assert.Multiple(() =>
 		{ 
 			Assert.That(categories[1], Is.EqualTo("Cat1")); 
 			Assert.That(categories[2], Is.EqualTo("Cat2"));
+			if (hasAddContent)
+			{
+				Assert.That(categories[99], Is.EqualTo("Cat99"));
+			}
 		});
 
 		var cat1Items = _economyService.GetItemsForCategory(1);
 		var cat2Items = _economyService.GetItemsForCategory(2);
+		var cat99Items = _economyService.GetItemsForCategory(99);
 		
 		Assert.Multiple(() =>
 		{ 
 			Assert.That(cat1Items, Has.Length.EqualTo(2)); 
 			Assert.That(cat2Items, Has.Length.EqualTo(2));
+			Assert.That(cat99Items, Has.Length.EqualTo(hasAddContent ? 1 : 0));
 		});
 		Assert.Multiple(() =>
 		{ 
@@ -148,12 +165,24 @@ public class EconomyServiceTests : HarmonyTestBase
 			Assert.That(cat1Items[1].DailyDelta, Is.EqualTo(27)); 
 			Assert.That(cat2Items[0].DailyDelta, Is.EqualTo(27)); 
 			Assert.That(cat2Items[1].DailyDelta, Is.EqualTo(27));
+
+			if (hasAddContent)
+			{
+				Assert.That(cat99Items[0].ObjectId, Is.EqualTo("99"));
+				Assert.That(cat99Items[0].Supply, Is.EqualTo(777));
+				Assert.That(cat99Items[0].DailyDelta, Is.EqualTo(27));
+			}
 		});
 	}
 
 	[Test]
-	public void ShouldGenerateNewEconomyOnLoadIfEmptyWithCurrentSeasonsCrop()
+	public void ShouldGenerateNewEconomyOnLoadIfEmptyWithCurrentSeasonsCrop([Values]bool hasAddContent)
 	{
+		if (!hasAddContent)
+		{
+			_mockContentPackService.Setup(m => m.GetItemsOfType<AddToEconomyContentPackItem>()).Returns([]);
+		}
+
 		Game1.currentSeason = "Summer";
 		var seed1 = new SeedModel("1", new CropData())
 		{
@@ -176,20 +205,26 @@ public class EconomyServiceTests : HarmonyTestBase
 
 		var categories = _economyService.GetCategories();
 		
-		Assert.That(categories, Has.Count.EqualTo(2));
+		Assert.That(categories, Has.Count.EqualTo(hasAddContent ? 3 : 2));
 		Assert.Multiple(() =>
 		{ 
 			Assert.That(categories[1], Is.EqualTo("Cat1")); 
 			Assert.That(categories[2], Is.EqualTo("Cat2"));
+			if (hasAddContent)
+			{
+				Assert.That(categories[99], Is.EqualTo("Cat99"));
+			}
 		});
 
 		var cat1Items = _economyService.GetItemsForCategory(1);
 		var cat2Items = _economyService.GetItemsForCategory(2);
+		var cat99Items = _economyService.GetItemsForCategory(99);
 		
 		Assert.Multiple(() =>
 		{ 
 			Assert.That(cat1Items, Has.Length.EqualTo(2)); 
 			Assert.That(cat2Items, Has.Length.EqualTo(2));
+			Assert.That(cat99Items, Has.Length.EqualTo(hasAddContent ? 1 : 0));
 		});
 		Assert.Multiple(() =>
 		{ 
@@ -207,12 +242,40 @@ public class EconomyServiceTests : HarmonyTestBase
 			Assert.That(cat1Items[1].DailyDelta, Is.EqualTo(25)); 
 			Assert.That(cat2Items[0].DailyDelta, Is.EqualTo(27)); 
 			Assert.That(cat2Items[1].DailyDelta, Is.EqualTo(27));
+
+			if (hasAddContent)
+			{
+				Assert.That(cat99Items[0].ObjectId, Is.EqualTo("99")); 
+				Assert.That(cat99Items[0].Supply, Is.EqualTo(777)); 
+				Assert.That(cat99Items[0].DailyDelta, Is.EqualTo(27)); 
+			}
 		});
 	}
 	
 	[Test]
-	public void ShouldGenerateNewEconomyOnLoadIfEmptyWithCurrentSeasonsFish()
+	public void ShouldGenerateNewEconomyOnLoadIfEmptyWithCurrentSeasonsFish([Values]bool hasAddContent)
 	{
+		Game1.objectData = new Dictionary<string, ObjectData>([
+			GenerateObjectData("1", 1),
+			GenerateObjectData("2", 1),
+			GenerateObjectData("3", 2),
+			GenerateObjectData("4", 2),
+			GenerateObjectData("5", 2),
+			GenerateObjectData("99", 99),
+			GenerateObjectData("100", 99),
+		]);
+		if (!hasAddContent)
+		{
+			_mockContentPackService.Setup(m => m.GetItemsOfType<AddToEconomyContentPackItem>()).Returns([]);
+		}
+		else
+		{
+			_mockContentPackService.Setup(m => m.GetItemsOfType<AddToEconomyContentPackItem>()).Returns([
+				new AddToEconomyContentPackItem { Id = "99" },
+				new AddToEconomyContentPackItem { Id = "100" },
+			]);
+		}
+
 		Game1.currentSeason = "Summer";
 		var fish1 = new FishModel("1","a/b/c/d/e/f/Spring")
 		{
@@ -222,8 +285,18 @@ public class EconomyServiceTests : HarmonyTestBase
 		{
 			Seasons = Seasons.Fall,
 		};
+		var fish3 = new FishModel("99","a/b/c/d/e/f/Spring")
+		{
+			Seasons = Seasons.Summer,
+		};
+		var fish4 = new FishModel("100","a/b/c/d/e/f/Spring")
+		{
+			Seasons = Seasons.Fall,
+		};
 		_mockFishService.Setup(m => m.GetFishModelFromModelId("1")).Returns(fish1);
 		_mockFishService.Setup(m => m.GetFishModelFromModelId("2")).Returns(fish2);
+		_mockFishService.Setup(m => m.GetFishModelFromModelId("99")).Returns(fish3);
+		_mockFishService.Setup(m => m.GetFishModelFromModelId("100")).Returns(fish4);
 		
 		_economyService.OnLoaded();
 		
@@ -235,20 +308,26 @@ public class EconomyServiceTests : HarmonyTestBase
 
 		var categories = _economyService.GetCategories();
 		
-		Assert.That(categories, Has.Count.EqualTo(2));
+		Assert.That(categories, Has.Count.EqualTo(hasAddContent ? 3 : 2));
 		Assert.Multiple(() =>
 		{ 
 			Assert.That(categories[1], Is.EqualTo("Cat1")); 
 			Assert.That(categories[2], Is.EqualTo("Cat2"));
+			if (hasAddContent)
+			{
+				Assert.That(categories[99], Is.EqualTo("Cat99"));
+			}
 		});
 
 		var cat1Items = _economyService.GetItemsForCategory(1);
 		var cat2Items = _economyService.GetItemsForCategory(2);
+		var cat99Items = _economyService.GetItemsForCategory(99);
 		
 		Assert.Multiple(() =>
 		{ 
 			Assert.That(cat1Items, Has.Length.EqualTo(2)); 
 			Assert.That(cat2Items, Has.Length.EqualTo(2));
+			Assert.That(cat99Items, Has.Length.EqualTo(hasAddContent ? 2 : 0));
 		});
 		Assert.Multiple(() =>
 		{ 
@@ -266,6 +345,18 @@ public class EconomyServiceTests : HarmonyTestBase
 			Assert.That(cat1Items[1].DailyDelta, Is.EqualTo(25)); 
 			Assert.That(cat2Items[0].DailyDelta, Is.EqualTo(27)); 
 			Assert.That(cat2Items[1].DailyDelta, Is.EqualTo(27));
+
+			if (hasAddContent)
+			{
+				Assert.That(cat99Items[0].ObjectId, Is.EqualTo("99")); 
+				Assert.That(cat99Items[1].ObjectId, Is.EqualTo("100")); 
+				
+				Assert.That(cat99Items[0].Supply, Is.EqualTo(777)); 
+				Assert.That(cat99Items[1].Supply, Is.EqualTo(777)); 
+				
+				Assert.That(cat99Items[0].DailyDelta, Is.EqualTo(26)); 
+				Assert.That(cat99Items[1].DailyDelta, Is.EqualTo(25)); 
+			}
 		});
 	}
 
@@ -298,22 +389,36 @@ public class EconomyServiceTests : HarmonyTestBase
 	}
 	
 	[Test]
-	public void ShouldLoadAnExistingEconomyOnLoad()
+	public void ShouldLoadAnExistingEconomyOnLoad([Values]bool hasAddContent)
 	{
-		var model = new EconomyModel(new Dictionary<int, Dictionary<string, ItemModel>>
+		if (!hasAddContent)
+		{
+			_mockContentPackService.Setup(m => m.GetItemsOfType<AddToEconomyContentPackItem>()).Returns([]);
+		}
+
+		var categoryEconomies = new Dictionary<int, Dictionary<string, ItemModel>>
+		{
+			{1, new Dictionary<string, ItemModel>()
 			{
-				{1, new Dictionary<string, ItemModel>()
-				{
-					{"1", new ItemModel("1"){ DailyDelta = 11, Supply = 110}},
-					{"2", new ItemModel("2"){ DailyDelta = 12, Supply = 120}},
-				}},
-				{2, new Dictionary<string, ItemModel>()
-				{
-					{"3", new ItemModel("3"){ DailyDelta = 21, Supply = 210}},
-					{"4", new ItemModel("4"){ DailyDelta = 22, Supply = 220}},
-				}},
-			}
-		);
+				{"1", new ItemModel("1"){ DailyDelta = 11, Supply = 110}},
+				{"2", new ItemModel("2"){ DailyDelta = 12, Supply = 120}},
+			}},
+			{2, new Dictionary<string, ItemModel>()
+			{
+				{"3", new ItemModel("3"){ DailyDelta = 21, Supply = 210}},
+				{"4", new ItemModel("4"){ DailyDelta = 22, Supply = 220}},
+			}},
+		};
+
+		if (hasAddContent)
+		{
+			categoryEconomies.TryAdd(99, new Dictionary<string, ItemModel>
+			{
+				{"99", new ItemModel("99"){ DailyDelta = -7, Supply = 999}},
+			});
+		}
+		
+		var model = new EconomyModel(categoryEconomies);
 		
 		_mockDataHelper.Setup(m => m.ReadSaveData<EconomyModel>(EconomyModel.ModelKey))
 			.Returns(model);
@@ -328,20 +433,27 @@ public class EconomyServiceTests : HarmonyTestBase
 
 		var categories = _economyService.GetCategories();
 		
-		Assert.That(categories, Has.Count.EqualTo(2));
+		Assert.That(categories, Has.Count.EqualTo(hasAddContent ? 3 : 2));
 		Assert.Multiple(() =>
 		{ 
 			Assert.That(categories[1], Is.EqualTo("Cat1")); 
 			Assert.That(categories[2], Is.EqualTo("Cat2"));
+
+			if (hasAddContent)
+			{
+				Assert.That(categories[99], Is.EqualTo("Cat99"));
+			}
 		});
 
 		var cat1Items = _economyService.GetItemsForCategory(1);
 		var cat2Items = _economyService.GetItemsForCategory(2);
+		var cat99Items = _economyService.GetItemsForCategory(99);
 		
 		Assert.Multiple(() =>
 		{ 
 			Assert.That(cat1Items, Has.Length.EqualTo(2)); 
 			Assert.That(cat2Items, Has.Length.EqualTo(2));
+			Assert.That(cat99Items, Has.Length.EqualTo(hasAddContent ? 1 : 0));
 		});
 		Assert.Multiple(() =>
 		{ 
@@ -359,6 +471,13 @@ public class EconomyServiceTests : HarmonyTestBase
 			Assert.That(cat1Items[1].DailyDelta, Is.EqualTo(12)); 
 			Assert.That(cat2Items[0].DailyDelta, Is.EqualTo(21)); 
 			Assert.That(cat2Items[1].DailyDelta, Is.EqualTo(22));
+
+			if (hasAddContent)
+			{
+				Assert.That(cat99Items[0].ObjectId, Is.EqualTo("99")); 
+				Assert.That(cat99Items[0].Supply, Is.EqualTo(999)); 
+				Assert.That(cat99Items[0].DailyDelta, Is.EqualTo(-7)); 
+			}
 		});
 	}
 
@@ -1433,7 +1552,7 @@ public class EconomyServiceTests : HarmonyTestBase
 	}
 
 	[Test]
-	public void ShouldConsolidateEconomyModelWhenLoadingWithMismatches()
+	public void ShouldConsolidateEconomyModelWhenLoadingWithMismatches([Values] bool hasAddContent)
 	{
 		HarmonyObject.ObjectIdCategoryMapping.Clear();
 		Game1.objectData = new Dictionary<string, ObjectData>(new[]
@@ -1442,19 +1561,37 @@ public class EconomyServiceTests : HarmonyTestBase
 			GenerateObjectData("22", 1),
 			GenerateObjectData("3", 3),
 			GenerateObjectData("4", 2),
+			GenerateObjectData("99", 99),
+			GenerateObjectData("100", 99),
 		});
+
+		if (!hasAddContent)
+		{
+			_mockContentPackService.Setup(m => m.GetItemsOfType<AddToEconomyContentPackItem>()).Returns([]);
+		}
+		else
+		{
+			_mockContentPackService.Setup(m => m.GetItemsOfType<AddToEconomyContentPackItem>()).Returns([
+				new AddToEconomyContentPackItem { Id = "99" },
+				new AddToEconomyContentPackItem { Id = "100" },
+			]);
+		}
 		
 		var model = new EconomyModel(new Dictionary<int, Dictionary<string, ItemModel>>
 			{
-				{1, new Dictionary<string, ItemModel>()
+				{1, new Dictionary<string, ItemModel>
 				{
 					{"1", new ItemModel("1"){ DailyDelta = 11, Supply = 110}},
 					{"2", new ItemModel("2"){ DailyDelta = 12, Supply = 120}},
 				}},
-				{2, new Dictionary<string, ItemModel>()
+				{2, new Dictionary<string, ItemModel>
 				{
 					{"3", new ItemModel("3"){ DailyDelta = 21, Supply = 210}},
 					{"4", new ItemModel("4"){ DailyDelta = 22, Supply = 220}},
+				}},
+				{99, new Dictionary<string, ItemModel>
+				{
+					{"99", new ItemModel("99"){ DailyDelta = 21, Supply = 210}},
 				}},
 			}
 		);
@@ -1473,23 +1610,29 @@ public class EconomyServiceTests : HarmonyTestBase
 
 		var categories = _economyService.GetCategories();
 		
-		Assert.That(categories, Has.Count.EqualTo(3));
+		Assert.That(categories, Has.Count.EqualTo(hasAddContent ? 4 : 3));
 		Assert.Multiple(() =>
 		{ 
 			Assert.That(categories[1], Is.EqualTo("Cat1")); 
 			Assert.That(categories[2], Is.EqualTo("Cat2"));
 			Assert.That(categories[3], Is.EqualTo("Cat3"));
+			if (hasAddContent)
+			{
+				Assert.That(categories[99], Is.EqualTo("Cat99"));
+			}
 		});
 
 		var cat1Items = _economyService.GetItemsForCategory(1);
 		var cat2Items = _economyService.GetItemsForCategory(2);
 		var cat3Items = _economyService.GetItemsForCategory(3);
+		var cat99Items = _economyService.GetItemsForCategory(99);
 		
 		Assert.Multiple(() =>
 		{ 
 			Assert.That(cat1Items, Has.Length.EqualTo(2)); 
 			Assert.That(cat2Items, Has.Length.EqualTo(1));
 			Assert.That(cat3Items, Has.Length.EqualTo(1));
+			Assert.That(cat99Items, Has.Length.EqualTo(hasAddContent ? 2 : 0));
 		});
 		Assert.Multiple(() =>
 		{ 
@@ -1508,7 +1651,19 @@ public class EconomyServiceTests : HarmonyTestBase
 			Assert.That(cat2Items[0].DailyDelta, Is.EqualTo(22)); 
 			Assert.That(cat3Items[0].DailyDelta, Is.EqualTo(21)); 
 			Assert.That(cat1Items[1].DailyDelta, Is.Not.EqualTo(12)); 
-			Assert.That(cat1Items[1].DailyDelta, Is.Not.EqualTo(0)); 
+			Assert.That(cat1Items[1].DailyDelta, Is.Not.EqualTo(0));
+
+			if (hasAddContent)
+			{
+				Assert.That(cat99Items[0].ObjectId, Is.EqualTo("99"));
+				Assert.That(cat99Items[1].ObjectId, Is.EqualTo("100"));
+				
+				Assert.That(cat99Items[0].Supply, Is.EqualTo(210));
+				Assert.That(cat99Items[1].Supply, Is.EqualTo(777));
+				
+				Assert.That(cat99Items[0].DailyDelta, Is.EqualTo(21));
+				Assert.That(cat99Items[1].DailyDelta, Is.EqualTo(27));
+			}
 		});
 	}
 
@@ -1551,6 +1706,57 @@ public class EconomyServiceTests : HarmonyTestBase
 			Assert.That(_economyService.GetConsolidatedItem(artisanModel).ObjectId, Is.EqualTo("442"));
 		});
  }
+	
+	[Test]
+	public void ShouldHandleAddContentOverlappingCategoryMapping()
+	{
+		_mockContentPackService.Setup(m => m.GetItemsOfType<AddToEconomyContentPackItem>()).Returns([
+			new AddToEconomyContentPackItem { Id = "1" },
+		]);
+
+		_economyService.OnLoaded();
+		
+		_mockMultiplayerService.Verify(m => m.SendMessageToPeers(It.IsAny<RequestEconomyModelMessage>()), Times.Exactly(0));
+		_mockDataHelper.Verify(m => m.WriteSaveData(EconomyModel.ModelKey, It.IsAny<EconomyModel>()), Times.Exactly(1));
+		_mockFishService.Verify(m => m.GenerateFishMapping(It.IsAny<EconomyModel>()), Times.Exactly(1));
+		_mockSeedService.Verify(m => m.GenerateSeedMapping(It.IsAny<EconomyModel>()), Times.Exactly(1));
+		Assert.That(_economyService.Loaded, Is.True);
+
+		var categories = _economyService.GetCategories();
+		
+		Assert.That(categories, Has.Count.EqualTo(2));
+		Assert.Multiple(() =>
+		{ 
+			Assert.That(categories[1], Is.EqualTo("Cat1")); 
+			Assert.That(categories[2], Is.EqualTo("Cat2"));
+		});
+
+		var cat1Items = _economyService.GetItemsForCategory(1);
+		var cat2Items = _economyService.GetItemsForCategory(2);
+		
+		Assert.Multiple(() =>
+		{ 
+			Assert.That(cat1Items, Has.Length.EqualTo(2)); 
+			Assert.That(cat2Items, Has.Length.EqualTo(2));
+		});
+		Assert.Multiple(() =>
+		{ 
+			Assert.That(cat1Items[0].ObjectId, Is.EqualTo("1")); 
+			Assert.That(cat1Items[1].ObjectId, Is.EqualTo("2")); 
+			Assert.That(cat2Items[0].ObjectId, Is.EqualTo("3")); 
+			Assert.That(cat2Items[1].ObjectId, Is.EqualTo("4"));
+			
+			Assert.That(cat1Items[0].Supply, Is.EqualTo(777)); 
+			Assert.That(cat1Items[1].Supply, Is.EqualTo(777)); 
+			Assert.That(cat2Items[0].Supply, Is.EqualTo(777)); 
+			Assert.That(cat2Items[1].Supply, Is.EqualTo(777));
+			
+			Assert.That(cat1Items[0].DailyDelta, Is.EqualTo(27)); 
+			Assert.That(cat1Items[1].DailyDelta, Is.EqualTo(27)); 
+			Assert.That(cat2Items[0].DailyDelta, Is.EqualTo(27)); 
+			Assert.That(cat2Items[1].DailyDelta, Is.EqualTo(27));
+		});
+	}
 
 	private static IEnumerable<TestCaseData> ShouldGetBreakEvenSupplyTestCases()
 	{

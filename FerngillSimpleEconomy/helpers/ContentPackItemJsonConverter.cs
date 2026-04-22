@@ -32,6 +32,7 @@ public class ContentPackItemJsonConverter : JsonConverter<BaseContentPackItem>
 				"MapEquivalentItems" => JsonSerializer.Deserialize<MapEquivalentItemsContentPackItem>(rawText, options),
 				"IgnoreInEconomy" => JsonSerializer.Deserialize<IgnoreInEconomyContentPackItem>(rawText, options),
 				"MapItemToSeason" => JsonSerializer.Deserialize<MapItemToSeasonContentPackItem>(rawText, options),
+				"AddToEconomy" => JsonSerializer.Deserialize<AddToEconomyContentPackItem>(rawText, options),
 				_ => throw new JsonException($"Unknown action type: {action}"),
 			};
 

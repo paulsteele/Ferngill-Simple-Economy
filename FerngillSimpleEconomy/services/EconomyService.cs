@@ -158,11 +158,16 @@ public class EconomyService(
 	private EconomyModel GenerateBlankEconomy()
 	{
 		var ignoreList = contentPackService.GetItemsOfType<IgnoreInEconomyContentPackItem>().Select(i => i.Id).ToArray();
+		var addList = contentPackService.GetItemsOfType<AddToEconomyContentPackItem>();
 
 		var validItems = Game1.objectData.Keys
 			.Where(key => !ignoreList.Contains(key))
 			.Select(id => new Object(id, 1))
 			.Where(obj => ConfigModel.Instance.ValidCategories.Contains(obj.Category))
+			.Concat(addList
+				.Select(i => new Object(i.Id, 1))
+				.Where(obj => !ConfigModel.Instance.ValidCategories.Contains(obj.Category))
+			)
 			.GroupBy(obj => obj.Category, obj => new ItemModel(obj.ItemId))
 			.ToDictionary(grouping => grouping.Key, grouping => grouping.ToDictionary(item => item.ObjectId));
 
