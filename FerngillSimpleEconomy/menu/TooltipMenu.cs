@@ -1,23 +1,20 @@
-using System;
 using System.Linq;
-using fse.core.extensions;
 using fse.core.helpers;
 using fse.core.models;
 using fse.core.services;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Menus;
-using Object = StardewValley.Object;
-using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace fse.core.menu;
 
 public interface ITooltipMenu
 {
-	void PostRenderHud(RenderedHudEventArgs _);
-	void PostRenderGui(RenderedActiveMenuEventArgs _);
+	void PostRenderHud(RenderedHudEventArgs e);
+	void PostRenderGui(RenderedActiveMenuEventArgs e);
 }
 
 public class TooltipMenu(
@@ -29,24 +26,30 @@ public class TooltipMenu(
 {
 	private readonly bool _isUiInfoSuiteLoaded = helper.ModRegistry.IsLoaded("Annosz.UiInfoSuite2");
 
-	public void PostRenderHud(RenderedHudEventArgs e) =>
-		SafeRenderTooltip(true, () => Game1.onScreenMenus.OfType<Toolbar>().FirstOrDefault()?.hoverItem);
+	public void PostRenderHud(RenderedHudEventArgs e)
+	{
+		if (!ConfigModel.Instance.EnableTooltip || Game1.activeClickableMenu != null)
+		{
+			return;
+		}
 
-	public void PostRenderGui(RenderedActiveMenuEventArgs e) =>
-		SafeRenderTooltip(false, () => GetHoveredItemFromMenu(Game1.activeClickableMenu));
+		var toolbarItem = Game1.onScreenMenus.OfType<Toolbar>().FirstOrDefault()?.hoverItem;
+		
+		PopulateHoverTextBoxAndDraw(toolbarItem);
+	}
 
-	private void SafeRenderTooltip(bool activeClickableShouldBeNull, Func<Item?> retriever)
+	public void PostRenderGui(RenderedActiveMenuEventArgs e)
 	{
 		if (!ConfigModel.Instance.EnableTooltip)
 		{
 			return;
 		}
-		if ((Game1.activeClickableMenu == null) != activeClickableShouldBeNull)
+		if (Game1.activeClickableMenu == null)
 		{
 			return;
 		}
 
-		var item = retriever();
+		var item = GetHoveredItemFromMenu(Game1.activeClickableMenu);
 		if (item != null)
 		{
 			PopulateHoverTextBoxAndDraw(item);
@@ -87,35 +90,29 @@ public class TooltipMenu(
 
 	private void DrawHoverTextBox(ItemModel model)
 	{
-		const int toolbarXPadding = 20;
-		const int toolbarYPadding = 15;
-		var tooltipRect = new Rectangle(helper.Input.GetCursorPosition().GetUiScaledPosition().ToPoint(), new Point(260, 110));
+		const int width = 240;
+		const int height = 110;
+
+		var x = (int)(Mouse.GetState().X / Game1.options.uiScale) - Game1.tileSize / 2 - width;
+		var y = (int)(Mouse.GetState().Y / Game1.options.uiScale) + Game1.tileSize / 3;
 
 		//So that the tooltips don't overlap
 		if (_isUiInfoSuiteLoaded)
 		{
-			tooltipRect.X -= 140;
+			x -= 140;
 		}
 
-		Utility.makeSafe(ref tooltipRect);
+		if (x < 0)
+		{
+			x = 0;
+		}
 
-		IClickableMenu.drawTextureBox(
-			Game1.spriteBatch, 
-			Game1.menuTexture, 
-			new Rectangle(0, 256, 60, 60), 
-			tooltipRect.X, 
-			tooltipRect.Y, 
-			tooltipRect.Width, 
-			tooltipRect.Height, 
-			Color.White
-		);
-		drawSupplyBarHelper.DrawSupplyBar(
-			Game1.spriteBatch, 
-			tooltipRect.X + toolbarXPadding, 
-			tooltipRect.Y + toolbarYPadding, 
-			tooltipRect.X + tooltipRect.Width - toolbarXPadding, 
-			Game1.tileSize / 2, 
-			model
-		);
+		if (y + height > Game1.graphics.GraphicsDevice.Viewport.Height)
+		{
+			y = Game1.graphics.GraphicsDevice.Viewport.Height - height;
+		}
+
+		IClickableMenu.drawTextureBox(Game1.spriteBatch, Game1.menuTexture, new Rectangle(0, 256, 60, 60), x, y, width+20, height, Color.White);
+		drawSupplyBarHelper.DrawSupplyBar(Game1.spriteBatch, x+15, y+20, x+width, (Game1.tileSize / 2), model);
 	}
 }
