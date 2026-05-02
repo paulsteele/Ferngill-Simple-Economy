@@ -16,7 +16,6 @@ namespace fse.core.menu;
 
 public interface ITooltipMenu
 {
-	void PostRendering(RenderingEventArgs _);
 	void PostRenderHud(RenderedHudEventArgs _);
 	void PostRenderGui(RenderedActiveMenuEventArgs _);
 }
@@ -29,15 +28,14 @@ public class TooltipMenu(
 	) : ITooltipMenu
 {
 	private readonly bool _isUiInfoSuiteLoaded = helper.ModRegistry.IsLoaded("Annosz.UiInfoSuite2");
-	private Item? _hoverItem;
-	
-	public void PostRendering(RenderingEventArgs e) => _hoverItem = GetHoveredItem();
 
-	public void PostRenderHud(RenderedHudEventArgs e) => SafeRenderTooltip(true);
+	public void PostRenderHud(RenderedHudEventArgs e) =>
+		SafeRenderTooltip(true, () => Game1.onScreenMenus.OfType<Toolbar>().FirstOrDefault()?.hoverItem);
 
-	public void PostRenderGui(RenderedActiveMenuEventArgs e) => SafeRenderTooltip(false);
+	public void PostRenderGui(RenderedActiveMenuEventArgs e) =>
+		SafeRenderTooltip(false, () => GetHoveredItemFromMenu(Game1.activeClickableMenu));
 
-	private void SafeRenderTooltip(bool activeClickableShouldBeNull)
+	private void SafeRenderTooltip(bool activeClickableShouldBeNull, Func<Item?> retriever)
 	{
 		if (!ConfigModel.Instance.EnableTooltip)
 		{
@@ -48,29 +46,27 @@ public class TooltipMenu(
 			return;
 		}
 
-		if (_hoverItem != null)
+		var item = retriever();
+		if (item != null)
 		{
-			PopulateHoverTextBoxAndDraw(_hoverItem);
+			PopulateHoverTextBoxAndDraw(item);
 		}
 	}
 
-	//hoveredItem on tooltips will only be available during the Rendering event.
-	private Item? GetHoveredItem()
+	private Item? GetHoveredItemFromMenu(IClickableMenu menu)
 	{
-		var menu = Game1.activeClickableMenu ?? Game1.onScreenMenus.OfType<Toolbar>().FirstOrDefault();
-
 		var page = betterGameMenuService.GetCurrentPage(menu);
 		if (page is InventoryPage inventoryPage)
 		{
 			return inventoryPage.hoveredItem;
 		}
 
-		return menu switch
+		if (menu is MenuWithInventory inventoryMenu)
 		{
-			MenuWithInventory inventoryMenu => inventoryMenu.hoveredItem,
-			Toolbar toolbar => toolbar.hoverItem,
-			_ => null,
-		};
+			return inventoryMenu.hoveredItem;
+		}
+
+		return null;
 	}
 
 	private void PopulateHoverTextBoxAndDraw(Item? item)
