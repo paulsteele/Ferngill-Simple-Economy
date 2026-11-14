@@ -1,7 +1,6 @@
 using fse.core.api;
 using fse.core.handlers;
 using fse.core.helpers;
-using fse.core.menu;
 using fse.core.models;
 using fse.core.patches;
 using fse.core.services;
@@ -35,8 +34,8 @@ public class FerngillSimpleEconomy : Mod
 		var iconicFrameworkService = new IconicFrameworkService(helper, forecastMenuService);
 		var starControlService = new StarControlService(ModManifest, helper, forecastMenuService);
 		var genericConfigMenuService = new GenericConfigMenuService(helper, ModManifest, economyService, contentPackService);
-		var tooltipMenu = new TooltipMenu(helper, economyService, drawSupplyBarHelper, betterGameMenuService);
-		RegisterPatches(economyService, drawSupplyBarHelper);
+		var tooltipService = new TooltipService(economyService, drawSupplyBarHelper);
+		RegisterPatches(economyService, drawSupplyBarHelper, tooltipService);
 		RegisterHandlers(
 			helper, 
 			economyService, 
@@ -45,7 +44,6 @@ public class FerngillSimpleEconomy : Mod
 			iconicFrameworkService, 
 			starControlService, 
 			genericConfigMenuService, 
-			tooltipMenu, 
 			multiplayerService
 		);
 		helper.ConsoleCommands.Add("fse_reset", "Fully Resets Ferngill Simple Economy", (_, _) =>
@@ -74,13 +72,14 @@ public class FerngillSimpleEconomy : Mod
 
 	private void RegisterPatches
 	(
-		EconomyService economyService, 
-		IDrawSupplyBarHelper drawSupplyBarHelper
+		IEconomyService economyService, 
+		IDrawSupplyBarHelper drawSupplyBarHelper,
+		ITooltipService tooltipService
 	)
 	{
 		var harmony = new Harmony(ModManifest.UniqueID);
 
-		SelfRegisteringPatches.Initialize(economyService, Monitor, drawSupplyBarHelper);
+		SelfRegisteringPatches.Initialize(economyService, Monitor, drawSupplyBarHelper, tooltipService);
 		new ObjectPatches().Register(harmony);
 		new ShopMenuPatches().Register(harmony);
 	}
@@ -94,14 +93,13 @@ public class FerngillSimpleEconomy : Mod
 		IconicFrameworkService iconicFrameworkService,
 		StarControlService starControlService,
 		GenericConfigMenuService genericConfigMenuService,
-		TooltipMenu tooltipMenu, 
 		MultiplayerService multiplayerService
 	)
 	{
 		new DayEndHandler(helper, Monitor, economyService).Register();
 		new SaveLoadedHandler(helper, Monitor, economyService).Register();
 		new GameLoadedHandler(helper, Monitor, betterGameMenuService, iconicFrameworkService, starControlService, genericConfigMenuService).Register();
-		new GameMenuLoadedHandler(helper, Monitor, forecastMenuService, tooltipMenu).Register();
+		new GameMenuLoadedHandler(helper, Monitor, forecastMenuService).Register();
 		new MultiplayerHandler(helper, economyService, multiplayerService).Register();
 		new HotkeyHandler(helper, forecastMenuService).Register();
 	}

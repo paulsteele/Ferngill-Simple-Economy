@@ -17,15 +17,20 @@ public abstract class SelfRegisteringPatches
 	private static IDrawSupplyBarHelper? _drawSupplyBarHelper;
 	protected static IDrawSupplyBarHelper DrawSupplyBarHelper => _drawSupplyBarHelper ?? throw new Exception("DrawSupplyBarHelper not initialized");
 
+	private static ITooltipService? _tooltipService;
+	protected static ITooltipService TooltipService => _tooltipService ?? throw new Exception("TooltipService not initialized");
+
 	public static void Initialize(
 		IEconomyService economyService, 
 		IMonitor monitor,
-		IDrawSupplyBarHelper drawSupplyBarHelper
+		IDrawSupplyBarHelper drawSupplyBarHelper,
+		ITooltipService tooltipService
 	)
 	{
 		_economyService = economyService;
 		_monitor = monitor;
 		_drawSupplyBarHelper = drawSupplyBarHelper;
+		_tooltipService = tooltipService;
 	}
 
 	public abstract void Register(Harmony harmony);
