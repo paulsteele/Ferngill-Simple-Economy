@@ -107,7 +107,7 @@ public class ShopMenuPatches : SelfRegisteringPatches
 			var component = forSaleButtons[i];
 			var salable = forSale[currItemIdx + i];
 			var bounds = component.bounds;
-			if (salable is Object { Category: Object.SeedsCategory } obj && EconomyService.GetItemModelFromSeed(obj.ItemId) is ItemModel model)
+			if (salable is Object { Category: Object.SeedsCategory } obj && EconomyService.GetItemModelFromSeed(obj.ItemId) is { } model)
 			{
 				if (bounds.Width < vanillaBtnWidth)
 				{

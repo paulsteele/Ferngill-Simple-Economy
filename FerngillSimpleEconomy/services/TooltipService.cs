@@ -26,7 +26,7 @@ public class TooltipService(IEconomyService economyService, IDrawSupplyBarHelper
 			return result;
 		}
 
-		var offset = economyService.GetItemModelFromObject(obj) == null ? 0 : TooltipAreaHeight;
+		var offset = GetRelevantItemModelForTooltip(obj) == null ? 0 : TooltipAreaHeight;
 
 		if (offset == 0)
 		{
@@ -50,7 +50,7 @@ public class TooltipService(IEconomyService economyService, IDrawSupplyBarHelper
 			return Point.Zero;
 		}
 		
-		var model = economyService.GetItemModelFromObject(obj);
+		var model = GetRelevantItemModelForTooltip(obj);
 
 		if (model == null)
 		{
@@ -60,6 +60,15 @@ public class TooltipService(IEconomyService economyService, IDrawSupplyBarHelper
 		drawSupplyBarHelper.DrawSupplyBar(spriteBatch, x + HorizontalPadding, y + VerticalPadding, x + GetTooltipWidth(), BarHeight, model);
 		
 		return new Point(0, TooltipAreaHeight);
+	}
+
+	private ItemModel? GetRelevantItemModelForTooltip(Object obj)
+	{
+		if (!economyService.CategoryIsInEconomy(Object.SeedsCategory) && obj.Category == Object.SeedsCategory)
+		{
+			return economyService.GetItemModelFromSeed(obj.ItemId);
+		}
+		return economyService.GetItemModelFromObject(obj);
 	}
 
 	// copied from Item.getDescriptionWidth
