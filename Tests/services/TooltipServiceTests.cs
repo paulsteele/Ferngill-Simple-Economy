@@ -40,11 +40,11 @@ public class TooltipServiceTests : HarmonyTestBase
 		ConfigModel.Instance.EnableTooltip = true;
 	}
 	
-	[TestCase(true, true, 0, 0, 0, 0, 110)]
-	[TestCase(true, true, 200, 0, 0, 0, 310)]
-	[TestCase(true, true, 300, 0, 0, 0, 410)]
-	[TestCase(true, true, 300, 0, 100, 0, 210)]
-	[TestCase(true, true, 300, 100, 0, 100, 410)]
+	[TestCase(true, true, 0, 0, 0, 0, 86)]
+	[TestCase(true, true, 200, 0, 0, 0, 286)]
+	[TestCase(true, true, 300, 0, 0, 0, 386)]
+	[TestCase(true, true, 300, 0, 100, 0, 186)]
+	[TestCase(true, true, 300, 100, 0, 100, 386)]
 	[TestCase(false, true, 200, 0, 0, 0, 0)]
 	[TestCase(false, true, 300, 0, 0, 0, 0)]
 	[TestCase(false, true, 300, 0, 100, 0, 100)]
@@ -69,9 +69,9 @@ public class TooltipServiceTests : HarmonyTestBase
 		Assert.That(result, Is.EqualTo(new Point(expectedX, expectedY)));
 	}
 
-	[TestCase(true, true, 0, 0, 0, 110)]
-	[TestCase(true, true, 0, 100, 0, 110)]
-	[TestCase(true, true, 100, 0, 0, 110)]
+	[TestCase(true, true, 0, 0, 0, 86)]
+	[TestCase(true, true, 0, 100, 0, 86)]
+	[TestCase(true, true, 100, 0, 0, 86)]
 	[TestCase(false, true, 0, 0, 0, 0)]
 	[TestCase(false, true, 0, 100, 0, 0)]
 	[TestCase(false, true, 100, 0, 0, 0)]

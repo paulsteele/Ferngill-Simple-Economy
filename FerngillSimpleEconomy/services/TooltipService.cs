@@ -14,10 +14,10 @@ public interface ITooltipService
 
 public class TooltipService(IEconomyService economyService, IDrawSupplyBarHelper drawSupplyBarHelper) : ITooltipService
 {
-	private const int TooltipAreaHeight = 110;
-	private const int TooltipAreaWidth = 255;
 	private const int BarHeight = Game1.tileSize / 2;
-	private const int Padding = 15;
+	private const int VerticalPadding = 20;
+	private const int TooltipAreaHeight = BarHeight + VerticalPadding + 34;
+	private const int HorizontalPadding = 18;
 
 	public Point GetExtraSpaceNeededForTooltipSpecialIcons(Item item, int startingHeight, Point result)
 	{
@@ -57,8 +57,16 @@ public class TooltipService(IEconomyService economyService, IDrawSupplyBarHelper
 			return Point.Zero;
 		}
 
-		drawSupplyBarHelper.DrawSupplyBar(spriteBatch, x + Padding, y + Padding, x + TooltipAreaWidth - Padding, BarHeight, model);
+		drawSupplyBarHelper.DrawSupplyBar(spriteBatch, x + HorizontalPadding, y + VerticalPadding, x + GetTooltipWidth(), BarHeight, model);
 		
 		return new Point(0, TooltipAreaHeight);
 	}
+
+	// copied from Item.getDescriptionWidth
+	private static int GetTooltipWidth() => LocalizedContentManager.CurrentLanguageCode switch
+		{
+			LocalizedContentManager.LanguageCode.fr => 384,
+			LocalizedContentManager.LanguageCode.tr => 336,
+			_ => 272,
+		};
 }
