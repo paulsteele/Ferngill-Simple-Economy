@@ -14,6 +14,11 @@ public interface ITooltipService
 
 public class TooltipService(IEconomyService economyService, IDrawSupplyBarHelper drawSupplyBarHelper) : ITooltipService
 {
+	private const int TooltipAreaHeight = 110;
+	private const int TooltipAreaWidth = 255;
+	private const int BarHeight = Game1.tileSize / 2;
+	private const int Padding = 15;
+
 	public Point GetExtraSpaceNeededForTooltipSpecialIcons(Item item, int startingHeight, Point result)
 	{
 		if (!ConfigModel.Instance.EnableTooltip || item is not Object obj)
@@ -21,7 +26,7 @@ public class TooltipService(IEconomyService economyService, IDrawSupplyBarHelper
 			return result;
 		}
 
-		var offset = economyService.GetItemModelFromObject(obj) == null ? 0 : 110;
+		var offset = economyService.GetItemModelFromObject(obj) == null ? 0 : TooltipAreaHeight;
 
 		if (offset == 0)
 		{
@@ -51,9 +56,9 @@ public class TooltipService(IEconomyService economyService, IDrawSupplyBarHelper
 		{
 			return Point.Zero;
 		}
+
+		drawSupplyBarHelper.DrawSupplyBar(spriteBatch, x + Padding, y + Padding, x + TooltipAreaWidth - Padding, BarHeight, model);
 		
-		drawSupplyBarHelper.DrawSupplyBar(spriteBatch, x+15, y+20, x+240, Game1.tileSize / 2, model);
-		
-		return new Point(0, 110);
+		return new Point(0, TooltipAreaHeight);
 	}
 }
