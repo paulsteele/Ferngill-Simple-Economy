@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using fse.core.models;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.GameData.Crops;
+using StardewValley.GameData.FruitTrees;
 using Object = StardewValley.Object;
 
 namespace fse.core.services;
@@ -23,29 +25,35 @@ public class SeedService(IMonitor monitor) : ISeedService
 	public void GenerateSeedMapping(EconomyModel economyModel)
 	{
 		var cropData = Game1.content.Load<Dictionary<string, CropData>>("Data\\Crops");
-		var failCount = 0;
-		Exception? mostRecentException = null;
+		var fruitTreeData = Game1.content.Load<Dictionary<string, FruitTreeData>>("Data\\FruitTrees");
 		
-		// ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
 		if (cropData == null)
 		{
+			monitor.LogOnce("Failed generating seed mapping. Missing cropData", LogLevel.Error);
 			return;
 		}
 
-		foreach (var seed in cropData.Keys)
+		if (fruitTreeData == null)
+		{
+			monitor.LogOnce("Failed generating seed mapping. Missing fruitTreeData", LogLevel.Error);
+			return;
+		}
+
+		var seeds = cropData
+			.Select(kvp => GetSeedModelWithErrors(() => new SeedModel(kvp.Key, kvp.Value)))
+			.Concat(fruitTreeData.Select(kvp => GetSeedModelWithErrors(() => new SeedModel(kvp.Key, kvp.Value))))
+			.OfType<SeedModel>();
+
+		foreach (var seedModel in seeds)
 		{
 			try
 			{
-				if (!cropData.TryGetValue(seed, out var data))
-				{
-					continue;
-				}
-				var seedModel = new SeedModel(seed, data);
 				var obj = new Object(seedModel.CropId, 1);
 				if (!economyModel.CategoryEconomies.TryGetValue(obj.Category, out var category))
 				{
 					continue;
 				}
+
 				if (!category.TryGetValue(seedModel.CropId, out var model))
 				{
 					continue;
@@ -54,16 +62,25 @@ public class SeedService(IMonitor monitor) : ISeedService
 				SeedToItem.TryAdd(seedModel.ObjectId, model);
 				ItemToSeed.TryAdd(model.ObjectId, seedModel);
 			}
-			catch (Exception ex)
+			catch(Exception ex)
 			{
-				failCount++;
-				mostRecentException = ex;
+				monitor.LogOnce("Failed generating seed mapping.", LogLevel.Error);
+				monitor.LogOnce(ex.ToString(), LogLevel.Error);
 			}
 		}
-		if (mostRecentException != null)
+	}
+
+	private SeedModel? GetSeedModelWithErrors(Func<SeedModel> getter)
+	{
+		try
 		{
-			monitor.LogOnce($"Failed generating {failCount} seed mappings.", LogLevel.Error);
-			monitor.LogOnce(mostRecentException.ToString(), LogLevel.Error);
+			return getter();
+		}
+		catch (Exception ex)
+		{
+			monitor.LogOnce("Failed generating seed mapping.", LogLevel.Error);
+			monitor.LogOnce(ex.ToString(), LogLevel.Error);
+			return null;
 		}
 	}
 	

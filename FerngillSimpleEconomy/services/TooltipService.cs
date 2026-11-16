@@ -64,11 +64,17 @@ public class TooltipService(IEconomyService economyService, IDrawSupplyBarHelper
 
 	private ItemModel? GetRelevantItemModelForTooltip(Object obj)
 	{
-		if (!economyService.CategoryIsInEconomy(Object.SeedsCategory) && obj.Category == Object.SeedsCategory)
+		if (economyService.GetItemModelFromObject(obj) is { } model)
 		{
-			return economyService.GetItemModelFromSeed(obj.ItemId);
+			return model;
 		}
-		return economyService.GetItemModelFromObject(obj);
+
+		if (economyService.GetItemModelFromSeed(obj.ItemId) is { } seedModel)
+		{
+			return seedModel;
+		}
+
+		return null;
 	}
 
 	// copied from Item.getDescriptionWidth

@@ -107,16 +107,19 @@ public class ShopMenuPatches : SelfRegisteringPatches
 			var component = forSaleButtons[i];
 			var salable = forSale[currItemIdx + i];
 			var bounds = component.bounds;
-			if (salable is Object { Category: Object.SeedsCategory } obj && EconomyService.GetItemModelFromSeed(obj.ItemId) is { } model)
+
+			if (salable is not Object obj || EconomyService.GetItemModelFromSeed(obj.ItemId) is not { } model)
 			{
-				if (bounds.Width < vanillaBtnWidth)
-				{
-					DrawSupplyBarHelper.DrawSupplyBar(b, bounds.X + 96, component.bounds.Y + 20, bounds.Right - bounds.Width / 5, 30, model);
-				}
-				else
-				{
-					DrawSupplyBarHelper.DrawSupplyBar(b, bounds.Right - 400, component.bounds.Y + 20, bounds.Right - 200, 30, model);
-				}
+				continue;
+			}
+
+			if (bounds.Width < vanillaBtnWidth)
+			{
+				DrawSupplyBarHelper.DrawSupplyBar(b, bounds.X + 96, component.bounds.Y + 20, bounds.Right - bounds.Width / 5, 30, model);
+			}
+			else
+			{
+				DrawSupplyBarHelper.DrawSupplyBar(b, bounds.Right - 400, component.bounds.Y + 20, bounds.Right - 200, 30, model);
 			}
 		}
 	}

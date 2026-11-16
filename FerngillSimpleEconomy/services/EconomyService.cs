@@ -31,7 +31,6 @@ public interface IEconomyService
 	ItemModel GetConsolidatedItem(ItemModel original);
 	decimal GetBreakEvenSupply();
 	ItemModel? GetItemModelFromObject(Object obj);
-	bool CategoryIsInEconomy(int category);
 }
 
 public class EconomyService(
@@ -475,8 +474,6 @@ public class EconomyService(
 		var model = Economy.GetItem(equivalentItemsService, obj);
 		return model == null ? null : GetConsolidatedItem(model);
 	}
-
-	public bool CategoryIsInEconomy(int category) => Economy.CategoryEconomies.ContainsKey(category);
 
 	private static int RoundDouble(double d) => (int)Math.Round(d, 0, MidpointRounding.ToEven);
 	private static int RoundDecimal(decimal d) => (int)Math.Round(d, 0, MidpointRounding.ToEven);
