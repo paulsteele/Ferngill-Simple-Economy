@@ -10,6 +10,7 @@ public interface ITooltipService
 {
 	Point GetExtraSpaceNeededForTooltipSpecialIcons(Item item, int startingHeight, Point result);
 	Point DrawTooltip(Item item, SpriteBatch spriteBatch, int x, int y);
+	int Width { set; }
 }
 
 public class TooltipService(IEconomyService economyService, IDrawSupplyBarHelper drawSupplyBarHelper) : ITooltipService
@@ -18,6 +19,7 @@ public class TooltipService(IEconomyService economyService, IDrawSupplyBarHelper
 	private const int VerticalPadding = 20;
 	private const int TooltipAreaHeight = BarHeight + VerticalPadding + 34;
 	private const int HorizontalPadding = 18;
+	public int Width { get; set; }
 
 	public Point GetExtraSpaceNeededForTooltipSpecialIcons(Item item, int startingHeight, Point result)
 	{
@@ -57,7 +59,7 @@ public class TooltipService(IEconomyService economyService, IDrawSupplyBarHelper
 			return Point.Zero;
 		}
 
-		drawSupplyBarHelper.DrawSupplyBar(spriteBatch, x + HorizontalPadding, y + VerticalPadding, x + GetTooltipWidth(), BarHeight, model);
+		drawSupplyBarHelper.DrawSupplyBar(spriteBatch, x + HorizontalPadding, y + VerticalPadding, x + Width - HorizontalPadding, BarHeight, model);
 		
 		return new Point(0, TooltipAreaHeight);
 	}
@@ -76,12 +78,4 @@ public class TooltipService(IEconomyService economyService, IDrawSupplyBarHelper
 
 		return null;
 	}
-
-	// copied from Item.getDescriptionWidth
-	private static int GetTooltipWidth() => LocalizedContentManager.CurrentLanguageCode switch
-		{
-			LocalizedContentManager.LanguageCode.fr => 384,
-			LocalizedContentManager.LanguageCode.tr => 336,
-			_ => 272,
-		};
 }

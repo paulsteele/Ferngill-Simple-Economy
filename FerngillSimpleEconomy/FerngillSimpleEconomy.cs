@@ -82,6 +82,8 @@ public class FerngillSimpleEconomy : Mod
 		SelfRegisteringPatches.Initialize(economyService, Monitor, drawSupplyBarHelper, tooltipService);
 		new ObjectPatches().Register(harmony);
 		new ShopMenuPatches().Register(harmony);
+		new ClickableMenuPatches().Register(harmony);
+		new ItemPatches().Register(harmony);
 	}
 
 	private void RegisterHandlers
