@@ -59,7 +59,7 @@ public class TooltipService(IEconomyService economyService, IDrawSupplyBarHelper
 			return Point.Zero;
 		}
 
-		drawSupplyBarHelper.DrawSupplyBar(spriteBatch, x + HorizontalPadding, y + VerticalPadding, x + Width - HorizontalPadding, BarHeight, model);
+		drawSupplyBarHelper.DrawSupplyBar(spriteBatch, x + HorizontalPadding, y + VerticalPadding, x + Width - HorizontalPadding - 12, BarHeight, model);
 		
 		return new Point(0, TooltipAreaHeight);
 	}

@@ -20,7 +20,7 @@ public class DrawSupplyBarHelper(IEconomyService economyService) : IDrawSupplyBa
 	public void DrawSupplyBar(SpriteBatch batch, int startingX, int startingY, int endingX, int barHeight, ItemModel originalModel)
 	{
 		var model = economyService.GetConsolidatedItem(originalModel);
-		var barWidth = ((endingX - startingX) / 10) * 10;
+		var barWidth = endingX - startingX;
 		var percentage = Math.Min(model.Supply / (float)ConfigModel.Instance.MaxCalculatedSupply, 1);
 
 		var percentageRect = new Rectangle(startingX, startingY + Game1.tileSize / 2, (int) (barWidth * percentage), barHeight);
@@ -54,7 +54,7 @@ public class DrawSupplyBarHelper(IEconomyService economyService) : IDrawSupplyBa
 		// ticks 
 		for (var i = 1; i < 10; i++)
 		{
-			var tickX = startingX + ((barWidth / 10) * i);
+			var tickX = startingX + (barWidth * i) / 10;
 			if (percentageRect.X + percentageRect.Width > tickX)
 			{
 				batch.Draw(Game1.staminaRect, new Rectangle(tickX , y, 4, 28), color1);
